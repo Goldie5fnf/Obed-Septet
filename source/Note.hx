@@ -20,6 +20,7 @@ class Note extends FlxSprite
 	public var strumTime:Float = 0;
 
 	public var mustPress:Bool = false;
+	public var enemyMustPress:Bool = false;
 	public var noteData:Int = 0;
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
@@ -203,7 +204,7 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (mustPress)
+		if (mustPress || enemyMustPress)
 		{
 			// miss on the NEXT frame so lag doesnt make u miss notes
 			if (willMiss && !wasGoodHit)

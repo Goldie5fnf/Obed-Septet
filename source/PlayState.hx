@@ -96,6 +96,7 @@ class PlayState extends MusicBeatState
 
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	private var enemyStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -489,50 +490,6 @@ class PlayState extends MusicBeatState
 				bg.scale.set(6, 6);
 				add(bg);
 
-			/* 
-				var bg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('weeb/evilSchoolBG'));
-				bg.scale.set(6, 6);
-				// bg.setGraphicSize(Std.int(bg.width * 6));
-				// bg.updateHitbox();
-				add(bg);
-
-				var fg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('weeb/evilSchoolFG'));
-				fg.scale.set(6, 6);
-				// fg.setGraphicSize(Std.int(fg.width * 6));
-				// fg.updateHitbox();
-				add(fg);
-
-				wiggleShit.effectType = WiggleEffectType.DREAMY;
-				wiggleShit.waveAmplitude = 0.01;
-				wiggleShit.waveFrequency = 60;
-				wiggleShit.waveSpeed = 0.8;
-			 */
-
-			// bg.shader = wiggleShit.shader;
-			// fg.shader = wiggleShit.shader;
-
-			/* 
-				var waveSprite = new FlxEffectSprite(bg, [waveEffectBG]);
-				var waveSpriteFG = new FlxEffectSprite(fg, [waveEffectFG]);
-
-				// Using scale since setGraphicSize() doesnt work???
-				waveSprite.scale.set(6, 6);
-				waveSpriteFG.scale.set(6, 6);
-				waveSprite.setPosition(posX, posY);
-				waveSpriteFG.setPosition(posX, posY);
-
-				waveSprite.scrollFactor.set(0.7, 0.8);
-				waveSpriteFG.scrollFactor.set(0.9, 0.8);
-
-				// waveSprite.setGraphicSize(Std.int(waveSprite.width * 6));
-				// waveSprite.updateHitbox();
-				// waveSpriteFG.setGraphicSize(Std.int(fg.width * 6));
-				// waveSpriteFG.updateHitbox();
-
-				add(waveSprite);
-				add(waveSpriteFG);
-			 */
-
 			case 'guns' | 'stress' | 'ugh':
 				defaultCamZoom = 0.90;
 				curStage = 'tank';
@@ -809,6 +766,7 @@ class PlayState extends MusicBeatState
 		add(grpNoteSplashes);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
+		enemyStrums = new FlxTypedGroup<FlxSprite>();
 
 		generateSong();
 
@@ -850,7 +808,7 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
+		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 250, healthBarBG.y + 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
@@ -1272,14 +1230,16 @@ class PlayState extends MusicBeatState
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;
+					sustainNote.enemyMustPress = sustainNote.mustPress;
 
-					if (sustainNote.mustPress)
+					if (sustainNote.mustPress || sustainNote.enemyMustPress)
 						sustainNote.x += FlxG.width / 2; // general offset
 				}
 
 				swagNote.mustPress = gottaHitNote;
+				swagNote.enemyMustPress = swagNote.mustPress;
 
-				if (swagNote.mustPress)
+				if (swagNote.mustPress || swagNote.enemyMustPress)
 					swagNote.x += FlxG.width / 2; // general offset
 			}
 		}
@@ -1400,12 +1360,21 @@ class PlayState extends MusicBeatState
 
 			babyArrow.ID = i;
 
-			if (player == 1)
-				playerStrums.add(babyArrow);
+			switch (player)
+			{
+				case 0:
+					enemyStrums.add(babyArrow);
+				case 1:
+					playerStrums.add(babyArrow);
+			}
 
 			babyArrow.animation.play('static');
 			babyArrow.x += 50;
 			babyArrow.x += ((FlxG.width / 2) * player);
+
+			enemyStrums.forEach(function(spr:FlxSprite) {
+				spr.centerOffsets();
+			});
 
 			strumLineNotes.add(babyArrow);
 		}
@@ -1562,7 +1531,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Enemy Missed:" + enemyMisses + " Score:" + songScore + " Player Missed:" + playerMisses;
+		scoreTxt.text = "Score:" + songScore + " Combo:" + combo + " Player Missed:" + playerMisses + " Enemy Missed:" + enemyMisses;
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -1757,8 +1726,6 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				isEnemyMiss = FlxG.random.bool(10);
-
 				if ((PreferencesMenu.getPref('downscroll') && daNote.y < -daNote.height)
 					|| (!PreferencesMenu.getPref('downscroll') && daNote.y > FlxG.height))
 				{
@@ -1784,7 +1751,7 @@ class PlayState extends MusicBeatState
 						else
 							daNote.y += daNote.height / 2;
 
-						if ((!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+						if (((!daNote.enemyMustPress || !daNote.mustPress) || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
 							&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= strumLineMid)
 						{
 							// clipRect is applied to graphic itself so use frame Heights
@@ -1801,7 +1768,7 @@ class PlayState extends MusicBeatState
 					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 					if (daNote.isSustainNote
-						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+						&& ((!daNote.enemyMustPress || !daNote.mustPress) || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
 						&& daNote.y + daNote.offset.y * daNote.scale.y <= strumLineMid)
 					{
 						var swagRect:FlxRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
@@ -1812,8 +1779,19 @@ class PlayState extends MusicBeatState
 					}
 				}
 
-				if (!daNote.mustPress && daNote.wasGoodHit)
+				if (isEnemyMiss)
 				{
+					noteMiss(Std.int(Math.abs(daNote.noteData)), 'dad');
+					daNote.enemyMustPress = true;
+				}
+
+				if ((!daNote.enemyMustPress || !daNote.mustPress) && daNote.wasGoodHit)
+				{
+					if (enemyMisses < enemyMissLimit)
+						isEnemyMiss = FlxG.random.bool(10);
+					else
+						isEnemyMiss = false;
+
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
@@ -1828,22 +1806,29 @@ class PlayState extends MusicBeatState
 					if (daNote.altNote)
 						altAnim = '-alt';
 
-					if (isEnemyMiss && enemyMisses < enemyMissLimit)
-						noteMiss(Std.int(Math.abs(daNote.noteData)), 'dad');
-					else
+					switch (Math.abs(daNote.noteData))
 					{
-						switch (Math.abs(daNote.noteData))
-						{
-							case 0:
-								dad.playAnim('singLEFT' + altAnim, true);
-							case 1:
-								dad.playAnim('singDOWN' + altAnim, true);
-							case 2:
-								dad.playAnim('singUP' + altAnim, true);
-							case 3:
-								dad.playAnim('singRIGHT' + altAnim, true);
-						}
+						case 0:
+							dad.playAnim('singLEFT' + altAnim, true);
+						case 1:
+							dad.playAnim('singDOWN' + altAnim, true);
+						case 2:
+							dad.playAnim('singUP' + altAnim, true);
+						case 3:
+							dad.playAnim('singRIGHT' + altAnim, true);
 					}
+
+					enemyStrums.forEach(function(spr:FlxSprite) {
+						if (Math.abs(daNote.noteData) == spr.ID) {
+							spr.animation.play('confirm', true);
+						}
+						if (spr.animation.curAnim.name == 'confirm') {
+							spr.centerOffsets();
+							spr.offset.x -= 13;
+							spr.offset.y -= 13;
+						} else
+							spr.centerOffsets();
+					});
 
 					dad.holdTimer = 0;
 
@@ -1870,8 +1855,9 @@ class PlayState extends MusicBeatState
 				}
 				else if (daNote.tooLate || daNote.wasGoodHit)
 				{
-					if (daNote.tooLate)
+					if (daNote.tooLate && !daNote.enemyMustPress)
 					{
+						playerMisses++;
 						health -= 0.0475;
 						vocals.volume = 0;
 						killCombo();
@@ -1886,6 +1872,13 @@ class PlayState extends MusicBeatState
 				}
 			});
 		}
+
+		enemyStrums.forEach(function(spr:FlxSprite) {
+			if (spr.animation.finished) {
+				spr.animation.play('static');
+				spr.centerOffsets();
+			}
+		});
 
 		if (!inCutscene)
 			keyShit();
@@ -2059,15 +2052,6 @@ class PlayState extends MusicBeatState
 		// Only add the score if you're not on practice mode
 		if (!practiceMode)
 			songScore += score;
-
-		// ludum dare rating system
-		/* if (combo > 60)
-				daRating = 'sick';
-			else if (combo > 12)
-				daRating = 'good'
-			else if (combo > 4)
-				daRating = 'bad';
-		 */
 
 		var ratingPath:String = daRating;
 
@@ -2289,7 +2273,7 @@ class PlayState extends MusicBeatState
 
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
+				if (isEnemyMiss || !isEnemyMiss && daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
 					if (directionList.contains(daNote.noteData))
 					{
@@ -2381,18 +2365,23 @@ class PlayState extends MusicBeatState
 		if (player == 'BF')
 		{
 			health -= 0.04;
-			playerMisses += 1;
+			playerMisses++;
 			killCombo();
 		}
 		else if (player == 'dad')
 		{
 			health += 0.04;
-			enemyMisses += 1;
+			enemyMisses++;
 			isEnemyMiss = false;
 		}
 
 		if (!practiceMode)
-			songScore -= 10;
+		{
+			if (player == 'BF')
+				songScore -= 10;
+			else if (player == 'dad')
+				songScore += 10;
+		}
 
 		vocals.volume = 0;
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
