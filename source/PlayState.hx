@@ -1562,7 +1562,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Dad Missed:" + playerMisses + " Score:" + songScore + " BF Missed:" + playerMisses;
+		scoreTxt.text = "Enemy Missed:" + enemyMisses + " Score:" + songScore + " Player Missed:" + playerMisses;
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -1757,6 +1757,8 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
+				isEnemyMiss = FlxG.random.bool(10);
+
 				if ((PreferencesMenu.getPref('downscroll') && daNote.y < -daNote.height)
 					|| (!PreferencesMenu.getPref('downscroll') && daNote.y > FlxG.height))
 				{
@@ -1812,8 +1814,6 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					isEnemyMiss = FlxG.random.bool(25);
-
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
@@ -2382,6 +2382,7 @@ class PlayState extends MusicBeatState
 		{
 			health -= 0.04;
 			playerMisses += 1;
+			killCombo();
 		}
 		else if (player == 'dad')
 		{
@@ -2389,8 +2390,6 @@ class PlayState extends MusicBeatState
 			enemyMisses += 1;
 			isEnemyMiss = false;
 		}
-
-		killCombo();
 
 		if (!practiceMode)
 			songScore -= 10;
