@@ -151,6 +151,11 @@ class PlayState extends MusicBeatState
 
 	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
+	var playerMisses:Int = 0;
+	var enemyMisses:Int = 0;
+	var enemyMissLimit:Int = 30;
+	var isEnemyMiss:Bool = false;
+
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -1557,7 +1562,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore;
+		scoreTxt.text = "Dad Missed:" + playerMisses + " Score:" + songScore + " BF Missed:" + playerMisses;
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
@@ -1807,6 +1812,8 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
+					isEnemyMiss = FlxG.random.bool(25);
+
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
@@ -1821,16 +1828,21 @@ class PlayState extends MusicBeatState
 					if (daNote.altNote)
 						altAnim = '-alt';
 
-					switch (Math.abs(daNote.noteData))
+					if (isEnemyMiss && enemyMisses < enemyMissLimit)
+						noteMiss(Std.int(Math.abs(daNote.noteData)), 'dad');
+					else
 					{
-						case 0:
-							dad.playAnim('singLEFT' + altAnim, true);
-						case 1:
-							dad.playAnim('singDOWN' + altAnim, true);
-						case 2:
-							dad.playAnim('singUP' + altAnim, true);
-						case 3:
-							dad.playAnim('singRIGHT' + altAnim, true);
+						switch (Math.abs(daNote.noteData))
+						{
+							case 0:
+								dad.playAnim('singLEFT' + altAnim, true);
+							case 1:
+								dad.playAnim('singDOWN' + altAnim, true);
+							case 2:
+								dad.playAnim('singUP' + altAnim, true);
+							case 3:
+								dad.playAnim('singRIGHT' + altAnim, true);
+						}
 					}
 
 					dad.holdTimer = 0;
@@ -1842,15 +1854,6 @@ class PlayState extends MusicBeatState
 					notes.remove(daNote, true);
 					daNote.destroy();
 				}
-
-				// WIP interpolation shit? Need to fix the pause issue
-				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * SONG.speed));
-
-				// removing this so whether the note misses or not is entirely up to Note class
-				// var noteMiss:Bool = daNote.y < -daNote.height;
-
-				// if (PreferencesMenu.getPref('downscroll'))
-					// noteMiss = daNote.y > FlxG.height;
 
 				if (daNote.isSustainNote && daNote.wasGoodHit)
 				{
@@ -2373,10 +2376,20 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1):Void
+	function noteMiss(direction:Int = 1, player:String = 'BF'):Void
 	{
-		// whole function used to be encased in if (!boyfriend.stunned)
-		health -= 0.04;
+		if (player == 'BF')
+		{
+			health -= 0.04;
+			playerMisses += 1;
+		}
+		else if (player == 'dad')
+		{
+			health += 0.04;
+			enemyMisses += 1;
+			isEnemyMiss = false;
+		}
+
 		killCombo();
 
 		if (!practiceMode)
@@ -2385,47 +2398,35 @@ class PlayState extends MusicBeatState
 		vocals.volume = 0;
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 
-		/* boyfriend.stunned = true;
-
-		// get stunned for 5 seconds
-		new FlxTimer().start(5 / 60, function(tmr:FlxTimer)
+		if (player == 'BF')
 		{
-			boyfriend.stunned = false;
-		}); */
-
-		switch (direction)
+			switch (direction)
+			{
+				case 0:
+					boyfriend.playAnim('singLEFTmiss', true);
+				case 1:
+					boyfriend.playAnim('singDOWNmiss', true);
+				case 2:
+					boyfriend.playAnim('singUPmiss', true);
+				case 3:
+					boyfriend.playAnim('singRIGHTmiss', true);
+			}
+		}
+		else if (player == 'dad')
 		{
-			case 0:
-				boyfriend.playAnim('singLEFTmiss', true);
-			case 1:
-				boyfriend.playAnim('singDOWNmiss', true);
-			case 2:
-				boyfriend.playAnim('singUPmiss', true);
-			case 3:
-				boyfriend.playAnim('singRIGHTmiss', true);
+			switch (direction)
+			{
+				case 0:
+					dad.playAnim('singLEFTmiss', true);
+				case 1:
+					dad.playAnim('singDOWNmiss', true);
+				case 2:
+					dad.playAnim('singUPmiss', true);
+				case 3:
+					dad.playAnim('singRIGHTmiss', true);
+			}
 		}
 	}
-
-	/* not used anymore lol
-
-	function badNoteHit()
-	{
-		// just double pasting this shit cuz fuk u
-		// REDO THIS SYSTEM!
-		var leftP = controls.NOTE_LEFT_P;
-		var downP = controls.NOTE_DOWN_P;
-		var upP = controls.NOTE_UP_P;
-		var rightP = controls.NOTE_RIGHT_P;
-
-		if (leftP)
-			noteMiss(0);
-		if (downP)
-			noteMiss(1);
-		if (upP)
-			noteMiss(2);
-		if (rightP)
-			noteMiss(3);
-	} */
 
 	function goodNoteHit(note:Note):Void
 	{
