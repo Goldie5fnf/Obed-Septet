@@ -399,9 +399,7 @@ class ChartingState extends MusicBeatState
 			{
 				case 'Must hit section':
 					_song.notes[curSection].mustHitSection = check.checked;
-
 					updateHeads();
-
 				case 'Change BPM':
 					_song.notes[curSection].changeBPM = check.checked;
 					FlxG.log.add('changed bpm shit');
@@ -856,20 +854,6 @@ class ChartingState extends MusicBeatState
 			Conductor.changeBPM(daBPM);
 		}
 
-		/* // PORT BULLSHIT, INCASE THERE'S NO SUSTAIN DATA FOR A NOTE
-			for (sec in 0..._song.notes.length)
-			{
-				for (notesse in 0..._song.notes[sec].sectionNotes.length)
-				{
-					if (_song.notes[sec].sectionNotes[notesse][2] == null)
-					{
-						trace('SUS NULL');
-						_song.notes[sec].sectionNotes[notesse][2] = 0;
-					}
-				}
-			}
-		 */
-
 		for (i in sectionInfo)
 		{
 			var daNoteInfo = i[1];
@@ -962,19 +946,29 @@ class ChartingState extends MusicBeatState
 	{
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
 		var noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
+		var noteIsPlayer = true;
 		var noteSus = 0;
 		var noteAlt = false;
 
-		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteAlt]);
+		if (noteData >= 4 && check_mustHitSection.checked)
+			noteIsPlayer = false;
+		else if (noteData <= 3 && !check_mustHitSection.checked)
+			noteIsPlayer = false;
+		else
+			noteIsPlayer = true;
+
+		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteAlt, noteIsPlayer]);
 
 		curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 
 		if (FlxG.keys.pressed.CONTROL)
 		{
-			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus, noteAlt]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus, noteAlt, noteIsPlayer]);
 		}
 
 		trace(noteStrum);
+		trace(noteData);
+		trace(noteIsPlayer);
 		trace(curSection);
 
 		updateGrid();

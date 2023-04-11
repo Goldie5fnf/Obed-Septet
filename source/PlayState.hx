@@ -1214,6 +1214,7 @@ class PlayState extends MusicBeatState
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.altNote = songNotes[3];
+				swagNote.isPlayerNote = songNotes[4];
 				swagNote.scrollFactor.set(0, 0);
 
 				var susLength:Float = swagNote.sustainLength;
@@ -1230,16 +1231,14 @@ class PlayState extends MusicBeatState
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;
-					sustainNote.enemyMustPress = sustainNote.mustPress;
 
-					if (sustainNote.mustPress || sustainNote.enemyMustPress)
+					if (sustainNote.mustPress)
 						sustainNote.x += FlxG.width / 2; // general offset
 				}
 
 				swagNote.mustPress = gottaHitNote;
-				swagNote.enemyMustPress = swagNote.mustPress;
 
-				if (swagNote.mustPress || swagNote.enemyMustPress)
+				if (swagNote.mustPress)
 					swagNote.x += FlxG.width / 2; // general offset
 			}
 		}
@@ -1751,7 +1750,7 @@ class PlayState extends MusicBeatState
 						else
 							daNote.y += daNote.height / 2;
 
-						if (((!daNote.enemyMustPress || !daNote.mustPress) || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+						if ((!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
 							&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= strumLineMid)
 						{
 							// clipRect is applied to graphic itself so use frame Heights
@@ -1768,7 +1767,7 @@ class PlayState extends MusicBeatState
 					daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 					if (daNote.isSustainNote
-						&& ((!daNote.enemyMustPress || !daNote.mustPress) || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
+						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))
 						&& daNote.y + daNote.offset.y * daNote.scale.y <= strumLineMid)
 					{
 						var swagRect:FlxRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
@@ -1779,15 +1778,15 @@ class PlayState extends MusicBeatState
 					}
 				}
 
-				if (isEnemyMiss)
+				if (isEnemyMiss && !daNote.isPlayerNote)
 				{
-					noteMiss(Std.int(Math.abs(daNote.noteData)), 'dad');
-					daNote.enemyMustPress = true;
+					daNote.mustPress = true;
+					isEnemyMiss = false;
 				}
 
-				if ((!daNote.enemyMustPress || !daNote.mustPress) && daNote.wasGoodHit)
+				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					if (enemyMisses < enemyMissLimit)
+					if (enemyMisses < enemyMissLimit && !daNote.isPlayerNote)
 						isEnemyMiss = FlxG.random.bool(10);
 					else
 						isEnemyMiss = false;
@@ -1816,6 +1815,12 @@ class PlayState extends MusicBeatState
 							dad.playAnim('singUP' + altAnim, true);
 						case 3:
 							dad.playAnim('singRIGHT' + altAnim, true);
+					}
+
+					if (dad.holdTimer > Conductor.stepCrochet * 4 * 0.001)
+					{
+						if (dad.animation.curAnim.name.startsWith('sing') && !dad.animation.curAnim.name.endsWith('miss'))
+							dad.dance();
 					}
 
 					enemyStrums.forEach(function(spr:FlxSprite) {
@@ -1855,12 +1860,12 @@ class PlayState extends MusicBeatState
 				}
 				else if (daNote.tooLate || daNote.wasGoodHit)
 				{
-					if (daNote.tooLate && !daNote.enemyMustPress)
+					if (daNote.tooLate)
 					{
-						playerMisses++;
-						health -= 0.0475;
-						vocals.volume = 0;
-						killCombo();
+						if (daNote.isPlayerNote)
+							noteMiss(Std.int(Math.abs(daNote.noteData)), "BF", 0.0075);
+						else
+							noteMiss(Std.int(Math.abs(daNote.noteData)), "dad", 0.0075);
 					}
 
 					daNote.active = false;
@@ -2273,7 +2278,7 @@ class PlayState extends MusicBeatState
 
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (isEnemyMiss || !isEnemyMiss && daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
+				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
 					if (directionList.contains(daNote.noteData))
 					{
@@ -2360,60 +2365,48 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1, player:String = 'BF'):Void
+	function noteMiss(direction:Int = 1, player:String = 'BF', additionalHealthDown:Float = 0):Void
 	{
-		if (player == 'BF')
+		switch (player)
 		{
-			health -= 0.04;
-			playerMisses++;
-			killCombo();
-		}
-		else if (player == 'dad')
-		{
-			health += 0.04;
-			enemyMisses++;
-			isEnemyMiss = false;
-		}
+			case 'BF':
+				if (!practiceMode)
+					songScore -= 10;
+				health -= 0.04 + additionalHealthDown;
+				playerMisses++;
+				killCombo();
 
-		if (!practiceMode)
-		{
-			if (player == 'BF')
-				songScore -= 10;
-			else if (player == 'dad')
-				songScore += 10;
-		}
+				switch (direction)
+				{
+					case 0:
+						boyfriend.playAnim('singLEFTmiss', true);
+					case 1:
+						boyfriend.playAnim('singDOWNmiss', true);
+					case 2:
+						boyfriend.playAnim('singUPmiss', true);
+					case 3:
+						boyfriend.playAnim('singRIGHTmiss', true);
+				}
+			case 'dad':
+				if (!practiceMode)
+					songScore += 10;
+				health += 0.04 + additionalHealthDown;
+				enemyMisses++;
 
+				switch (direction)
+				{
+					case 0:
+						dad.playAnim('singLEFTmiss', true);
+					case 1:
+						dad.playAnim('singDOWNmiss', true);
+					case 2:
+						dad.playAnim('singUPmiss', true);
+					case 3:
+						dad.playAnim('singRIGHTmiss', true);
+				}
+		}
 		vocals.volume = 0;
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-
-		if (player == 'BF')
-		{
-			switch (direction)
-			{
-				case 0:
-					boyfriend.playAnim('singLEFTmiss', true);
-				case 1:
-					boyfriend.playAnim('singDOWNmiss', true);
-				case 2:
-					boyfriend.playAnim('singUPmiss', true);
-				case 3:
-					boyfriend.playAnim('singRIGHTmiss', true);
-			}
-		}
-		else if (player == 'dad')
-		{
-			switch (direction)
-			{
-				case 0:
-					dad.playAnim('singLEFTmiss', true);
-				case 1:
-					dad.playAnim('singDOWNmiss', true);
-				case 2:
-					dad.playAnim('singUPmiss', true);
-				case 3:
-					dad.playAnim('singRIGHTmiss', true);
-			}
-		}
 	}
 
 	function goodNoteHit(note:Note):Void
