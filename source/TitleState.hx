@@ -33,6 +33,7 @@ import shaderslmfao.BuildingShaders.BuildingShader;
 import shaderslmfao.BuildingShaders;
 import shaderslmfao.ColorSwap;
 import ui.PreferencesMenu;
+import hxcodec.VideoHandler;
 
 using StringTools;
 
@@ -277,6 +278,13 @@ class TitleState extends MusicBeatState
 
 		startedIntro = true;
 		// credGroup.add(credTextShit);
+
+		var vid:VideoHandler = new VideoHandler();
+		vid.playVideo(Paths.videos('videoplayback.mp4'));
+		vid.finishCallback = function()
+		{
+			FlxG.switchState(new MainMenuState());
+		}
 	}
 
 	function getIntroTextShit():Array<Array<String>>
@@ -328,7 +336,7 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
-		if (pressedEnter && !transitioning && skippedIntro)
+		/*if (pressedEnter && !transitioning && skippedIntro)
 		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.onComplete = null;
@@ -343,7 +351,7 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 				FlxG.switchState(new MainMenuState()));
-		}
+		}*/
 
 		if (pressedEnter && !skippedIntro && initialized)
 			skipIntro();

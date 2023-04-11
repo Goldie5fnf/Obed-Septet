@@ -1211,6 +1211,13 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
+				if (songNotes[1] >= 4 && section.mustHitSection)
+					songNotes[4] = false;
+				else if (songNotes[1] <= 3 && !section.mustHitSection)
+					songNotes[4] = false;
+				else
+					songNotes[4]= true;
+
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.altNote = songNotes[3];
@@ -1270,7 +1277,7 @@ class PlayState extends MusicBeatState
 		for (i in 0...4)
 		{
 			// FlxG.log.add(i);
-			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+			var babyArrow:FlxSprite = new FlxSprite(50, strumLine.y);
 			var colorswap:ColorSwap = new ColorSwap();
 			babyArrow.shader = colorswap.shader;
 			colorswap.update(Note.arrowColors[i]);
@@ -1875,6 +1882,8 @@ class PlayState extends MusicBeatState
 					notes.remove(daNote, true);
 					daNote.destroy();
 				}
+
+				trace(daNote.isPlayerNote);
 			});
 		}
 
