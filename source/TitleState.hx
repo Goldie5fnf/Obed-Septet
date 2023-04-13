@@ -240,7 +240,6 @@ class TitleState extends MusicBeatState
 
 		startedIntro = true;
 		// credGroup.add(credTextShit);
-		trace(Assets.list(IMAGE));
 	}
 
 	function getIntroTextShit():Array<Array<String>>

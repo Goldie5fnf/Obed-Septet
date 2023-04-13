@@ -17,9 +17,6 @@ class LoadingState extends MusicBeatState
 
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
-	static var library:String = "";
-
-	var screen:LoadingScreen;
 
 	public function new()
 	{
@@ -30,44 +27,32 @@ class LoadingState extends MusicBeatState
 	{
 		super.create();
 
-		trace(Assets.list(IMAGE));
-
-		screen = new LoadingScreen();
-		add(screen);
-
-		screen.max = soundsToCache.length + imagesToCache.length;
+		for (image in Assets.list(IMAGE))
+			imagesToCache.push(image);
+		for (sound in Assets.list(SOUND))
+			soundsToCache.push(sound);
 
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
 		FlxGraphic.defaultPersist = true;
 		Thread.create(() ->
 		{
-			screen.setLoadingText("Loading sounds...");
 			for (sound in soundsToCache)
 			{
 				trace("Caching sound " + sound);
-				FlxG.sound.cache(Paths.sound(sound, library));
-				screen.progress += 1;
+				FlxG.sound.cache(sound);
 			}
-
-			screen.setLoadingText("Loading images...");
 			for (image in imagesToCache)
 			{
 				trace("Caching image " + image);
-				FlxG.bitmap.add(Paths.image(image, library));
-				screen.progress += 1;
+				FlxG.bitmap.add(image);
 			}
-
 			FlxGraphic.defaultPersist = false;
-
-			screen.setLoadingText("Done!");
 			trace("Done caching");
 			
 			FlxG.camera.fade(FlxColor.BLACK, 1, false);
 			new FlxTimer().start(1, function(_:FlxTimer)
 			{
-				screen.kill();
-				screen.destroy();
 				loadAndSwitchState(target, false);
 			});
 		});
@@ -88,7 +73,7 @@ class LoadingState extends MusicBeatState
 		for (image in imagesToCache)
 		{
 			trace("Dumping image " + image);
-			FlxG.bitmap.removeByKey(Paths.image(image, library));
+			FlxG.bitmap.removeByKey(image);
 		}
 		soundsToCache = [];
 		imagesToCache = [];

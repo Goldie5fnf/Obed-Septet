@@ -2,7 +2,8 @@ package;
 
 import flixel.FlxGame;
 import flixel.FlxState;
-import openfl.Assets;
+import flixel.FlxG;
+import flixel.graphics.FlxGraphic;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
@@ -10,9 +11,8 @@ import openfl.events.AsyncErrorEvent;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.events.NetStatusEvent;
-import openfl.media.Video;
-import openfl.net.NetConnection;
-import openfl.net.NetStream;
+import openfl.utils.Assets;
+import openfl.system.System;
 
 class Main extends Sprite
 {
@@ -79,5 +79,38 @@ class Main extends Sprite
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, #if (flixel < '5.0.0') zoom, #end framerate, framerate, skipSplash, startFullscreen));
 		fpsCounter = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsCounter);
+	}
+
+	public static var persistentAssets:Array<FlxGraphic> = [];
+	public static function dumpCache()
+	{
+		if (Main.dumping)
+		{
+			trace('removed ur mom');
+			@:privateAccess
+			for (key in FlxG.bitmap._cache.keys())
+			{
+				var obj = FlxG.bitmap._cache.get(key);
+				if (obj != null && !persistentAssets.contains(obj))
+				{
+					Assets.cache.removeBitmapData(key);
+					FlxG.bitmap._cache.remove(key);
+					obj.destroy();
+					openfl.Assets.cache.removeBitmapData(key);
+				}
+			}
+			for (stuff in Assets.list(SOUND))
+				Assets.cache.clear(stuff);
+			System.gc();
+		}
+		Main.dumping = false;
+	}
+
+	public static var dumping:Bool = false;
+
+	public static function switchState(target:FlxState)
+	{
+		dumping = true;
+		FlxG.switchState(target);
 	}
 }

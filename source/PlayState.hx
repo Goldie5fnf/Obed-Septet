@@ -2,7 +2,6 @@ package;
 
 import Song.SwagSection;
 import Song.SwagSong;
-import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -116,8 +115,6 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
-
 	public static var seenCutscene:Bool = false;
 
 	var songScore:Int = 0;
@@ -171,8 +168,6 @@ class PlayState extends MusicBeatState
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
-
-		foregroundSprites = new FlxTypedGroup<BGSprite>();
 
 		#if discord_rpc
 		initDiscord();
@@ -354,7 +349,6 @@ class PlayState extends MusicBeatState
 		generateStaticArrows(0);
 		generateStaticArrows(1);
 
-		talking = false;
 		startedCountdown = true;
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
@@ -1115,7 +1109,7 @@ class PlayState extends MusicBeatState
 				switch (PlayState.storyWeek)
 				{
 					default:
-						FlxG.switchState(new StoryMenuState());
+						Main.switchState(new StoryMenuState());
 				}
 
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
@@ -1147,13 +1141,14 @@ class PlayState extends MusicBeatState
 				prevCamFollow = camFollow;
 
 				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-				LoadingState.loadAndSwitchState(new PlayState());
+				LoadingState.target = new PlayState();
+				FlxG.switchState(new PlayState());
 			}
 		}
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FreeplayState());
+			Main.switchState(new FreeplayState());
 		}
 	}
 
@@ -1187,7 +1182,7 @@ class PlayState extends MusicBeatState
 			score = 200;
 		}
 
-		if (daRating = 'sick')
+		if (daRating == 'sick')
 		{
 			var noteSplash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 			noteSplash.setupNoteSplash(daNote.x, daNote.y, daNote.noteData);
@@ -1547,8 +1542,6 @@ class PlayState extends MusicBeatState
 				FlxG.log.add('CHANGED BPM!');
 			}
 		}
-		wiggleShit.update(Conductor.crochet);
-
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
 		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
 

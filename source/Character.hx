@@ -37,7 +37,7 @@ class Character extends FlxSprite
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('characters/GF_assets');
+				tex = Paths.getSparrowAtlas('characters/GF_assets', 'shared');
 				frames = tex;
 				quickAnimAdd('cheer', 'GF Cheer');
 				quickAnimAdd('singLEFT', 'GF left note');
@@ -56,7 +56,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
+				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
 				frames = tex;
 				quickAnimAdd('idle', 'BF idle dance');
 				quickAnimAdd('singUP', 'BF NOTE UP0');
@@ -112,7 +112,7 @@ class Character extends FlxSprite
 
 	private function loadOffsetFile(offsetCharacter:String)
 	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/" + offsetCharacter + "Offsets.txt"));
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("images/characters/" + offsetCharacter + "Offsets.txt", TEXT, 'shared'));
 
 		for (i in daFile)
 		{
@@ -160,7 +160,7 @@ class Character extends FlxSprite
 		{
 			switch (curCharacter)
 			{
-				case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel' | 'gf-tankmen':
+				case 'gf':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
 						danced = !danced;
