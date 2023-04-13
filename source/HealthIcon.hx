@@ -6,9 +6,6 @@ using StringTools;
 
 class HealthIcon extends FlxSprite
 {
-	/**
-	 * Used for FreeplayState! If you use it elsewhere, prob gonna annoying
-	 */
 	public var sprTracker:FlxSprite;
 
 	var char:String = '';
@@ -25,23 +22,8 @@ class HealthIcon extends FlxSprite
 		scrollFactor.set();
 	}
 
-	public var isOldIcon:Bool = false;
-
-	public function swapOldIcon():Void
-	{
-		isOldIcon = !isOldIcon;
-
-		if (isOldIcon)
-			changeIcon('bf-old');
-		else
-			changeIcon(PlayState.SONG.player1);
-	}
-
 	public function changeIcon(newChar:String):Void
 	{
-		if (newChar != 'bf-pixel' && newChar != 'bf-old')
-			newChar = newChar.split('-')[0].trim();
-
 		if (newChar != char)
 		{
 			if (animation.getByName(newChar) == null)
