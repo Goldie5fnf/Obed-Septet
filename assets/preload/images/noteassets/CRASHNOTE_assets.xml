@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="CRASHNOTE_assets.png">
+	<!-- Created with Adobe Animate version 20.5.1.31044 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="down press " x="0" y="0" width="149" height="146"/>
+	<SubTexture name="down press " x="0" y="0" width="149" height="146"/>
+	<SubTexture name="down press " x="149" y="0" width="149" height="146"/>
+	<SubTexture name="down press " x="149" y="0" width="149" height="146"/>
+	<SubTexture name="left press " x="298" y="0" width="147" height="150"/>
+	<SubTexture name="left press " x="298" y="0" width="147" height="150"/>
+	<SubTexture name="left press " x="0" y="150" width="147" height="150"/>
+	<SubTexture name="left press " x="0" y="150" width="147" height="150"/>
+	<SubTexture name="right press " x="147" y="150" width="149" height="151"/>
+	<SubTexture name="right press " x="147" y="150" width="149" height="151"/>
+	<SubTexture name="right press " x="296" y="150" width="149" height="151"/>
+	<SubTexture name="right press " x="296" y="150" width="149" height="151"/>
+	<SubTexture name="up press " x="0" y="301" width="153" height="151"/>
+	<SubTexture name="up press " x="0" y="301" width="153" height="151"/>
+	<SubTexture name="up press " x="153" y="301" width="153" height="151"/>
+	<SubTexture name="up press " x="153" y="301" width="153" height="151"/>
+</TextureAtlas>

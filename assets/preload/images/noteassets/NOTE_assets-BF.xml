@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="NOTE_assets-BF.png">
+	<!-- Created with Adobe Animate version 20.5.1.31044 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="arrowDOWN" x="0" y="0" width="186" height="158"/>
+	<SubTexture name="arrowLEFT" x="186" y="0" width="159" height="187"/>
+	<SubTexture name="arrowRIGHT" x="345" y="0" width="159" height="187"/>
+	<SubTexture name="blue" x="504" y="0" width="186" height="158"/>
+	<SubTexture name="down confirm" x="690" y="0" width="265" height="232" frameX="0" frameY="0" frameWidth="265" frameHeight="234"/>
+	<SubTexture name="down confirm" x="955" y="0" width="265" height="232" frameX="0" frameY="0" frameWidth="265" frameHeight="234"/>
+	<SubTexture name="down confirm" x="1220" y="0" width="262" height="232" frameX="-2" frameY="-2" frameWidth="265" frameHeight="234"/>
+	<SubTexture name="down confirm" x="1220" y="0" width="262" height="232" frameX="-2" frameY="-2" frameWidth="265" frameHeight="234"/>
+	<SubTexture name="green" x="1482" y="0" width="187" height="158"/>
+	<SubTexture name="left confirm" x="1669" y="0" width="234" height="264"/>
+	<SubTexture name="left confirm" x="0" y="264" width="223" height="254" frameX="-5" frameY="-5" frameWidth="234" frameHeight="264"/>
+	<SubTexture name="left confirm" x="223" y="264" width="230" height="260" frameX="-2" frameY="-1" frameWidth="234" frameHeight="264"/>
+	<SubTexture name="left confirm" x="223" y="264" width="230" height="260" frameX="-2" frameY="-1" frameWidth="234" frameHeight="264"/>
+	<SubTexture name="pruple end hold " x="453" y="264" width="103" height="105"/>
+	<SubTexture name="purple hold piece " x="556" y="264" width="51" height="44"/>
+	<SubTexture name="purple " x="607" y="264" width="158" height="186"/>
+	<SubTexture name="red " x="765" y="264" width="158" height="186"/>
+	<SubTexture name="right confirm " x="923" y="264" width="229" height="261" frameX="-1" frameY="-1" frameWidth="233" frameHeight="262"/>
+	<SubTexture name="right confirm " x="1152" y="264" width="229" height="261" frameX="-1" frameY="-1" frameWidth="233" frameHeight="262"/>
+	<SubTexture name="right confirm " x="1381" y="264" width="233" height="262"/>
+	<SubTexture name="right confirm " x="1381" y="264" width="233" height="262"/>
+	<SubTexture name="arrowUP " x="1614" y="264" width="187" height="158"/>
+	<SubTexture name="up confirm " x="0" y="526" width="270" height="239"/>
+	<SubTexture name="up confirm " x="270" y="526" width="270" height="239"/>
+	<SubTexture name="up confirm " x="540" y="526" width="245" height="217" frameX="-12" frameY="-11" frameWidth="270" frameHeight="239"/>
+	<SubTexture name="up confirm " x="540" y="526" width="245" height="217" frameX="-12" frameY="-11" frameWidth="270" frameHeight="239"/>
+</TextureAtlas>

@@ -59,9 +59,6 @@ class Main extends Sprite
 
 		setupGame();
 	}
-
-	var video:Video;
-	var netStream:NetStream;
 	private var overlay:Sprite;
 
 	public static var fpsCounter:FPS;
