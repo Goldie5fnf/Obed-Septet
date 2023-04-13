@@ -299,7 +299,7 @@ class StoryMenuState extends MusicBeatState
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
 				LoadingState.target = new PlayState();
-				FlxG.switchState(new PlayState());
+				FlxG.switchState(new LoadingState());
 			});
 		}
 	}

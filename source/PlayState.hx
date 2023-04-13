@@ -1141,7 +1141,6 @@ class PlayState extends MusicBeatState
 				prevCamFollow = camFollow;
 
 				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-				LoadingState.target = new PlayState();
 				FlxG.switchState(new PlayState());
 			}
 		}

@@ -11,7 +11,7 @@ import openfl.events.AsyncErrorEvent;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.events.NetStatusEvent;
-import openfl.utils.Assets;
+import openfl.Assets;
 import openfl.system.System;
 
 class Main extends Sprite

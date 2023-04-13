@@ -57,7 +57,7 @@ class GameOverState extends FlxTransitionableState
 			{
 				FlxG.sound.music.stop();
 				LoadingState.target = new PlayState();
-				FlxG.switchState(new PlayState());
+				FlxG.switchState(new LoadingState());
 			});
 		}
 		super.update(elapsed);
