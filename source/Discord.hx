@@ -4,18 +4,18 @@ import Sys.sleep;
 
 using StringTools;
 
-#if discord_rpc
+#if DISCORD
 import discord_rpc.DiscordRpc;
 #end
 
 class DiscordClient
 {
-	#if discord_rpc
+	#if DISCORD
 	public function new()
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "814588678700924999",
+			clientID: "1096370715017629746",
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
@@ -26,7 +26,6 @@ class DiscordClient
 		{
 			DiscordRpc.process();
 			sleep(2);
-			// trace("Discord Client Update");
 		}
 
 		DiscordRpc.shutdown();
@@ -40,7 +39,7 @@ class DiscordClient
 	static function onReady()
 	{
 		DiscordRpc.presence({
-			details: "In the Menus",
+			details: "Starting",
 			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "Friday Night Funkin'"

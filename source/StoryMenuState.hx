@@ -1,6 +1,6 @@
 package;
 
-#if discord_rpc
+#if DISCORD
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
@@ -95,8 +95,7 @@ class StoryMenuState extends MusicBeatState
 
 		trace("Line 70");
 
-		#if discord_rpc
-		// Updating Discord Rich Presence
+		#if DISCORD
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -298,8 +297,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
-				LoadingState.target = new PlayState();
-				FlxG.switchState(new LoadingState());
+				FlxG.switchState(new PlayState());
 			});
 		}
 	}

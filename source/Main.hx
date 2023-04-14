@@ -18,7 +18,7 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
+	var initialState:Class<FlxState> = LoadingState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 144; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -79,38 +79,5 @@ class Main extends Sprite
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, #if (flixel < '5.0.0') zoom, #end framerate, framerate, skipSplash, startFullscreen));
 		fpsCounter = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsCounter);
-	}
-
-	public static var persistentAssets:Array<FlxGraphic> = [];
-	public static function dumpCache()
-	{
-		if (Main.dumping)
-		{
-			trace('removed ur mom');
-			@:privateAccess
-			for (key in FlxG.bitmap._cache.keys())
-			{
-				var obj = FlxG.bitmap._cache.get(key);
-				if (obj != null && !persistentAssets.contains(obj))
-				{
-					Assets.cache.removeBitmapData(key);
-					FlxG.bitmap._cache.remove(key);
-					obj.destroy();
-					openfl.Assets.cache.removeBitmapData(key);
-				}
-			}
-			for (stuff in Assets.list(SOUND))
-				Assets.cache.clear(stuff);
-			System.gc();
-		}
-		Main.dumping = false;
-	}
-
-	public static var dumping:Bool = false;
-
-	public static function switchState(target:FlxState)
-	{
-		dumping = true;
-		FlxG.switchState(target);
 	}
 }

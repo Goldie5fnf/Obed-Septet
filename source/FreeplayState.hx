@@ -1,6 +1,6 @@
 package;
 
-#if discord_rpc
+#if DISCORD
 import Discord.DiscordClient;
 #end
 import flash.text.TextField;
@@ -49,7 +49,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		#if discord_rpc
+		#if DISCORD
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -188,8 +188,7 @@ class FreeplayState extends MusicBeatState
 
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
-			LoadingState.target = new PlayState();
-			FlxG.switchState(new LoadingState());
+			FlxG.switchState(new PlayState());
 		}
 	}
 

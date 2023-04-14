@@ -6,17 +6,18 @@ import flixel.graphics.FlxGraphic;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import openfl.utils.Assets;
+import openfl.utils.AssetType;
 import sys.thread.Thread;
+#if DISCORD
+import Discord.DiscordClient;
+#end
 
 using StringTools;
 
 class LoadingState extends MusicBeatState
 {
-	public static var target:FlxState;
-	public static var stopMusic = false;
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
-
 	var screen:LoadingScreen;
 
 	public function new()
@@ -28,29 +29,17 @@ class LoadingState extends MusicBeatState
 	{
 		super.create();
 
+		Init.Initialize();
+
 		screen = new LoadingScreen();
 		add(screen);
 
 		screen.max = imagesToCache.length;
 
 		for (image in Assets.list(IMAGE))
-		{
-			var library = image.startsWith('assets/shared') ? 'shared' : '';
-
-			if (library == 'shared')
-				imagesToCache.push(Paths.getPath(StringTools.replace(image, 'assets/shared/', ''), IMAGE, library));
-			else
-				imagesToCache.push(image);
-		}
+			checkLibs(image, imagesToCache, IMAGE);
 		for (sound in Assets.list(SOUND))
-		{
-			var library = sound.startsWith('assets/shared') ? 'shared' : '';
-
-			if (library == 'shared')
-				soundsToCache.push(Paths.getPath(StringTools.replace(sound, 'assets/shared/', ''), SOUND, library));
-			else
-				soundsToCache.push(sound);
-		}
+			checkLibs(sound, soundsToCache, SOUND);
 
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
@@ -61,14 +50,14 @@ class LoadingState extends MusicBeatState
 			for (image in imagesToCache)
 			{
 				trace("Caching image " + image);
-				//FlxG.bitmap.add(image);
+				FlxG.bitmap.add(image);
 				screen.progress += 1;
 			}
 			screen.setLoadingText("Loading sounds...");
 			for (sound in soundsToCache)
 			{
 				trace("Caching sound " + sound);
-				//FlxG.sound.cache(sound);
+				FlxG.sound.cache(sound);
 				screen.progress += 1;
 			}
 			FlxGraphic.defaultPersist = false;
@@ -80,18 +69,16 @@ class LoadingState extends MusicBeatState
 			{
 				screen.kill();
 				screen.destroy();
-				loadAndSwitchState(target, false);
+				FlxG.switchState(new TitleState());
 			});
 		});
 	}
-
-	public static function loadAndSwitchState(target:FlxState, stopMusic = false)
+	function checkLibs(asset:String, assetsToCache:Array<String>, type:AssetType)
 	{
-		Paths.setCurrentLevel("week" + PlayState.storyWeek);
-
-		if (stopMusic && FlxG.sound.music != null)
-			FlxG.sound.music.stop();
-		Main.dumping = false;
-		FlxG.switchState(target);
+		var library:String = asset.startsWith('assets/songs') ? 'songs' : (asset.startsWith('assets/shared') ? 'shared' : '');
+		if (library != '')
+			assetsToCache.push(Paths.getPath(StringTools.replace(asset, 'assets/' + library + '/', ''), type, library));
+		else
+			assetsToCache.push(asset);
 	}
 }

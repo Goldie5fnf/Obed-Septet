@@ -23,20 +23,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		var daBf:String = '';
 		switch (daStage)
 		{
-			case 'school' | 'schoolEvil':
-				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
 			default:
 				daBf = 'bf';
 		}
 
 		var daSong = PlayState.SONG.song.toLowerCase();
-
-		switch (daSong)
-		{
-			case 'stress':
-				daBf = 'bf-holding-gf-dead';
-		}
 
 		super();
 
@@ -159,8 +150,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
 				{
-					LoadingState.target = new PlayState();
-					FlxG.switchState(new LoadingState());
+					FlxG.switchState(new PlayState());
 				});
 			});
 		}

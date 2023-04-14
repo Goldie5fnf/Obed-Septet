@@ -23,7 +23,7 @@ import ui.Prompt;
 
 using StringTools;
 
-#if discord_rpc
+#if DISCORD
 import Discord.DiscordClient;
 #end
 
@@ -36,7 +36,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if discord_rpc
+		#if DISCORD
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end

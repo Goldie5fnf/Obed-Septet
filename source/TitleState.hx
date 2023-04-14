@@ -35,7 +35,7 @@ import ui.PreferencesMenu;
 
 using StringTools;
 
-#if discord_rpc
+#if DISCORD
 import Discord.DiscordClient;
 #end
 #if desktop
@@ -66,39 +66,18 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		startedIntro = false;
+		#if DISCORD
+		DiscordClient.changePresence("In the Menus", null);
+		#end
 
-		FlxG.game.focusLostFramerate = 60;
+		startedIntro = false;
 
 		swagShader = new ColorSwap();
 		alphaShader = new BuildingShaders();
 
-		FlxG.sound.muteKeys = [ZERO];
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
-		// DEBUG BULLSHIT
-
 		super.create();
-
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-		PreferencesMenu.initPrefs();
-		PlayerSettings.init();
-		Highscore.load();
-
-		if (FlxG.save.data.weekUnlocked != null)
-		{
-			// FIX LATER!!!
-			// WEEK UNLOCK PROGRESSION!!
-			// StoryMenuState.weekUnlocked = FlxG.save.data.weekUnlocked;
-
-			if (StoryMenuState.weekUnlocked.length < 4)
-				StoryMenuState.weekUnlocked.insert(0, true);
-
-			// QUICK PATCH OOPS!
-			if (!StoryMenuState.weekUnlocked[0])
-				StoryMenuState.weekUnlocked[0] = true;
-		}
 
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
@@ -108,15 +87,6 @@ class TitleState extends MusicBeatState
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
 			startIntro();
-		});
-		#end
-
-		#if discord_rpc
-		DiscordClient.initialize();
-
-		Application.current.onExit.add(function(exitCode)
-		{
-			DiscordClient.shutdown();
 		});
 		#end
 	}
