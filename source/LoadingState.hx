@@ -34,12 +34,12 @@ class LoadingState extends MusicBeatState
 		screen = new LoadingScreen();
 		add(screen);
 
-		screen.max = imagesToCache.length;
-
 		for (image in Assets.list(IMAGE))
 			checkLibs(image, imagesToCache, IMAGE);
 		for (sound in Assets.list(SOUND))
 			checkLibs(sound, soundsToCache, SOUND);
+
+                screen.max = imagesToCache.length + soundsToCache.length;
 
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
