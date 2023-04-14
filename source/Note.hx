@@ -36,7 +36,7 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 
-	public static var swagWidth:Float = 160 * 0.7;
+	public static var swagWidth:Float = 160 * 0.7 + 10;
 	public static var PURP_NOTE:Int = 0;
 	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
@@ -52,22 +52,22 @@ class Note extends FlxSprite
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
-		x += 100;
+		x += 87.5;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;
 
-		frames = Paths.getSparrowAtlas('NOTE_assets-BF');
+		frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-BF');
 
-		animation.addByPrefix('greenScroll', 'green ');
-		animation.addByPrefix('redScroll', 'red ');
-		animation.addByPrefix('blueScroll', 'blue ');
-		animation.addByPrefix('purpleScroll', 'purple ');
+		animation.addByPrefix('greenScroll', 'upnote');
+		animation.addByPrefix('redScroll', 'rightnote');
+		animation.addByPrefix('blueScroll', 'downnote');
+		animation.addByPrefix('purpleScroll', 'leftnote');
 
-		animation.addByPrefix('holdend', 'pruple end hold');
-		animation.addByPrefix('hold', 'purple hold piece');
+		animation.addByPrefix('holdend', 'note end hold');
+		animation.addByPrefix('hold', 'note hold piece');
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
@@ -76,20 +76,17 @@ class Note extends FlxSprite
 		switch (noteData)
 		{
 			case 0:
-				x += swagWidth * 0;
 				animation.play('purpleScroll');
 			case 1:
-				x += swagWidth * 1;
+				x += swagWidth * 1 - 4;
 				animation.play('blueScroll');
 			case 2:
-				x += swagWidth * 2;
+				x += swagWidth * 2 - 2;
 				animation.play('greenScroll');
 			case 3:
 				x += swagWidth * 3;
 				animation.play('redScroll');
 		}
-
-		// trace(prevNote);
 
 		if (isSustainNote && prevNote != null)
 		{
@@ -104,10 +101,14 @@ class Note extends FlxSprite
 
 			updateHitbox();
 
-			x -= width / 2;
-			prevNote.animation.play('hold');
-			prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
-			prevNote.updateHitbox();
+			x -= width / 4;
+			if (prevNote.isSustainNote) {
+				prevNote.animation.play('hold');
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				prevNote.updateHitbox();
+			}
+			if (animation.name.endsWith('end'))
+				offset.x += width / 4;//i woke up in a new buggatti:fire:
 		}
 	}
 

@@ -14,9 +14,10 @@ class LoadingState extends MusicBeatState
 {
 	public static var target:FlxState;
 	public static var stopMusic = false;
-
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
+
+	var screen:LoadingScreen;
 
 	public function new()
 	{
@@ -27,32 +28,58 @@ class LoadingState extends MusicBeatState
 	{
 		super.create();
 
+		screen = new LoadingScreen();
+		add(screen);
+
+		screen.max = imagesToCache.length;
+
 		for (image in Assets.list(IMAGE))
-			imagesToCache.push(image);
+		{
+			var library = image.startsWith('assets/shared') ? 'shared' : '';
+
+			if (library == 'shared')
+				imagesToCache.push(Paths.getPath(StringTools.replace(image, 'assets/shared/', ''), IMAGE, library));
+			else
+				imagesToCache.push(image);
+		}
 		for (sound in Assets.list(SOUND))
-			soundsToCache.push(sound);
+		{
+			var library = sound.startsWith('assets/shared') ? 'shared' : '';
+
+			if (library == 'shared')
+				soundsToCache.push(Paths.getPath(StringTools.replace(sound, 'assets/shared/', ''), SOUND, library));
+			else
+				soundsToCache.push(sound);
+		}
 
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
 		FlxGraphic.defaultPersist = true;
 		Thread.create(() ->
 		{
-			for (sound in soundsToCache)
-			{
-				trace("Caching sound " + sound);
-				FlxG.sound.cache(sound);
-			}
+			screen.setLoadingText("Loading images...");
 			for (image in imagesToCache)
 			{
 				trace("Caching image " + image);
-				FlxG.bitmap.add(image);
+				//FlxG.bitmap.add(image);
+				screen.progress += 1;
+			}
+			screen.setLoadingText("Loading sounds...");
+			for (sound in soundsToCache)
+			{
+				trace("Caching sound " + sound);
+				//FlxG.sound.cache(sound);
+				screen.progress += 1;
 			}
 			FlxGraphic.defaultPersist = false;
+			screen.setLoadingText("Done!");
 			trace("Done caching");
 			
 			FlxG.camera.fade(FlxColor.BLACK, 1, false);
 			new FlxTimer().start(1, function(_:FlxTimer)
 			{
+				screen.kill();
+				screen.destroy();
 				loadAndSwitchState(target, false);
 			});
 		});
@@ -66,16 +93,5 @@ class LoadingState extends MusicBeatState
 			FlxG.sound.music.stop();
 		Main.dumping = false;
 		FlxG.switchState(target);
-	}
-
-	public static function dumpAdditionalAssets()
-	{
-		for (image in imagesToCache)
-		{
-			trace("Dumping image " + image);
-			FlxG.bitmap.removeByKey(image);
-		}
-		soundsToCache = [];
-		imagesToCache = [];
 	}
 }
