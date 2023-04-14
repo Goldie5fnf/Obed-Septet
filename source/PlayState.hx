@@ -299,6 +299,11 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		
+		#if android
+		addHitbox(false);
+		addHitboxCamera();
+		#end
 
 		startingSong = true;
 
@@ -351,6 +356,9 @@ class PlayState extends MusicBeatState
 	{
 		inCutscene = false;
 		camHUD.visible = true;
+		#if android
+		hitbox.visible = true;
+		#end
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
@@ -744,7 +752,7 @@ class PlayState extends MusicBeatState
 
 		scoreTxt.text = "Score:" + songScore + " Combo:" + combo + " Player Missed:" + playerMisses + " Enemy Missed:" + enemyMisses;
 
-		if (controls.PAUSE && startedCountdown && canPause)
+		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -1078,6 +1086,9 @@ class PlayState extends MusicBeatState
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		#if android
+		removeHitbox();
+		#end
 		if (SONG.validScore)
 		{
 			Highscore.saveScore(SONG.song, songScore, storyDifficulty);

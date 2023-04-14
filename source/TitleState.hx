@@ -69,6 +69,10 @@ class TitleState extends MusicBeatState
 		#if DISCORD
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+		
+	#if android
+  FlxG.android.preventDefaultKeys = [BACK];
+  #end
 
 		startedIntro = false;
 
