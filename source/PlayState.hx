@@ -297,7 +297,7 @@ class PlayState extends MusicBeatState
 
 		#if android
 		addHitbox(false);
-		addHitboxCamera();
+		addHitboxCamera(false);
 		#end
 
 		startingSong = true;
