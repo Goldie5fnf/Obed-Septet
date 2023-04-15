@@ -5,7 +5,7 @@ import flixel.FlxState;
 import lime.app.Application;
 import ui.PreferencesMenu;
 #if windows
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 
 class Init

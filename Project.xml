@@ -70,7 +70,7 @@
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="hxCodec" if="VIDEOS" />
-	<haxelib name="discord_rpc" if="DISCORD"/>
+	<haxelib name="hxdiscord_rpc" if="DISCORD"/>
 	<haxelib name="extension-androidtools" if="android"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->

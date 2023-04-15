@@ -1,7 +1,7 @@
 package;
 
 #if DISCORD
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 import flash.text.TextField;
 import flixel.FlxG;

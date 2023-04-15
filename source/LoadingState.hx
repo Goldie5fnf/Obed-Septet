@@ -9,7 +9,7 @@ import openfl.utils.Assets;
 import openfl.utils.AssetType;
 import sys.thread.Thread;
 #if DISCORD
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 
 using StringTools;

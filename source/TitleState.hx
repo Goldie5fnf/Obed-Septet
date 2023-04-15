@@ -30,7 +30,7 @@ import ui.PreferencesMenu;
 using StringTools;
 
 #if DISCORD
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 #if desktop
 import sys.FileSystem;

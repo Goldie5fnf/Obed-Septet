@@ -24,7 +24,7 @@ import ui.Prompt;
 using StringTools;
 
 #if DISCORD
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 
 class MainMenuState extends MusicBeatState

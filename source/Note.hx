@@ -78,10 +78,10 @@ class Note extends FlxSprite
 			case 0:
 				animation.play('purpleScroll');
 			case 1:
-				x += swagWidth * 1 - 7.5;
+				x += swagWidth * 1 - 7;
 				animation.play('blueScroll');
 			case 2:
-				x += swagWidth * 2 - 5;
+				x += swagWidth * 2 - 2.5;
 				animation.play('greenScroll');
 			case 3:
 				x += swagWidth * 3;

@@ -56,7 +56,7 @@ import vlc.MP4Sprite as VideoSprite;
 using StringTools;
 
 #if DISCORD
-import Discord.DiscordClient;
+import DiscordClient.DiscordClient;
 #end
 
 class PlayState extends MusicBeatState
@@ -212,7 +212,7 @@ class PlayState extends MusicBeatState
 
 		for (i in 0...2)
 		{
-			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 20).loadGraphic(Paths.image('noteassets/bar'));
+			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image('noteassets/bar'));
 			arrowBar.antialiasing = true;
 			arrowBar.setGraphicSize(Std.int(arrowBar.width * 0.7));
 			arrowBar.updateHitbox();
@@ -563,12 +563,12 @@ class PlayState extends MusicBeatState
 					babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
 					crashArrow.animation.addByPrefix('press', 'left press', 24, false);
 				case 1:
-					babyArrow.x += 5 + Note.swagWidth * 1;
+					babyArrow.x += 2.5 + Note.swagWidth * 1;
 					babyArrow.animation.addByPrefix('static', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
 					crashArrow.animation.addByPrefix('press', 'down press', 24, false);
 				case 2:
-					babyArrow.x += 7.5 + Note.swagWidth * 2;
+					babyArrow.x += 7 + Note.swagWidth * 2;
 					babyArrow.animation.addByPrefix('static', 'arrowUP');
 					babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
 					crashArrow.animation.addByPrefix('press', 'up press', 24, false);
