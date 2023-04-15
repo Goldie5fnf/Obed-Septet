@@ -33,9 +33,9 @@ class Main extends Sprite
 
 	public function new()
 	{
-	  #if android
+	  //#if android
 	  SUtil.uncaughtErrorHandler();
-	  #end
+	  //#end
 	
 		super();
 
@@ -80,9 +80,9 @@ class Main extends Sprite
 		initialState = TitleState;
 		#end
 		
-		#if android
+		//#if android
 		SUtil.checkPermissions();
-		#end
+		//#end
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, #if (flixel < '5.0.0') zoom, #end framerate, framerate, skipSplash, startFullscreen));
 		fpsCounter = new FPS(10, 3, 0xFFFFFF);
