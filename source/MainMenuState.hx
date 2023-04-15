@@ -117,10 +117,12 @@ class MainMenuState extends MusicBeatState
 		versionShit.text += '(Newgrounds exclusive preview)';
 
 		// NG.core.calls.event.logEvent('swag').send();
+
+		super.create();
+
                 #if mobile
                 addVirtualPad(UP_DOWN, A_B);
                 #end
-		super.create();
 	}
 
 	override function finishTransIn()
