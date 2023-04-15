@@ -33,9 +33,9 @@ class GameOverState extends FlxTransitionableState
 
 		super.create();
 
-                #if mobile
-                addVirtualPad(NONE, A_B);
-                #end
+		#if mobile
+		addVirtualPad(NONE, A_B);
+		#end
 	}
 
 	private var fading:Bool = false;

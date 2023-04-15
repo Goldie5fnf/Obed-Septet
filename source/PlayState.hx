@@ -42,18 +42,17 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import ui.PreferencesMenu;
 #if VIDEOS
-#if (hxCodec == "2.6.0") 
+#if (hxCodec == "2.6.0")
 import VideoHandler;
 import VideoSprite;
-#elseif (hxCodec >= "2.6.1") 
+#elseif (hxCodec >= "2.6.1")
 import hxcodec.VideoHandler;
 import hxcodec.VideoSprite;
-#else 
+#else
 import vlc.MP4Handler as VideoHandler;
 import vlc.MP4Sprite as VideoSprite;
 #end
 #end
-
 using StringTools;
 
 #if DISCORD
@@ -295,7 +294,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
-		
+
 		#if android
 		addHitbox(false);
 		addHitboxCamera();
@@ -314,7 +313,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		else
-		    startCountdown();
+			startCountdown();
 
 		super.create();
 	}
@@ -344,7 +343,7 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 	}
-	
+
 	var startTimer:FlxTimer = new FlxTimer();
 	var perfectMode:Bool = false;
 
@@ -383,8 +382,10 @@ class PlayState extends MusicBeatState
 			var introSprPaths:Array<String> = ["ready", "set", "go"];
 			var altSuffix:String = "";
 
-			var introSndPaths:Array<String> = ["intro3" + altSuffix, "intro2" + altSuffix,
-				"intro1" + altSuffix, "introGo" + altSuffix];
+			var introSndPaths:Array<String> = [
+				"intro3" + altSuffix, "intro2" + altSuffix,
+				"intro1" + altSuffix, "introGo" + altSuffix
+			];
 
 			if (swagCounter > 0)
 				readySetGo(introSprPaths[swagCounter - 1]);
@@ -483,7 +484,7 @@ class PlayState extends MusicBeatState
 				if ((songNotes[1] >= 4 && section.mustHitSection) || (songNotes[1] <= 3 && !section.mustHitSection))
 					songNotes[4] = false;
 				else
-					songNotes[4]= true;
+					songNotes[4] = true;
 
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
@@ -609,7 +610,8 @@ class PlayState extends MusicBeatState
 			crashArrow.x = babyArrow.x;
 			crashArrow.y = babyArrow.y;
 
-			enemyStrums.forEach(function(spr:FlxSprite) {
+			enemyStrums.forEach(function(spr:FlxSprite)
+			{
 				spr.centerOffsets();
 			});
 
@@ -806,7 +808,7 @@ class PlayState extends MusicBeatState
 			if (FlxG.keys.pressed.SHIFT)
 				if (FlxG.keys.pressed.CONTROL)
 					FlxG.switchState(new AnimationDebug(gf.curCharacter));
-				else 
+				else
 					FlxG.switchState(new AnimationDebug(SONG.player1));
 			else
 				FlxG.switchState(new AnimationDebug(SONG.player2));
@@ -977,15 +979,19 @@ class PlayState extends MusicBeatState
 							dad.dance();
 					}
 
-					enemyStrums.forEach(function(spr:FlxSprite) {
-						if (Math.abs(daNote.noteData) == spr.ID) {
+					enemyStrums.forEach(function(spr:FlxSprite)
+					{
+						if (Math.abs(daNote.noteData) == spr.ID)
+						{
 							spr.animation.play('confirm', true);
 						}
-						if (spr.animation.curAnim.name == 'confirm') {
+						if (spr.animation.curAnim.name == 'confirm')
+						{
 							spr.centerOffsets();
 							spr.offset.x -= 13;
 							spr.offset.y -= 13;
-						} else
+						}
+						else
 							spr.centerOffsets();
 					});
 
@@ -1032,8 +1038,10 @@ class PlayState extends MusicBeatState
 			});
 		}
 
-		enemyStrums.forEach(function(spr:FlxSprite) {
-			if (spr.animation.finished) {
+		enemyStrums.forEach(function(spr:FlxSprite)
+		{
+			if (spr.animation.finished)
+			{
 				spr.animation.play('static');
 				spr.centerOffsets();
 			}
@@ -1443,14 +1451,14 @@ class PlayState extends MusicBeatState
 						cspr.alpha = (cspr.ID == direction) ? 1 : 0;
 						spr.alpha = (direction == spr.ID) ? 0 : 1;
 						if (cspr.ID == direction && spr.animation.curAnim.name != 'confirm')
-						{	
+						{
 							cspr.animation.play('press');
 							new FlxTimer().start(0.2, function(tmr:FlxTimer)
 							{
 								cspr.alpha = 0;
 								spr.alpha = 1;
 							});
-						}			
+						}
 					});
 				});
 			case 'dad':

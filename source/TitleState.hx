@@ -41,6 +41,7 @@ import sys.thread.Thread;
 class TitleState extends MusicBeatState
 {
 	public static var initialized:Bool = false;
+
 	var startedIntro:Bool;
 
 	var blackScreen:FlxSprite;
@@ -61,10 +62,10 @@ class TitleState extends MusicBeatState
 		#if DISCORD
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-		
+
 		#if android
-  		FlxG.android.preventDefaultKeys = [BACK];
-  		#end
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
 
 		startedIntro = false;
 
@@ -83,6 +84,7 @@ class TitleState extends MusicBeatState
 		});
 		#end
 	}
+
 	var logoBl:FlxSprite;
 
 	var gfDance:FlxSprite;
@@ -97,10 +99,10 @@ class TitleState extends MusicBeatState
 			diamond.persist = true;
 			diamond.destroyOnNoUse = false;
 
-			FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(0, 0), {asset: diamond, width: 32, height: 32},
-				new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-			FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(0, 0), {asset: diamond, width: 32, height: 32},
-			    new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+			FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(0, 0),
+				{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+			FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(0, 0),
+				{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
 
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
@@ -256,8 +258,7 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
-			new FlxTimer().start(1, function(tmr:FlxTimer)
-				FlxG.switchState(new MainMenuState()));
+			new FlxTimer().start(1, function(tmr:FlxTimer) FlxG.switchState(new MainMenuState()));
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
@@ -302,7 +303,7 @@ class TitleState extends MusicBeatState
 		super.beatHit();
 
 		if (!startedIntro)
-			return ;
+			return;
 
 		if (skippedIntro)
 		{

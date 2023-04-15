@@ -18,6 +18,7 @@ class LoadingState extends MusicBeatState
 {
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
+
 	var screen:LoadingScreen;
 
 	public function new()
@@ -39,7 +40,7 @@ class LoadingState extends MusicBeatState
 		for (sound in Assets.list(SOUND))
 			checkLibs(sound, soundsToCache, SOUND);
 
-                screen.max = imagesToCache.length + soundsToCache.length;
+		screen.max = imagesToCache.length + soundsToCache.length;
 
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
@@ -63,7 +64,7 @@ class LoadingState extends MusicBeatState
 			FlxGraphic.defaultPersist = false;
 			screen.setLoadingText("Done!");
 			trace("Done caching");
-			
+
 			FlxG.camera.fade(FlxColor.BLACK, 1, false);
 			new FlxTimer().start(1, function(_:FlxTimer)
 			{
@@ -73,6 +74,7 @@ class LoadingState extends MusicBeatState
 			});
 		});
 	}
+
 	function checkLibs(asset:String, assetsToCache:Array<String>, type:AssetType)
 	{
 		var library:String = asset.startsWith('assets/songs') ? 'songs' : (asset.startsWith('assets/shared') ? 'shared' : '');

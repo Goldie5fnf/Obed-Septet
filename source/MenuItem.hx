@@ -26,6 +26,7 @@ class MenuItem extends FlxSpriteGroup
 	{
 		isFlashing = true;
 	}
+
 	var fakeFramerate:Int = Math.round((1 / FlxG.elapsed) / 10);
 
 	override function update(elapsed:Float)

@@ -8,10 +8,12 @@ import ui.PreferencesMenu;
 import Discord.DiscordClient;
 #end
 
-class Init {
+class Init
+{
 	function new() {}
 
-	public static function Initialize() {
+	public static function Initialize()
+	{
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = [ZERO];
 		FlxG.save.bind('funkin', 'ninjamuffin99');

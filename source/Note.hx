@@ -102,13 +102,14 @@ class Note extends FlxSprite
 			updateHitbox();
 
 			x -= width / 4.25;
-			if (prevNote.isSustainNote) {
+			if (prevNote.isSustainNote)
+			{
 				prevNote.animation.play('hold');
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 			}
 			if (animation.name.endsWith('end'))
-				offset.x += width / 4.25;//i woke up in a new buggatti:fire:
+				offset.x += width / 4.25; // i woke up in a new buggatti:fire:
 		}
 	}
 

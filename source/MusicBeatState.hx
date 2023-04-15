@@ -23,7 +23,7 @@ class MusicBeatState extends FlxUIState
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
-		
+
 	#if mobile
 	var hitbox:FlxHitbox;
 	var virtualPad:FlxVirtualPad;
@@ -118,7 +118,7 @@ class MusicBeatState extends FlxUIState
 		if (hitbox != null)
 			hitbox = FlxDestroyUtil.destroy(hitbox);
 		#end
-	}	
+	}
 
 	override function create()
 	{
