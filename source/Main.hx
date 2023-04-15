@@ -33,6 +33,10 @@ class Main extends Sprite
 
 	public function new()
 	{
+	  #if android
+	  SUtil.uncaughtErrorHandler();
+	  #end
+	
 		super();
 
 		if (stage != null)
@@ -74,6 +78,10 @@ class Main extends Sprite
 
 		#if !debug
 		initialState = TitleState;
+		#end
+		
+		#if android
+		SUtil.checkPermissions();
 		#end
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, #if (flixel < '5.0.0') zoom, #end framerate, framerate, skipSplash, startFullscreen));

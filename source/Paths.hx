@@ -117,6 +117,6 @@ class Paths
 
 	inline static public function videos(key:String)
 	{
-		return 'assets/videos/$key';
+		return #if android SUtil.getStorageDirectory() +#end 'assets/videos/$key';
 	}
 }
