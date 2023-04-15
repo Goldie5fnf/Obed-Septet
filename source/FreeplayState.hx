@@ -114,11 +114,11 @@ class FreeplayState extends MusicBeatState
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
+		super.create();
+
                 #if mobile
                 addVirtualPad(LEFT_FULL, A_B);
                 #end
-
-		super.create();
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
