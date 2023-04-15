@@ -32,6 +32,10 @@ class GameOverState extends FlxTransitionableState
 		FlxG.sound.music.fadeOut(2, FlxG.sound.music.volume * 0.6);
 
 		super.create();
+
+                #if mobile
+                addVirtualPad(NONE, A_B);
+                #end
 	}
 
 	private var fading:Bool = false;
