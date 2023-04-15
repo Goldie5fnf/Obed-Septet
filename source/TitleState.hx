@@ -25,12 +25,6 @@ import openfl.events.AsyncErrorEvent;
 import openfl.events.AsyncErrorEvent;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
-import openfl.events.NetStatusEvent;
-import openfl.net.NetConnection;
-import openfl.net.NetStream;
-import shaderslmfao.BuildingShaders.BuildingShader;
-import shaderslmfao.BuildingShaders;
-import shaderslmfao.ColorSwap;
 import ui.PreferencesMenu;
 
 using StringTools;
@@ -58,8 +52,6 @@ class TitleState extends MusicBeatState
 	var curWacky:Array<String> = [];
 	var wackyImage:FlxSprite;
 	var lastBeat:Int = 0;
-	var swagShader:ColorSwap;
-	var alphaShader:BuildingShaders;
 	var thingie:FlxSprite;
 
 	private var overlay:Sprite;
@@ -70,14 +62,11 @@ class TitleState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 		
-	#if android
-  FlxG.android.preventDefaultKeys = [BACK];
-  #end
+		#if android
+  		FlxG.android.preventDefaultKeys = [BACK];
+  		#end
 
 		startedIntro = false;
-
-		swagShader = new ColorSwap();
-		alphaShader = new BuildingShaders();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
@@ -138,15 +127,7 @@ class TitleState extends MusicBeatState
 		logoBl.antialiasing = true;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
-
 		logoBl.updateHitbox();
-
-		logoBl.shader = swagShader.shader;
-		// logoBl.shader = alphaShader.shader;
-
-		// trace();
-		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
 
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
@@ -154,9 +135,6 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = true;
 		add(gfDance);
-
-		gfDance.shader = swagShader.shader;
-
 		add(logoBl);
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
@@ -284,13 +262,6 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !skippedIntro && initialized)
 			skipIntro();
-
-		if (controls.UI_LEFT)
-			swagShader.update(-elapsed * 0.1);
-
-		if (controls.UI_RIGHT)
-			swagShader.update(elapsed * 0.1);
-
 		super.update(elapsed);
 	}
 

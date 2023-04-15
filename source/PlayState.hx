@@ -40,9 +40,6 @@ import openfl.Lib;
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
-import openfl.filters.ShaderFilter;
-import shaderslmfao.BuildingShaders.BuildingShader;
-import shaderslmfao.BuildingShaders;
 import ui.PreferencesMenu;
 #if VIDEOS
 #if (hxCodec == "2.6.0") 
@@ -146,7 +143,6 @@ class PlayState extends MusicBeatState
 	#end
 
 	var camPos:FlxPoint;
-	var lightFadeShader:BuildingShaders;
 
 	override public function create()
 	{
