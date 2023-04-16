@@ -118,6 +118,9 @@ class AnimationDebug extends FlxState
 	{
 		textAnim.text = char.animation.curAnim.name;
 
+		if (FlxG.keys.justPressed.ENTER) 
+			FlxG.switchState(new PlayState());
+
 		if (FlxG.keys.justPressed.E)
 			FlxG.camera.zoom += 0.25;
 		if (FlxG.keys.justPressed.Q)

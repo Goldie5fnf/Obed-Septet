@@ -97,11 +97,16 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
-	private var health:Float = 1;
+	private var healthP1:Float = 1;
+	private var healthP2:Float = 1;
 	private var combo:Int = 0;
 
-	private var healthBarBG:FlxSprite;
-	private var healthBar:FlxBar;
+	private var barP1BG:FlxSprite;
+	private var barP2BG:FlxSprite;
+	private var barP1:FlxBar;
+	private var barP2:FlxBar;
+	private var barX:Float = 50;
+	private var barY:Float = FlxG.height * 0.7;
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
@@ -258,39 +263,48 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
-		healthBarBG.screenCenter(X);
-		healthBarBG.scrollFactor.set();
-		add(healthBarBG);
-
 		if (PreferencesMenu.getPref('downscroll'))
-			healthBarBG.y = FlxG.height * 0.1;
+			barY = FlxG.height * 0.1;
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
-		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
-		// healthBar
-		add(healthBar);
+		barP1BG = new FlxSprite(barX + 800, barY).loadGraphic(Paths.image('barassets/HPbarbar-BF'));
+		barP1BG.flipX = true;
+		barP1BG.scrollFactor.set();
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 250, healthBarBG.y + 30, 0, "", 20);
+		barP2BG = new FlxSprite(barX, barY).loadGraphic(Paths.image('barassets/HPbarbar-BF'));
+		barP2BG.scrollFactor.set();
+
+		barP1 = new FlxBar(barP1BG.x + 15, barP1BG.y + 75, LEFT_TO_RIGHT, Std.int(barP1BG.width), Std.int(barP1BG.height), this, 'healthP1', 0, 2);
+		barP1.flipX = barP1BG.flipX;
+		barP1.scrollFactor.set();
+		barP1.createImageBar(Paths.image('barassets/HPbarHP-BF'), Paths.image('barassets/HPbarHP-BF'));
+		add(barP1);
+		add(barP1BG);
+
+		barP2 = new FlxBar(barP2BG.x + 105, barP2BG.y + 75, LEFT_TO_RIGHT, Std.int(barP2BG.width), Std.int(barP2BG.height), this, 'healthP2', 0, 2);
+		barP2.scrollFactor.set();
+		barP2.createImageBar(Paths.image('barassets/HPbarHP-V1'), Paths.image('barassets/HPbarHP-V1'));
+		barP1.scale.x = barP2.scale.x = 0.8;
+		add(barP2);
+		add(barP2BG);
+
+		scoreTxt = new FlxText(250, 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
-
 		iconP2 = new HealthIcon(SONG.player2, false);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
+		iconP1.y = iconP2.y = barY + 37.5;
 
 		grpNoteSplashes.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
-		healthBar.cameras = [camHUD];
-		healthBarBG.cameras = [camHUD];
+		barP1BG.cameras = [camHUD];
+		barP1.cameras = [camHUD];
+		barP2BG.cameras = [camHUD];
+		barP2.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
@@ -668,7 +682,7 @@ class PlayState extends MusicBeatState
 	#if DISCORD
 	override public function onFocus():Void
 	{
-		if (health > 0 && !paused && FlxG.autoPause)
+		if (healthP1 > 0 && !paused && FlxG.autoPause)
 		{
 			if (Conductor.songPosition > 0.0)
 				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
@@ -681,7 +695,7 @@ class PlayState extends MusicBeatState
 
 	override public function onFocusLost():Void
 	{
-		if (health > 0 && !paused && FlxG.autoPause)
+		if (healthP1 > 0 && !paused && FlxG.autoPause)
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 
 		super.onFocusLost();
@@ -782,20 +796,22 @@ class PlayState extends MusicBeatState
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
-		var iconOffset:Int = 26;
+		iconP1.x = barP1BG.x + 215;
+		iconP2.x = barP2BG.x + 10;
+		
+		if (healthP1 > 2)
+			healthP2 = 2;
+		if (healthP2 > 2)
+			healthP2 = 2;
+		else if (healthP2 <= 0)
+			healthP2 = 0;
 
-		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
-
-		if (health > 2)
-			health = 2;
-
-		if (healthBar.percent < 20)
+		if (barP1.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
 			iconP1.animation.curAnim.curFrame = 0;
 
-		if (healthBar.percent > 80)
+		if (barP2.percent < 20)
 			iconP2.animation.curAnim.curFrame = 1;
 		else
 			iconP2.animation.curAnim.curFrame = 0;
@@ -839,30 +855,26 @@ class PlayState extends MusicBeatState
 		{
 			if (controls.RESET)
 			{
-				health = 0;
+				healthP1 = 0;
 				trace("RESET = True");
 			}
 
 			#if CAN_CHEAT
 			if (controls.CHEAT)
 			{
-				health += 1;
+				healthP1 += 1;
 				trace("User is cheating!");
 			}
 			#end
 
-			if (health <= 0 && !practiceMode)
+			if (healthP1 <= 0 && !practiceMode)
 			{
-				// boyfriend.stunned = true;
-
 				persistentUpdate = false;
 				persistentDraw = false;
 				paused = true;
 
 				vocals.stop();
 				FlxG.sound.music.stop();
-
-				// unloadAssets();
 
 				deathCounter += 1;
 
@@ -948,7 +960,7 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					isEnemyMiss = (enemyMisses < enemyMissLimit && !daNote.isPlayerNote) ? FlxG.random.bool(1) : false;
+					isEnemyMiss = (enemyMisses < enemyMissLimit && !daNote.isPlayerNote) ? FlxG.random.bool(5) : false;
 
 					var altAnim:String = "";
 
@@ -960,6 +972,11 @@ class PlayState extends MusicBeatState
 
 					if (daNote.altNote)
 						altAnim = '-alt';
+
+					if (daNote.noteData >= 0)
+						healthP1 += 0.023;
+					else
+						healthP1 += 0.004;
 
 					switch (Math.abs(daNote.noteData))
 					{
@@ -1023,9 +1040,9 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate && !daNote.isSustainNote)
 					{
 						if (daNote.isPlayerNote)
-							noteMiss(Std.int(Math.abs(daNote.noteData)), "BF", 0.0075);
+							noteMiss(Std.int(Math.abs(daNote.noteData)), false, "BF", 0.0075);
 						else
-							noteMiss(Std.int(Math.abs(daNote.noteData)), "dad", 0.0075);
+							noteMiss(Std.int(Math.abs(daNote.noteData)), false, "dad", 0.0075);
 					}
 
 					daNote.active = false;
@@ -1130,10 +1147,10 @@ class PlayState extends MusicBeatState
 				var difficulty:String = "";
 
 				if (storyDifficulty == 0)
-					difficulty = '-easy';
+					difficulty = '-fine';
 
-				if (storyDifficulty == 2)
-					difficulty = '-hard';
+				if (storyDifficulty == 1)
+					difficulty = '-obed';
 
 				trace('LOADING NEXT SONG');
 				trace(storyPlaylist[0].toLowerCase() + difficulty);
@@ -1429,7 +1446,7 @@ class PlayState extends MusicBeatState
 			case 'BF':
 				if (!practiceMode)
 					songScore -= 10;
-				health -= 0.04 + additionalHealthDown;
+				healthP1 -= 0.04 + additionalHealthDown;
 				playerMisses++;
 				killCombo();
 
@@ -1444,27 +1461,30 @@ class PlayState extends MusicBeatState
 					case 3:
 						boyfriend.playAnim('singRIGHTmiss', true);
 				}
-				playerStrums.forEach(function(spr:FlxSprite)
+				if (isCrashNote)
 				{
-					crashStrum.forEach(function(cspr:FlxSprite)
+					playerStrums.forEach(function(spr:FlxSprite)
 					{
-						cspr.alpha = (cspr.ID == direction) ? 1 : 0;
-						spr.alpha = (direction == spr.ID) ? 0 : 1;
-						if (cspr.ID == direction && spr.animation.curAnim.name != 'confirm')
+						crashStrum.forEach(function(cspr:FlxSprite)
 						{
-							cspr.animation.play('press');
-							new FlxTimer().start(0.2, function(tmr:FlxTimer)
+							cspr.alpha = (cspr.ID == direction) ? 1 : 0;
+							spr.alpha = (direction == spr.ID) ? 0 : 1;
+							if (cspr.ID == direction && spr.animation.curAnim.name != 'confirm')
 							{
-								cspr.alpha = 0;
-								spr.alpha = 1;
-							});
-						}
+								cspr.animation.play('press');
+								new FlxTimer().start(0.2, function(tmr:FlxTimer)
+								{
+									cspr.alpha = 0;
+									spr.alpha = 1;
+								});
+							}
+						});
 					});
-				});
+				}
 			case 'dad':
 				if (!practiceMode)
 					songScore += 10;
-				health += 0.04 + additionalHealthDown;
+				healthP2 -= 0.04 + additionalHealthDown;
 				enemyMisses++;
 
 				switch (direction)
@@ -1494,9 +1514,9 @@ class PlayState extends MusicBeatState
 			}
 
 			if (note.noteData >= 0)
-				health += 0.023;
+				healthP1 += 0.023;
 			else
-				health += 0.004;
+				healthP1 += 0.004;
 
 			switch (note.noteData)
 			{
@@ -1557,11 +1577,6 @@ class PlayState extends MusicBeatState
 				FlxG.log.add('CHANGED BPM!');
 			}
 		}
-		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
-		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
-
-		iconP1.updateHitbox();
-		iconP2.updateHitbox();
 
 		if (curBeat % gfSpeed == 0)
 			gf.dance();

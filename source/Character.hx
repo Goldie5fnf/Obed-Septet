@@ -76,6 +76,23 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
+
+			case 'peka':
+				var tex = Paths.getSparrowAtlas('characters/peka');
+				frames = tex;
+				quickAnimAdd('idle', 'idle instance');
+				quickAnimAdd('singUP', 'up instance');
+				quickAnimAdd('singLEFT', 'left instance');
+				quickAnimAdd('singRIGHT', 'right instance');
+				quickAnimAdd('singDOWN', 'down instance');
+				quickAnimAdd('singUPmiss', 'up instance');
+				quickAnimAdd('singLEFTmiss', 'left instance');
+				quickAnimAdd('singRIGHTmiss', 'right instance');
+				quickAnimAdd('singDOWNmiss', 'down instance');
+
+				playAnim('idle');
+
+				flipX = true;
 		}
 
 		loadOffsetFile(curCharacter);

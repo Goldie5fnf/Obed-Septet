@@ -23,6 +23,7 @@ class LoadingState extends MusicBeatState
 
 	var screen:LoadingScreen;
 	var warning:FlxText;
+	var enabled:Bool = true;
 
 	override function create()
 	{
@@ -40,20 +41,25 @@ class LoadingState extends MusicBeatState
 
 	override function update(elapsed)
 	{
-		if (controls.ACCEPT)
+		if (enabled)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-			FlxFlicker.flicker(warning, 1, 0.06, true, false, function(flick:FlxFlicker)
+			if (controls.ACCEPT)
 			{
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+				enabled = false;
+				FlxFlicker.flicker(warning, 1, 0.06, true, false, function(flick:FlxFlicker)
+				{
+					warning.destroy();
+					precache();
+				});
+			}
+			else if (controls.BACK)
+			{
+				enabled = false;
+				FlxG.sound.play(Paths.sound('cancelMenu'));
 				warning.destroy();
-				precache();
-			});
-		}
-		else if (controls.BACK)
-		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			warning.destroy();
-			FlxG.switchState(new TitleState());
+				FlxG.switchState(new TitleState());
+			}
 		}
 
 		super.update(elapsed);
