@@ -258,7 +258,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar', 'shared'));
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -389,7 +389,7 @@ class PlayState extends MusicBeatState
 
 			if (swagCounter > 0)
 				readySetGo(introSprPaths[swagCounter - 1]);
-			FlxG.sound.play(Paths.sound(introSndPaths[swagCounter], 'shared'), 0.6);
+			FlxG.sound.play(Paths.sound(introSndPaths[swagCounter]), 0.6);
 
 			swagCounter += 1;
 		}, 4);
@@ -397,7 +397,7 @@ class PlayState extends MusicBeatState
 
 	function readySetGo(path:String):Void
 	{
-		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path, 'shared'));
+		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path));
 		spr.scrollFactor.set();
 
 		spr.updateHitbox();
@@ -1193,7 +1193,7 @@ class PlayState extends MusicBeatState
 		if (!practiceMode)
 			songScore += score;
 
-		rating.loadGraphic(Paths.image(daRating, 'shared'));
+		rating.loadGraphic(Paths.image(daRating));
 		rating.x = FlxG.width * 0.55 - 40;
 		if (rating.x < FlxG.camera.scroll.x)
 			rating.x = FlxG.camera.scroll.x;
@@ -1223,7 +1223,7 @@ class PlayState extends MusicBeatState
 
 	function displayCombo():Void
 	{
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('combo', 'shared'));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('combo'));
 		comboSpr.y = FlxG.camera.scroll.y + FlxG.camera.height * 0.4 + 80;
 		comboSpr.x = FlxG.width * 0.55;
 		if (comboSpr.x < FlxG.camera.scroll.x + 194)
@@ -1480,7 +1480,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 		vocals.volume = 0;
-		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3, 'shared'), FlxG.random.float(0.1, 0.2));
+		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 	}
 
 	function goodNoteHit(note:Note):Void

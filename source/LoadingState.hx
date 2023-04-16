@@ -36,9 +36,11 @@ class LoadingState extends MusicBeatState
 		add(screen);
 
 		for (image in Assets.list(IMAGE))
-			checkLibs(image, imagesToCache, IMAGE);
+			if (!image.startsWith('flixel'))
+				imagesToCache.push(image);
 		for (sound in Assets.list(SOUND))
-			checkLibs(sound, soundsToCache, SOUND);
+			if (!sound.startsWith('flixel'))
+				soundsToCache.push(sound);
 
 		screen.max = imagesToCache.length + soundsToCache.length;
 
@@ -73,14 +75,5 @@ class LoadingState extends MusicBeatState
 				FlxG.switchState(new TitleState());
 			});
 		});
-	}
-
-	function checkLibs(asset:String, assetsToCache:Array<String>, type:AssetType)
-	{
-		var library:String = asset.startsWith('assets/songs') ? 'songs' : (asset.startsWith('assets/shared') ? 'shared' : '');
-		if (library != '')
-			assetsToCache.push(Paths.getPath(StringTools.replace(asset, 'assets/' + library + '/', ''), type, library));
-		else
-			assetsToCache.push(asset);
 	}
 }
