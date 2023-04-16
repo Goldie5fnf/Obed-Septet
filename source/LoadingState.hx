@@ -2,7 +2,9 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.text.FlxText;
 import flixel.graphics.FlxGraphic;
+import flixel.effects.FlxFlicker;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import openfl.utils.Assets;
@@ -20,18 +22,45 @@ class LoadingState extends MusicBeatState
 	static var soundsToCache:Array<String> = [];
 
 	var screen:LoadingScreen;
-
-	public function new()
-	{
-		super();
-	}
+	var warning:FlxText;
 
 	override function create()
 	{
 		super.create();
 
-		Init.Initialize();
+		warning = new FlxText(0, 0, 0, 'Do you want to preload every image and sound in a game?\n
+		(RECOMMENDED FOR DEVICES WITH HIGH RAM)\n\n
+		Press ENTER to preload or ESC to skip.', 30);
+		warning.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		warning.screenCenter();
+		add(warning);
 
+		Init.Initialize();
+	}
+
+	override function update(elapsed)
+	{
+		if (controls.ACCEPT)
+		{
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxFlicker.flicker(warning, 1, 0.06, true, false, function(flick:FlxFlicker)
+			{
+				warning.destroy();
+				precache();
+			});
+		}
+		else if (controls.BACK)
+		{
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+			warning.destroy();
+			FlxG.switchState(new TitleState());
+		}
+
+		super.update(elapsed);
+	}
+
+	function precache()
+	{
 		screen = new LoadingScreen();
 		add(screen);
 

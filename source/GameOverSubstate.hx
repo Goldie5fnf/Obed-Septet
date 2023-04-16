@@ -45,22 +45,12 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.target = null;
 
 		bf.playAnim('firstDeath');
-
-		var randomCensor:Array<Int> = [];
-
-		if (PreferencesMenu.getPref('censor-naughty'))
-			randomCensor = [1, 3, 8, 13, 17, 21];
-
-		randomGameover = FlxG.random.int(1, 25, randomCensor);
 	}
 
 	var playingDeathSound:Bool = false;
 
 	override function update(elapsed:Float)
 	{
-		// makes the lerp non-dependant on the framerate
-		// FlxG.camera.followLerp = CoolUtil.camLerpShit(0.01);
-
 		super.update(elapsed);
 
 		if (controls.ACCEPT)

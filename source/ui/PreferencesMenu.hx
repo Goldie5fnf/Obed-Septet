@@ -41,10 +41,8 @@ class PreferencesMenu extends ui.OptionsState.Page
 
 		add(items = new TextMenuList());
 
-		createPrefItem('Ghost Tapping', 'Ghost Tapping', false);
-		createPrefItem('naughtyness', 'censor-naughty', true);
+		createPrefItem('Ghost Tapping', 'ghost-tapping', false);
 		createPrefItem('downscroll', 'downscroll', false);
-		createPrefItem('flashing menu', 'flashing-menu', true);
 		createPrefItem('Camera Zooming on Beat', 'camera-zoom', true);
 		createPrefItem('FPS Counter', 'fps-counter', true);
 		createPrefItem('Auto Pause', 'auto-pause', false);
@@ -88,10 +86,8 @@ class PreferencesMenu extends ui.OptionsState.Page
 
 	public static function initPrefs():Void
 	{
-		preferenceCheck('Ghost Tapping', false);
-		preferenceCheck('censor-naughty', true);
+		preferenceCheck('ghost-tapping', false);
 		preferenceCheck('downscroll', false);
-		preferenceCheck('flashing-menu', true);
 		preferenceCheck('camera-zoom', true);
 		preferenceCheck('fps-counter', true);
 		preferenceCheck('auto-pause', false);
@@ -148,7 +144,7 @@ class PreferencesMenu extends ui.OptionsState.Page
 	 */
 	private function prefToggle(prefName:String)
 	{
-		if (prefName == 'Ghost Tapping')
+		if (prefName == 'ghost-tapping')
 		{
 			inGhost = true;
 			isText2 = false;

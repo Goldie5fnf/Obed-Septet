@@ -12,7 +12,6 @@ class LoadingScreen extends FlxTypedGroup<FlxSprite>
 	public var progress:Int = 0;
 	public var max:Int = 10;
 
-	var loadingImage:FlxSprite;
 	var loadTxtBg:FlxSprite;
 	var loadTxtProgress:FlxSprite;
 	var loadTxt:FlxText;
@@ -20,14 +19,6 @@ class LoadingScreen extends FlxTypedGroup<FlxSprite>
 	public function new()
 	{
 		super();
-
-		loadingImage = new FlxSprite(0, 0);
-		// loadingImage.loadGraphic(path);
-		// loadingImage.scale.set(shit, shit);
-		loadingImage.updateHitbox();
-		loadingImage.screenCenter();
-		// add(loadingImage);
-
 		loadTxtBg = new FlxSprite();
 		add(loadTxtBg);
 
