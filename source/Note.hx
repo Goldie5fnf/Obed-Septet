@@ -42,7 +42,7 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public function new(strumTime:Float, noteData:Int, char:String = 'BF', ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
 
@@ -59,7 +59,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-BF');
+		frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-$char');
 
 		animation.addByPrefix('greenScroll', 'upnote');
 		animation.addByPrefix('redScroll', 'rightnote');

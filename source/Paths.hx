@@ -5,6 +5,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 
+using StringTools;
+
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
@@ -72,17 +74,17 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String)
 	{
-		return FlxAtlasFrames.fromSparrow(image(key), file('images/$key.xml', IMAGE));
+		trace(image(key), image(key).replace('.png', '.xml'));
+		return FlxAtlasFrames.fromSparrow(image(key), image(key).replace('.png', '.xml'));
 	}
 
 	inline static public function getPackerAtlas(key:String)
 	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key), file('images/$key.xml', IMAGE));
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key), image(key).replace('.png', '.txt'));
 	}
 
 	inline static public function videos(key:String)
 	{
-		return #if android SUtil.getStorageDirectory() + #end
-		'assets/videos/$key';
+		return SUtil.getStorageDirectory() + 'assets/videos/$key';
 	}
 }

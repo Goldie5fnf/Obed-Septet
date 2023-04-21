@@ -24,7 +24,7 @@ import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.sound.FlxSound;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -70,8 +70,6 @@ class PlayState extends MusicBeatState
 	public static var deathCounter:Int = 0;
 	public static var practiceMode:Bool = false;
 
-	var halloweenLevel:Bool = false;
-
 	private var vocals:FlxSound;
 	private var vocalsFinished:Bool = false;
 
@@ -105,8 +103,11 @@ class PlayState extends MusicBeatState
 	private var barP2BG:FlxSprite;
 	private var barP1:FlxBar;
 	private var barP2:FlxBar;
-	private var barX:Float = 50;
-	private var barY:Float = FlxG.height * 0.7;
+	private var barX:Float = -50;
+	private var barY:Float = FlxG.height * 0.65;
+
+	var p1PART:String;
+	var p2PART:String;
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
@@ -131,9 +132,6 @@ class PlayState extends MusicBeatState
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
-
-	// how big to stretch the pixel art assets
-	public static var daPixelZoom:Float = 6;
 
 	var inCutscene:Bool = false;
 
@@ -215,9 +213,12 @@ class PlayState extends MusicBeatState
 
 		strumLine.scrollFactor.set();
 
+		p1PART = SONG.player1.toLowerCase();
+		p2PART = SONG.player2.toLowerCase();
+
 		for (i in 0...2)
-		{
-			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image('noteassets/bar'));
+		{	
+			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image((i == 1) ? 'noteassets/bar-$p1PART' : 'noteassets/bar-$p2PART'));
 			arrowBar.antialiasing = true;
 			arrowBar.setGraphicSize(Std.int(arrowBar.width * 0.7));
 			arrowBar.updateHitbox();
@@ -266,24 +267,38 @@ class PlayState extends MusicBeatState
 		if (PreferencesMenu.getPref('downscroll'))
 			barY = FlxG.height * 0.1;
 
-		barP1BG = new FlxSprite(barX + 800, barY).loadGraphic(Paths.image('barassets/HPbarbar-BF'));
+		var barbgScale:Float = 0.7;
+		var barWH:Array<Int> = [332, 41];
+		
+		var aaa:FlxSprite = new FlxSprite().loadGraphic(Paths.image('barassets/defhp'));
+		trace(aaa.width, aaa.height);
+
+		barP1BG = new FlxSprite(barX + 500, barY);
+		barP1BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
+		barP1BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
+		barP1BG.animation.play('idle');
 		barP1BG.flipX = true;
 		barP1BG.scrollFactor.set();
 
-		barP2BG = new FlxSprite(barX, barY).loadGraphic(Paths.image('barassets/HPbarbar-BF'));
+		barP2BG = new FlxSprite(barX, barY);
+		barP2BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
+		barP2BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
+		barP2BG.animation.play('idle');
 		barP2BG.scrollFactor.set();
 
-		barP1 = new FlxBar(barP1BG.x + 15, barP1BG.y + 75, LEFT_TO_RIGHT, Std.int(barP1BG.width), Std.int(barP1BG.height), this, 'healthP1', 0, 2);
+		barP1BG.scale.set(barbgScale, barbgScale);
+		barP2BG.scale.set(barbgScale, barbgScale);
+
+		barP1 = new FlxBar(barP1BG.x, barP1BG.y, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
-		barP1.createImageBar(Paths.image('barassets/HPbarHP-BF'), Paths.image('barassets/HPbarHP-BF'));
+		barP1.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p1PART'));
 		add(barP1);
 		add(barP1BG);
 
-		barP2 = new FlxBar(barP2BG.x + 105, barP2BG.y + 75, LEFT_TO_RIGHT, Std.int(barP2BG.width), Std.int(barP2BG.height), this, 'healthP2', 0, 2);
+		barP2 = new FlxBar(barP2BG.x, barP2BG.y, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
-		barP2.createImageBar(Paths.image('barassets/HPbarHP-V1'), Paths.image('barassets/HPbarHP-V1'));
-		barP1.scale.x = barP2.scale.x = 0.8;
+		barP2.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p2PART'));
 		add(barP2);
 		add(barP2BG);
 
@@ -476,7 +491,7 @@ class PlayState extends MusicBeatState
 
 		// NEW SHIT
 		noteData = songData.notes;
-
+		
 		for (section in noteData)
 		{
 			for (songNotes in section.sectionNotes)
@@ -500,7 +515,7 @@ class PlayState extends MusicBeatState
 				else
 					songNotes[4] = true;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, songNotes[4] ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase(), oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.altNote = songNotes[3];
 				swagNote.isPlayerNote = songNotes[4];
@@ -515,7 +530,7 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, songNotes[4] ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase(), oldNote, true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -551,13 +566,14 @@ class PlayState extends MusicBeatState
 
 	private function generateStaticArrows(player:Int):Void
 	{
+		var arrowPathShit:String = (player == 1) ? SONG.player2.toUpperCase() : SONG.player1.toUpperCase();
 		for (i in 0...4)
 		{
 			var babyArrow:FlxSprite = new FlxSprite(25, strumLine.y);
 			var crashArrow:FlxSprite = new FlxSprite();
 			crashArrow.alpha = 0;
 
-			babyArrow.frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-BF');
+			babyArrow.frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-$arrowPathShit');
 			crashArrow.frames = Paths.getSparrowAtlas('noteassets/CRASHNOTE_assets');
 
 			babyArrow.animation.addByPrefix('green', 'arrowUP');
@@ -974,9 +990,9 @@ class PlayState extends MusicBeatState
 						altAnim = '-alt';
 
 					if (daNote.noteData >= 0)
-						healthP1 += 0.023;
+						healthP2 += 0.023;
 					else
-						healthP1 += 0.004;
+						healthP2 += 0.004;
 
 					switch (Math.abs(daNote.noteData))
 					{
@@ -1005,8 +1021,22 @@ class PlayState extends MusicBeatState
 						if (spr.animation.curAnim.name == 'confirm')
 						{
 							spr.centerOffsets();
-							spr.offset.x -= 13;
-							spr.offset.y -= 13;
+							var addToOffset:Array<Int> = [0, 0];
+							switch (spr.ID)
+							{
+								case 0:
+									addToOffset[0] += -2;
+								case 1:
+									addToOffset[0] += 5;
+									addToOffset[1] += 5;
+								case 2:
+									addToOffset[1] += -5;
+								case 3:
+									addToOffset[0] += 8;
+									addToOffset[1] += 2;
+							}
+							spr.offset.x -= 13 + addToOffset[0];
+							spr.offset.y -= 13 + addToOffset[1];
 						}
 						else
 							spr.centerOffsets();
@@ -1431,8 +1461,22 @@ class PlayState extends MusicBeatState
 			if (spr.animation.curAnim.name == 'confirm')
 			{
 				spr.centerOffsets();
-				spr.offset.x -= 13;
-				spr.offset.y -= 13;
+				var addToOffset:Array<Int> = [0, 0];
+				switch (spr.ID)
+				{
+					case 0:
+						addToOffset[0] += -2;
+					case 1:
+						addToOffset[0] += 5;
+						addToOffset[1] += 5;
+					case 2:
+						addToOffset[1] += -5;
+					case 3:
+						addToOffset[0] += 8;
+						addToOffset[1] += 2;
+				}
+				spr.offset.x -= 13 + addToOffset[0];
+				spr.offset.y -= 13 + addToOffset[1];
 			}
 			else
 				spr.centerOffsets();

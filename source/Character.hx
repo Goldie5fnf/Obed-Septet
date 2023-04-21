@@ -77,22 +77,41 @@ class Character extends FlxSprite
 
 				flipX = true;
 
-			case 'peka':
-				var tex = Paths.getSparrowAtlas('characters/peka');
-				frames = tex;
-				quickAnimAdd('idle', 'idle instance');
-				quickAnimAdd('singUP', 'up instance');
-				quickAnimAdd('singLEFT', 'left instance');
-				quickAnimAdd('singRIGHT', 'right instance');
-				quickAnimAdd('singDOWN', 'down instance');
-				quickAnimAdd('singUPmiss', 'up instance');
-				quickAnimAdd('singLEFTmiss', 'left instance');
-				quickAnimAdd('singRIGHTmiss', 'right instance');
-				quickAnimAdd('singDOWNmiss', 'down instance');
+			case 'pico':
+				frames = Paths.getSparrowAtlas('characters/peka');
+				quickAnimAdd('idle', 'idle');
+				quickAnimAdd('singUP', 'up');
+				quickAnimAdd('singLEFT', 'left');
+				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singDOWN', 'down');
+				quickAnimAdd('singUPmiss', 'up');
+				quickAnimAdd('singLEFTmiss', 'left');
+				quickAnimAdd('singRIGHTmiss', 'right');
+				quickAnimAdd('singDOWNmiss', 'down');
 
 				playAnim('idle');
 
 				flipX = true;
+
+				scale.set(0.6, 0.6);
+				
+			case 'darnell':
+				frames = Paths.getSparrowAtlas('characters/N-WORD');
+				quickAnimAdd('idle', 'darnIdle');
+				quickAnimAdd('singUP', 'up');
+				quickAnimAdd('singLEFT', 'left');
+				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singDOWN', 'down');
+				quickAnimAdd('singUPmiss', 'up');
+				quickAnimAdd('singLEFTmiss', 'left');
+				quickAnimAdd('singRIGHTmiss', 'right');
+				quickAnimAdd('singDOWNmiss', 'down');
+
+				playAnim('idle');
+
+				flipX = false;
+
+				scale.set(0.6, 0.6);
 		}
 
 		loadOffsetFile(curCharacter);

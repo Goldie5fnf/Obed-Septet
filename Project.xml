@@ -43,9 +43,9 @@
 	<assets path="assets" exclude="*.mp3" unless="web"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel-yc29" rename="flixel" />
+	<haxelib name="flixel" />
 	<haxedev set='webgl' />
-	<haxelib name="flixel-addons-yc29" rename="flixel-addons" />
+	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
