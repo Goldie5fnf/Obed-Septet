@@ -1,39 +1,20 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import haxe.io.Path;
 
 class NoteSplash extends FlxSprite
 {
-	public function new(x:Float, y:Float, noteData:Int = 0):Void
+	public function new(x:Float, y:Float, ?char:String = "BF"):Void
 	{
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('noteSplashes');
+		frames = Paths.getSparrowAtlas('noteassets/NOTEIMPACT-$char');
 
-		animation.addByPrefix('note1-0', 'note impact 1  blue', 24, false);
-		animation.addByPrefix('note2-0', 'note impact 1 green', 24, false);
-		animation.addByPrefix('note0-0', 'note impact 1 purple', 24, false);
-		animation.addByPrefix('note3-0', 'note impact 1 red', 24, false);
-		animation.addByPrefix('note1-1', 'note impact 2 blue', 24, false);
-		animation.addByPrefix('note2-1', 'note impact 2 green', 24, false);
-		animation.addByPrefix('note0-1', 'note impact 2 purple', 24, false);
-		animation.addByPrefix('note3-1', 'note impact 2 red', 24, false);
-
-		setupNoteSplash(x, y, noteData);
-	}
-
-	public function setupNoteSplash(x:Float, y:Float, noteData:Int = 0)
-	{
-		setPosition(x, y);
-		alpha = 0.6;
-
-		animation.play('note' + noteData + '-' + FlxG.random.int(0, 1), true);
-		animation.curAnim.frameRate += FlxG.random.int(-2, 2);
+		animation.addByPrefix('note', 'note impact 2', 18, false);
+		animation.play('note', true);
+		scale.set(0.7, 0.7);
 		updateHitbox();
-
-		offset.set(width * 0.3, height * 0.3);
+		antialiasing = true;
 	}
 
 	override function update(elapsed:Float)

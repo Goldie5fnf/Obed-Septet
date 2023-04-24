@@ -1,4 +1,4 @@
-package;
+package caching;
 
 import flixel.FlxG;
 import flixel.FlxState;
@@ -35,6 +35,8 @@ class LoadingState extends MusicBeatState
 		warning.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		warning.screenCenter();
 		add(warning);
+
+		Init.Initialize();
 	}
 
 	override function update(elapsed)

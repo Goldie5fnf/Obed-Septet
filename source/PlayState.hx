@@ -95,16 +95,25 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
-	private var healthP1:Float = 1;
-	private var healthP2:Float = 1;
+	private var healthP1:Float = 2;
+	private var healthP2:Float = 2;
+	private var healthP1TXT:FlxText;
+	private var healthP2TXT:FlxText;
+	private var hp1txtX:Float;
+	private var hp2txtX:Float;
 	private var combo:Int = 0;
 
 	private var barP1BG:FlxSprite;
 	private var barP2BG:FlxSprite;
 	private var barP1:FlxBar;
 	private var barP2:FlxBar;
-	private var barX:Float = -50;
-	private var barY:Float = FlxG.height * 0.65;
+	private var barX:Float = -150;
+	private var barY:Float = FlxG.height * 0.69;
+
+	private var barShowcaseFinish:Bool = false;
+
+	private var barP1grp:FlxTypedGroup<Dynamic>;
+	private var barP2grp:FlxTypedGroup<Dynamic>;
 
 	var p1PART:String;
 	var p2PART:String;
@@ -126,7 +135,6 @@ class PlayState extends MusicBeatState
 
 	var playerMisses:Int = 0;
 	var enemyMisses:Int = 0;
-	var enemyMissLimit:Int = 30;
 	var isEnemyMiss:Bool = false;
 
 	public static var campaignScore:Int = 0;
@@ -230,10 +238,14 @@ class PlayState extends MusicBeatState
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
 		add(strumLineNotes);
 
-		// fake notesplash cache type deal so that it loads in the graphic?
-
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(grpNoteSplashes);
+
+		barP1grp = new FlxTypedGroup<Dynamic>();
+		add(barP1grp);
+
+		barP2grp = new FlxTypedGroup<Dynamic>();
+		add(barP2grp);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 		enemyStrums = new FlxTypedGroup<FlxSprite>();
@@ -267,13 +279,13 @@ class PlayState extends MusicBeatState
 		if (PreferencesMenu.getPref('downscroll'))
 			barY = FlxG.height * 0.1;
 
-		var barbgScale:Float = 0.7;
-		var barWH:Array<Int> = [332, 41];
+		var barbgScale:Float = 0.6;
+		var barWH:Array<Int> = [340, 44];
 		
 		var aaa:FlxSprite = new FlxSprite().loadGraphic(Paths.image('barassets/defhp'));
 		trace(aaa.width, aaa.height);
 
-		barP1BG = new FlxSprite(barX + 500, barY);
+		barP1BG = new FlxSprite(barX + 670, barY);
 		barP1BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
 		barP1BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
 		barP1BG.animation.play('idle');
@@ -289,18 +301,33 @@ class PlayState extends MusicBeatState
 		barP1BG.scale.set(barbgScale, barbgScale);
 		barP2BG.scale.set(barbgScale, barbgScale);
 
-		barP1 = new FlxBar(barP1BG.x, barP1BG.y, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
+		barP1 = new FlxBar(barP1BG.x + 325, barP1BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
 		barP1.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p1PART'));
-		add(barP1);
-		add(barP1BG);
 
-		barP2 = new FlxBar(barP2BG.x, barP2BG.y, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
+		barP2 = new FlxBar(barP2BG.x + 245, barP2BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
 		barP2.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p2PART'));
-		add(barP2);
-		add(barP2BG);
+
+		barP1.scale.x = barP2.scale.x = 0.9;
+		
+		hp1txtX = barP1BG.x + 449.5;
+		hp2txtX = barP2BG.x + 380;
+
+		healthP1TXT = new FlxText(hp1txtX, barP1BG.y + 167.5, 0, barP1.percent + '%', 30);
+		healthP1TXT.setFormat(Paths.font('vcr.ttf'), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+		healthP2TXT = new FlxText(hp2txtX, barP2BG.y + 167.5, 0, barP2.percent + '%', 50);
+		healthP2TXT.setFormat(Paths.font('vcr.ttf'), 30, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+		barP1grp.add(barP1);
+		barP1grp.add(barP1BG);
+		barP1grp.add(healthP1TXT);
+
+		barP2grp.add(barP2);
+		barP2grp.add(barP2BG);
+		barP2grp.add(healthP2TXT);
 
 		scoreTxt = new FlxText(250, 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -308,21 +335,36 @@ class PlayState extends MusicBeatState
 		add(scoreTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
-		add(iconP1);
+		barP1grp.add(iconP1);
 		iconP2 = new HealthIcon(SONG.player2, false);
-		add(iconP2);
-		iconP1.y = iconP2.y = barY + 37.5;
+		barP2grp.add(iconP2);
+		iconP1.y = iconP2.y = barY + 65;
+
+		iconP2.x = barX + 190;
+		iconP1.x = iconP2.x * 27.5;
+
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(100, iconP1.width, 0.7)));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(100, iconP2.width, 0.7)));
+		iconP1.updateHitbox();
+		iconP2.updateHitbox();
 
 		grpNoteSplashes.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
-		barP1BG.cameras = [camHUD];
-		barP1.cameras = [camHUD];
-		barP2BG.cameras = [camHUD];
-		barP2.cameras = [camHUD];
-		iconP1.cameras = [camHUD];
-		iconP2.cameras = [camHUD];
+		barP1grp.cameras = [camHUD];
+		barP2grp.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+
+		new FlxTimer().start(1, function(tmr:FlxTimer)
+		{
+			if (healthP1 == 2)
+				for (bp1 in barP1grp)
+					FlxTween.tween(bp1, {alpha: 0}, 0.2);
+			if (healthP2 == 2)
+				for (bp2 in barP2grp)
+					FlxTween.tween(bp2, {alpha: 0}, 0.2);
+			barShowcaseFinish = true;
+		});
 
 		#if android
 		addHitbox(false);
@@ -352,17 +394,6 @@ class PlayState extends MusicBeatState
 		#if DISCORD
 		storyDifficultyText = CoolUtil.difficultyString();
 		iconRPC = SONG.player2;
-
-		// To avoid having duplicate images in Discord assets
-		switch (iconRPC)
-		{
-			case 'senpai-angry':
-				iconRPC = 'senpai';
-			case 'monster-christmas':
-				iconRPC = 'monster';
-			case 'mom-car':
-				iconRPC = 'mom';
-		}
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		detailsText = isStoryMode ? "Story Mode: Week " + storyWeek : "Freeplay";
@@ -566,7 +597,7 @@ class PlayState extends MusicBeatState
 
 	private function generateStaticArrows(player:Int):Void
 	{
-		var arrowPathShit:String = (player == 1) ? SONG.player2.toUpperCase() : SONG.player1.toUpperCase();
+		var arrowPathShit:String = (player == 1) ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase();
 		for (i in 0...4)
 		{
 			var babyArrow:FlxSprite = new FlxSprite(25, strumLine.y);
@@ -779,6 +810,8 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		scoreTxt.text = "Score:" + songScore + " Combo:" + combo + " Player Missed:" + playerMisses + " Enemy Missed:" + enemyMisses;
+		healthP1TXT.text = barP1.percent + '%';
+		healthP2TXT.text = barP2.percent + '%';
 
 		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
@@ -805,21 +838,15 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 			#end
 		}
-
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.85)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.85)));
-
-		iconP1.updateHitbox();
-		iconP2.updateHitbox();
-
-		iconP1.x = barP1BG.x + 215;
-		iconP2.x = barP2BG.x + 10;
 		
 		if (healthP1 > 2)
-			healthP2 = 2;
+			healthP1 = 2;
+		else if (healthP1 < 0)
+			healthP1 = 0;
+
 		if (healthP2 > 2)
 			healthP2 = 2;
-		else if (healthP2 <= 0)
+		else if (healthP2 < 0)
 			healthP2 = 0;
 
 		if (barP1.percent < 20)
@@ -831,6 +858,39 @@ class PlayState extends MusicBeatState
 			iconP2.animation.curAnim.curFrame = 1;
 		else
 			iconP2.animation.curAnim.curFrame = 0;
+
+		if (barP1.percent >= 100)
+			healthP1TXT.x = hp1txtX;
+		else if (barP1.percent < 100)
+			healthP1TXT.x = hp1txtX + 10;
+		else if (barP1.percent < 10)
+			healthP1TXT.x = hp1txtX + 50;
+
+		if (barP2.percent >= 100)
+			healthP2TXT.x = hp2txtX;
+		else if (barP2.percent < 100)
+			healthP2TXT.x = hp2txtX + 10;
+		else if (barP2.percent < 10)
+			healthP2TXT.x = hp2txtX + 50;
+
+		if (barShowcaseFinish)
+		{
+			for (bp1 in barP1grp)
+			{
+				if (barP1.percent < 80 && bp1.alpha != 1)
+					FlxTween.tween(bp1, {alpha: 1}, 0.2);
+				else if (barP1.percent > 80 && bp1.alpha != 0)
+					FlxTween.tween(bp1, {alpha: 0}, 0.2);
+			}
+
+			for (bp2 in barP2grp)
+			{
+				if (barP2.percent < 80 && bp2.alpha != 1)
+					FlxTween.tween(bp2, {alpha: 1}, 0.2);
+				else if (barP2.percent > 80 && bp2.alpha != 0)
+					FlxTween.tween(bp2, {alpha: 0}, 0.2);
+			}
+		}
 
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
@@ -976,7 +1036,7 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					isEnemyMiss = (enemyMisses < enemyMissLimit && !daNote.isPlayerNote) ? FlxG.random.bool(5) : false;
+					isEnemyMiss = !daNote.isPlayerNote ? FlxG.random.bool(5) : false;
 
 					var altAnim:String = "";
 
@@ -1030,7 +1090,7 @@ class PlayState extends MusicBeatState
 									addToOffset[0] += 5;
 									addToOffset[1] += 5;
 								case 2:
-									addToOffset[1] += -5;
+									addToOffset[1] += -7;
 								case 3:
 									addToOffset[0] += 8;
 									addToOffset[1] += 2;
@@ -1231,8 +1291,7 @@ class PlayState extends MusicBeatState
 
 		if (daRating == 'sick')
 		{
-			var noteSplash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-			noteSplash.setupNoteSplash(daNote.x, daNote.y, daNote.noteData);
+			var noteSplash:NoteSplash = new NoteSplash(daNote.x, daNote.y, SONG.player1.toUpperCase());
 			grpNoteSplashes.add(noteSplash);
 		}
 
@@ -1470,7 +1529,7 @@ class PlayState extends MusicBeatState
 						addToOffset[0] += 5;
 						addToOffset[1] += 5;
 					case 2:
-						addToOffset[1] += -5;
+						addToOffset[1] += -7;
 					case 3:
 						addToOffset[0] += 8;
 						addToOffset[1] += 2;

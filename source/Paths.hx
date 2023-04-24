@@ -74,7 +74,6 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String)
 	{
-		trace(image(key), image(key).replace('.png', '.xml'));
 		return FlxAtlasFrames.fromSparrow(image(key), image(key).replace('.png', '.xml'));
 	}
 
