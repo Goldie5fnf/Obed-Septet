@@ -56,12 +56,7 @@ class FreeplayState extends MusicBeatState
 
 		var isDebug:Bool = false;
 
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
-
-		for (i in 0...initSonglist.length)
-		{
-			songs.push(new SongMetadata(initSonglist[i], 1, 'gf'));
-		}
+		songs.push(new SongMetadata('start', 1, 'darnell'));
 
 		if (FlxG.sound.music != null)
 		{

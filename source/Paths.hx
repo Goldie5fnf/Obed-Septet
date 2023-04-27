@@ -52,9 +52,9 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC);
 	}
 
-	inline static public function voices(song:String)
+	inline static public function voices(song:String, char:String)
 	{
-		return getPath('songs/${song.toLowerCase()}/Voices.$SOUND_EXT', MUSIC);
+		return getPath('songs/${song.toLowerCase()}/${char}Voices.$SOUND_EXT', MUSIC);
 	}
 
 	inline static public function inst(song:String)

@@ -8,13 +8,14 @@ class NoteSplash extends FlxSprite
 	{
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('noteassets/NOTEIMPACT-$char');
+		frames = Paths.getSparrowAtlas('noteassets/NOTEsplash-$char');
 
-		animation.addByPrefix('note', 'note impact 2', 18, false);
+		animation.addByPrefix('note', 'NOTEIMPACT', 24, false);
 		animation.play('note', true);
-		scale.set(0.7, 0.7);
+		scale.set(0.8, 0.8);
 		updateHitbox();
 		antialiasing = true;
+		offset.set(width * 0.4, height * 0.4);
 	}
 
 	override function update(elapsed:Float)

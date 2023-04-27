@@ -76,7 +76,9 @@ class ChartingState extends MusicBeatState
 
 	var tempBpm:Float = 0;
 
-	var vocals:FlxSound;
+	var vocalsP1:FlxSound;
+	var vocalsP2:FlxSound;
+	var vocalArray:Array<FlxSound> = [];
 
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
@@ -353,17 +355,24 @@ class ChartingState extends MusicBeatState
 
 		FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
 
-		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
-		vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
-		FlxG.sound.list.add(vocals);
+		vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(daSong, 'BF'));
+		vocalsP2 = new FlxSound().loadEmbedded(Paths.voices(daSong, 'Dad'));
+		vocalArray.push(vocalsP1);
+		vocalArray.push(vocalsP2);
+		for (vocals in vocalArray)
+			FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();
-		vocals.pause();
+		for (vocals in vocalArray)
+			vocals.pause();
 
 		FlxG.sound.music.onComplete = function()
 		{
-			vocals.pause();
-			vocals.time = 0;
+			for (vocals in vocalArray)
+			{
+				vocals.pause();
+				vocals.time = 0;
+			}
 			FlxG.sound.music.pause();
 			FlxG.sound.music.time = 0;
 			changeSection();
@@ -547,7 +556,8 @@ class ChartingState extends MusicBeatState
 
 			PlayState.SONG = _song;
 			FlxG.sound.music.stop();
-			vocals.stop();
+			for (vocals in vocalArray)
+				vocals.stop();
 			FlxG.mouse.visible = false;
 			FlxG.switchState(new PlayState());
 		}
@@ -584,11 +594,13 @@ class ChartingState extends MusicBeatState
 				if (FlxG.sound.music.playing)
 				{
 					FlxG.sound.music.pause();
-					vocals.pause();
+					for (vocals in vocalArray)
+						vocals.pause();
 				}
 				else
 				{
-					vocals.play();
+					for (vocals in vocalArray)
+						vocals.play();
 					FlxG.sound.music.play();
 				}
 			}
@@ -604,10 +616,12 @@ class ChartingState extends MusicBeatState
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.music.pause();
-				vocals.pause();
+				for (vocals in vocalArray)
+					vocals.pause();
 
 				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
-				vocals.time = FlxG.sound.music.time;
+				for (vocals in vocalArray)
+					vocals.time = FlxG.sound.music.time;
 			}
 
 			if (!FlxG.keys.pressed.SHIFT)
@@ -615,7 +629,8 @@ class ChartingState extends MusicBeatState
 				if (FlxG.keys.pressed.W || FlxG.keys.pressed.S)
 				{
 					FlxG.sound.music.pause();
-					vocals.pause();
+					for (vocals in vocalArray)
+						vocals.pause();
 
 					var daTime:Float = 700 * FlxG.elapsed;
 
@@ -626,7 +641,8 @@ class ChartingState extends MusicBeatState
 					else
 						FlxG.sound.music.time += daTime;
 
-					vocals.time = FlxG.sound.music.time;
+					for (vocals in vocalArray)
+						vocals.time = FlxG.sound.music.time;
 				}
 			}
 			else
@@ -634,7 +650,8 @@ class ChartingState extends MusicBeatState
 				if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S)
 				{
 					FlxG.sound.music.pause();
-					vocals.pause();
+					for (vocals in vocalArray)
+						vocals.pause();
 
 					var daTime:Float = Conductor.stepCrochet * 2;
 
@@ -645,7 +662,8 @@ class ChartingState extends MusicBeatState
 					else
 						FlxG.sound.music.time += daTime;
 
-					vocals.time = FlxG.sound.music.time;
+					for (vocals in vocalArray)
+						vocals.time = FlxG.sound.music.time;
 				}
 			}
 		}
@@ -727,7 +745,8 @@ class ChartingState extends MusicBeatState
 		updateGrid();
 
 		FlxG.sound.music.pause();
-		vocals.pause();
+		for (vocals in vocalArray)
+			vocals.pause();
 
 		// Basically old shit from changeSection???
 		FlxG.sound.music.time = sectionStartTime();
@@ -738,7 +757,8 @@ class ChartingState extends MusicBeatState
 			curSection = 0;
 		}
 
-		vocals.time = FlxG.sound.music.time;
+		for (vocals in vocalArray)
+			vocals.time = FlxG.sound.music.time;
 		updateCurStep();
 
 		updateGrid();
@@ -758,7 +778,8 @@ class ChartingState extends MusicBeatState
 			if (updateMusic)
 			{
 				FlxG.sound.music.pause();
-				vocals.pause();
+				for (vocals in vocalArray)
+					vocals.pause();
 
 				/*var daNum:Int = 0;
 					var daLength:Float = 0;
@@ -769,7 +790,8 @@ class ChartingState extends MusicBeatState
 				}*/
 
 				FlxG.sound.music.time = sectionStartTime();
-				vocals.time = FlxG.sound.music.time;
+				for (vocals in vocalArray)
+					vocals.time = FlxG.sound.music.time;
 				updateCurStep();
 			}
 
