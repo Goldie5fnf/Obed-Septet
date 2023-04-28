@@ -1098,6 +1098,9 @@ class PlayState extends MusicBeatState
 						{
 							spr.animation.play('confirm', true);
 						}
+						else
+							spr.animation.play('static', true);
+						
 						if (spr.animation.curAnim.name == 'confirm')
 						{
 							spr.centerOffsets();
