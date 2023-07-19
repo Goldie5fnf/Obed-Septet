@@ -4,6 +4,6 @@ singLEFTmiss -19 -4
 singUP -22 49
 idle 0 0
 singDOWNmiss 57 -8
-singRIGHT 43 -4
+singRIGHT -13 -6
 singUPmiss -18 49
-singLEFT -13 -6
+singLEFT 43 -4

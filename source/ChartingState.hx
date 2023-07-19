@@ -355,8 +355,22 @@ class ChartingState extends MusicBeatState
 
 		FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
 
-		vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(daSong, 'BF'));
-		vocalsP2 = new FlxSound().loadEmbedded(Paths.voices(daSong, 'Dad'));
+		var daPenis:String = '';
+		switch (daSong.toLowerCase()) {
+			case 'start':
+				daPenis = 'Pico';
+			case 'death-beat':
+				daPenis = 'BF';
+		}
+		vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(daSong, daPenis));
+		
+		switch (daSong.toLowerCase()) {
+			case 'start':
+				daPenis = 'Darnell';
+			case 'death-beat':
+				daPenis = 'Kartoshka';
+		}
+		vocalsP2 = new FlxSound().loadEmbedded(Paths.voices(daSong, daPenis));
 		vocalArray.push(vocalsP1);
 		vocalArray.push(vocalsP2);
 		for (vocals in vocalArray)

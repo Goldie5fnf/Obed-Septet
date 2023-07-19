@@ -57,6 +57,7 @@ class FreeplayState extends MusicBeatState
 		var isDebug:Bool = false;
 
 		songs.push(new SongMetadata('start', 1, 'darnell'));
+		songs.push(new SongMetadata('death-beat', 1, 'darnell'));
 
 		if (FlxG.sound.music != null)
 		{
@@ -83,10 +84,6 @@ class FreeplayState extends MusicBeatState
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			add(icon);
-
-			// songText.x += 40;
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-			// songText.screenCenter(X);
 		}
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);

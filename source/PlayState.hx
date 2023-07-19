@@ -1,3 +1,5 @@
+// p.s. i deleted all vid stuff (hxCodec) cuz we wanna do cutscenes in game
+
 package;
 
 import Song.SwagSection;
@@ -41,18 +43,7 @@ import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import ui.PreferencesMenu;
-#if VIDEOS
-#if (hxCodec == "2.6.0")
-import VideoHandler;
-import VideoSprite;
-#elseif (hxCodec >= "2.6.1")
-import hxcodec.VideoHandler;
-import hxcodec.VideoSprite;
-#else
-import vlc.MP4Handler as VideoHandler;
-import vlc.MP4Sprite as VideoSprite;
-#end
-#end
+
 using StringTools;
 
 #if DISCORD
@@ -111,8 +102,6 @@ class PlayState extends MusicBeatState
 	private var barP2:FlxBar;
 	private var barX:Float = -150;
 	private var barY:Float = FlxG.height * 0.69;
-
-	private var barShowcaseFinish:Bool = false;
 
 	private var barP1grp:FlxTypedGroup<Dynamic>;
 	private var barP2grp:FlxTypedGroup<Dynamic>;
@@ -357,17 +346,6 @@ class PlayState extends MusicBeatState
 		barP2grp.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 
-		new FlxTimer().start(1, function(tmr:FlxTimer)
-		{
-			if (healthP1 == 2)
-				for (bp1 in barP1grp)
-					FlxTween.tween(bp1, {alpha: 0}, 0.2);
-			if (healthP2 == 2)
-				for (bp2 in barP2grp)
-					FlxTween.tween(bp2, {alpha: 0}, 0.2);
-			barShowcaseFinish = true;
-		});
-
 		#if android
 		addHitbox(false);
 		addHitboxCamera(false);
@@ -500,8 +478,6 @@ class PlayState extends MusicBeatState
 
 	private function generateSong():Void
 	{
-		// FlxG.log.add(ChartParser.parse());
-
 		var songData = SONG;
 		Conductor.changeBPM(songData.bpm);
 
@@ -509,8 +485,23 @@ class PlayState extends MusicBeatState
 
 		if (SONG.needsVoices)
 		{
-			vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(SONG.song, 'BF'));
-			vocalsP2 = new FlxSound().loadEmbedded(Paths.voices(SONG.song, 'Dad'));
+			var daPenis:String = '';
+			switch (boyfriend.curCharacter) {
+				case 'bf':
+					daPenis = 'BF';
+				case 'pico':
+					daPenis = 'Pico';
+			}
+			vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(SONG.song, daPenis));
+			// we dont have goldie so uhhhhh yeah
+			daPenis = 'Kartoshka';
+			switch (dad.curCharacter) {
+				case 'darnell':
+					daPenis = 'Darnell';
+				case 'goldie':
+					daPenis = 'Kartoshka';
+			}
+			vocalsP2 = new FlxSound().loadEmbedded(Paths.voices(SONG.song, daPenis));
 			vocalArray.push(vocalsP1);
 			vocalArray.push(vocalsP2);
 		}
@@ -891,25 +882,6 @@ class PlayState extends MusicBeatState
 			healthP2TXT.x = hp2txtX + 10;
 		else if (barP2.percent < 10)
 			healthP2TXT.x = hp2txtX + 50;
-
-		if (barShowcaseFinish)
-		{
-			for (bp1 in barP1grp)
-			{
-				if (barP1.percent < 80 && bp1.alpha != 1)
-					FlxTween.tween(bp1, {alpha: 1}, 0.2);
-				else if (barP1.percent > 80 && bp1.alpha != 0)
-					FlxTween.tween(bp1, {alpha: 0}, 0.2);
-			}
-
-			for (bp2 in barP2grp)
-			{
-				if (barP2.percent < 80 && bp2.alpha != 1)
-					FlxTween.tween(bp2, {alpha: 1}, 0.2);
-				else if (barP2.percent > 80 && bp2.alpha != 0)
-					FlxTween.tween(bp2, {alpha: 0}, 0.2);
-			}
-		}
 
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
@@ -1318,7 +1290,7 @@ class PlayState extends MusicBeatState
 
 		if (daRating == 'sick')
 		{
-			var noteSplash:NoteSplash = new NoteSplash(daNote.x, daNote.y, SONG.player1.toUpperCase());
+			var noteSplash:NoteSplash = new NoteSplash(daNote.x, strumLine.y, SONG.player1.toUpperCase());
 			grpNoteSplashes.add(noteSplash);
 		}
 
@@ -1593,21 +1565,26 @@ class PlayState extends MusicBeatState
 					case 3:
 						boyfriend.playAnim('singRIGHTmiss', true);
 				}
+
 				if (isCrashNote)
 				{
-					playerStrums.forEach(function(spr:FlxSprite)
+					crashStrum.forEach(function(cspr:FlxSprite)
 					{
-						crashStrum.forEach(function(cspr:FlxSprite)
+						playerStrums.forEach(function(spr:FlxSprite)
 						{
-							cspr.alpha = (cspr.ID == direction) ? 1 : 0;
-							spr.alpha = (direction == spr.ID) ? 0 : 1;
-							if (cspr.ID == direction && spr.animation.curAnim.name != 'confirm')
-							{
-								cspr.animation.play('press');
-								new FlxTimer().start(0.2, function(tmr:FlxTimer)
-								{
-									cspr.alpha = 0;
+							if (spr.ID == direction) {
+								spr.alpha = 0.001;
+								new FlxTimer().start(0.2, function(tmr:FlxTimer) {
 									spr.alpha = 1;
+								});
+							}
+
+							if (cspr.ID == direction)
+							{
+								cspr.alpha = 1;
+								cspr.animation.play('press');
+								new FlxTimer().start(0.2, function(tmr:FlxTimer) {
+									cspr.alpha = 0.001;
 								});
 							}
 						});

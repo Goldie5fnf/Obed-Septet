@@ -81,8 +81,8 @@ class Character extends FlxSprite
 				frames = Paths.getSparrowAtlas('characters/peka');
 				quickAnimAdd('idle', 'idle');
 				quickAnimAdd('singUP', 'up');
-				quickAnimAdd('singLEFT', 'left');
-				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singRIGHT', 'left');
+				quickAnimAdd('singLEFT', 'right');
 				quickAnimAdd('singDOWN', 'down');
 				quickAnimAdd('singUPmiss', 'up');
 				quickAnimAdd('singLEFTmiss', 'left');
@@ -99,8 +99,8 @@ class Character extends FlxSprite
 				frames = Paths.getSparrowAtlas('characters/N-WORD');
 				quickAnimAdd('idle', 'darnIdle');
 				quickAnimAdd('singUP', 'up');
-				quickAnimAdd('singLEFT', 'left');
-				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singRIGHT', 'left');
+				quickAnimAdd('singLEFT', 'right');
 				quickAnimAdd('singDOWN', 'down');
 				quickAnimAdd('singUPmiss', 'up');
 				quickAnimAdd('singLEFTmiss', 'left');
