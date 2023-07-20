@@ -1,7 +1,10 @@
 package;
 
 import flixel.FlxG;
+import flixel.math.FlxMath;
 import flixel.FlxState;
+import flixel.FlxSprite;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.graphics.FlxGraphic;
 import flixel.effects.FlxFlicker;
@@ -18,62 +21,33 @@ using StringTools;
 
 class LoadingState extends MusicBeatState
 {
+	public static var path:String = "menus";
+	public static var bullshit:FlxState = new TitleState();
+	var screen:LoadingScreen;
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
-
-	var screen:LoadingScreen;
-	var warning:FlxText;
-	var enabled:Bool = true;
 
 	override function create()
 	{
 		super.create();
 
-		warning = new FlxText(0, 0, 0, 'Do you want to preload every image and sound in a game?\n
-		(RECOMMENDED FOR DEVICES WITH HIGH RAM)\n\n
-		Press ENTER to preload or ESC to skip.', 30);
-		warning.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		warning.screenCenter();
-		add(warning);
-	}
-
-	override function update(elapsed)
-	{
-		if (enabled)
-		{
-			if (controls.ACCEPT)
-			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-				enabled = false;
-				FlxFlicker.flicker(warning, 1, 0.06, true, false, function(flick:FlxFlicker)
-				{
-					warning.destroy();
-					precache();
-				});
-			}
-			else if (controls.BACK)
-			{
-				enabled = false;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				warning.destroy();
-				FlxG.switchState(new TitleState());
-			}
-		}
-
-		super.update(elapsed);
-	}
-
-	function precache()
-	{
 		screen = new LoadingScreen();
 		add(screen);
 
 		for (image in Assets.list(IMAGE))
-			if (!image.startsWith('flixel'))
+		{
+			if (image.startsWith('assets/gfx/$path'))
 				imagesToCache.push(image);
+			else if (path != 'global')
+				Assets.cache.removeBitmapData(image);
+		}
 		for (sound in Assets.list(SOUND))
-			if (!sound.startsWith('flixel'))
+		{
+			if (sound.startsWith('assets/sfx/$path'))
 				soundsToCache.push(sound);
+			else if (path != 'global')
+				Assets.cache.removeSound(sound);
+		}
 
 		screen.max = imagesToCache.length + soundsToCache.length;
 
@@ -85,14 +59,14 @@ class LoadingState extends MusicBeatState
 			screen.setLoadingText("Loading images...");
 			for (image in imagesToCache)
 			{
-				trace("Caching image " + image);
+				trace('Caching $path image $image');
 				FlxG.bitmap.add(image);
 				screen.progress += 1;
 			}
 			screen.setLoadingText("Loading sounds...");
 			for (sound in soundsToCache)
 			{
-				trace("Caching sound " + sound);
+				trace('Caching $path image $sound');
 				FlxG.sound.cache(sound);
 				screen.progress += 1;
 			}
@@ -105,7 +79,7 @@ class LoadingState extends MusicBeatState
 			{
 				screen.kill();
 				screen.destroy();
-				FlxG.switchState(new TitleState());
+				FlxG.switchState(bullshit);
 			});
 		});
 	}

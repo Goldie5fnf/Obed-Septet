@@ -3,14 +3,11 @@ package;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
-import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
 class Paths
 {
-	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
-
 	static public function getPath(file:String, type:AssetType)
 	{
 		var folder:String = (type == TEXT) ? 'data' : ((type == IMAGE) ? 'gfx' : ((type == MUSIC || type == SOUND) ? 'sfx' : ''));
@@ -37,34 +34,29 @@ class Paths
 		return getPath('$key.json', TEXT);
 	}
 
-	static public function sound(key:String)
+	static public function sound(key:String, folder:String)
 	{
-		return getPath('sounds/$key.$SOUND_EXT', SOUND);
+		return getPath('$folder/$key.ogg', SOUND);
 	}
 
-	inline static public function soundRandom(key:String, min:Int, max:Int)
+	inline static public function soundRandom(key:String, min:Int, max:Int, folder:String)
 	{
-		return sound(key + FlxG.random.int(min, max));
-	}
-
-	inline static public function music(key:String)
-	{
-		return getPath('music/$key.$SOUND_EXT', MUSIC);
+		return sound(key + FlxG.random.int(min, max), folder);
 	}
 
 	inline static public function voices(song:String, char:String)
 	{
-		return getPath('songs/${song.toLowerCase()}/${char}Voices.$SOUND_EXT', MUSIC);
+		return getPath('songs/${song.toLowerCase()}/${char}Voices.ogg', MUSIC);
 	}
 
 	inline static public function inst(song:String)
 	{
-		return getPath('songs/${song.toLowerCase()}/Inst.$SOUND_EXT', MUSIC);
+		return getPath('songs/${song.toLowerCase()}/Inst.ogg', MUSIC);
 	}
 
-	inline static public function image(key:String)
+	inline static public function image(key:String, folder:String)
 	{
-		return getPath('images/$key.png', IMAGE);
+		return getPath('$folder/$key.png', IMAGE);
 	}
 
 	inline static public function font(key:String)
@@ -72,14 +64,14 @@ class Paths
 		return 'assets/fonts/$key';
 	}
 
-	inline static public function getSparrowAtlas(key:String)
+	inline static public function getSparrowAtlas(key:String, folder:String = 'songs')
 	{
-		return FlxAtlasFrames.fromSparrow(image(key), image(key).replace('.png', '.xml'));
+		return FlxAtlasFrames.fromSparrow(image(key, folder), image(key, folder).replace('.png', '.xml'));
 	}
 
-	inline static public function getPackerAtlas(key:String)
+	inline static public function getPackerAtlas(key:String, folder:String = 'songs')
 	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key), image(key).replace('.png', '.txt'));
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, folder), image(key, folder).replace('.png', '.txt'));
 	}
 
 	inline static public function videos(key:String)

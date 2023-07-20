@@ -1,4 +1,4 @@
-package caching;
+package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

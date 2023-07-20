@@ -38,8 +38,8 @@
 
     <assets path="assets/gfx/mobile" if="mobile" />
 	<assets path="assets/fonts" embed='true'/>
-	<assets path="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets"/>
+	<assets path="assets"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />

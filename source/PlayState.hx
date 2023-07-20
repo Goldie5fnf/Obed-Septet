@@ -217,7 +217,7 @@ class PlayState extends MusicBeatState
 
 		for (i in 0...2)
 		{	
-			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image((i == 1) ? 'noteassets/bar-$p1PART' : 'noteassets/bar-$p2PART'));
+			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image((i == 1) ? 'noteassets/bar-$p1PART' : 'noteassets/bar-$p2PART', 'songs'));
 			arrowBar.antialiasing = true;
 			arrowBar.setGraphicSize(Std.int(arrowBar.width * 0.7));
 			arrowBar.updateHitbox();
@@ -273,7 +273,7 @@ class PlayState extends MusicBeatState
 		var barbgScale:Float = 0.6;
 		var barWH:Array<Int> = [340, 44];
 		
-		var aaa:FlxSprite = new FlxSprite().loadGraphic(Paths.image('barassets/defhp'));
+		var aaa:FlxSprite = new FlxSprite().loadGraphic(Paths.image('barassets/defhp', 'songs'));
 		trace(aaa.width, aaa.height);
 
 		barP1BG = new FlxSprite(barX + 670, barY);
@@ -295,11 +295,11 @@ class PlayState extends MusicBeatState
 		barP1 = new FlxBar(barP1BG.x + 325, barP1BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
-		barP1.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p1PART'));
+		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p1PART', 'songs'));
 
 		barP2 = new FlxBar(barP2BG.x + 245, barP2BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
-		barP2.createImageBar(Paths.image('barassets/defhp'), Paths.image('barassets/Hpbarhp-$p2PART'));
+		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p2PART', 'songs'));
 
 		barP1.scale.x = barP2.scale.x = 0.9;
 		
@@ -429,7 +429,7 @@ class PlayState extends MusicBeatState
 
 			if (swagCounter > 0)
 				readySetGo(introSprPaths[swagCounter - 1]);
-			FlxG.sound.play(Paths.sound(introSndPaths[swagCounter]), 0.6);
+			FlxG.sound.play(Paths.sound(introSndPaths[swagCounter], 'songs'), 0.6);
 
 			swagCounter += 1;
 		}, 4);
@@ -437,7 +437,7 @@ class PlayState extends MusicBeatState
 
 	function readySetGo(path:String):Void
 	{
-		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path));
+		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(path, 'songs'));
 		spr.scrollFactor.set();
 
 		spr.updateHitbox();
@@ -1210,7 +1210,7 @@ class PlayState extends MusicBeatState
 
 			if (storyPlaylist.length <= 0)
 			{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(Paths.sound('freakyMenu', 'menus'));
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
@@ -1218,7 +1218,9 @@ class PlayState extends MusicBeatState
 				switch (PlayState.storyWeek)
 				{
 					default:
-						FlxG.switchState(new StoryMenuState());
+						LoadingState.path = 'menus';
+						LoadingState.bullshit = new StoryMenuState();
+						FlxG.switchState(new LoadingState());
 				}
 
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
@@ -1257,7 +1259,9 @@ class PlayState extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FreeplayState());
+			LoadingState.path = 'menus';
+			LoadingState.bullshit = new FreeplayState();
+			FlxG.switchState(new LoadingState());
 		}
 	}
 
@@ -1298,7 +1302,7 @@ class PlayState extends MusicBeatState
 		if (!practiceMode)
 			songScore += score;
 
-		rating.loadGraphic(Paths.image(daRating));
+		rating.loadGraphic(Paths.image(daRating, 'songs'));
 		rating.x = FlxG.width * 0.55 - 40;
 		if (rating.x < FlxG.camera.scroll.x)
 			rating.x = FlxG.camera.scroll.x;
@@ -1328,7 +1332,7 @@ class PlayState extends MusicBeatState
 
 	function displayCombo():Void
 	{
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('combo'));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('combo', 'songs'));
 		comboSpr.y = FlxG.camera.scroll.y + FlxG.camera.height * 0.4 + 80;
 		comboSpr.x = FlxG.width * 0.55;
 		if (comboSpr.x < FlxG.camera.scroll.x + 194)
@@ -1366,7 +1370,7 @@ class PlayState extends MusicBeatState
 		var daLoop:Int = 1;
 		for (i in seperatedScore)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('num' + Std.int(i)));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('num' + Std.int(i), 'songs'));
 			numScore.y = comboSpr.y;
 			numScore.antialiasing = true;
 			numScore.setGraphicSize(Std.int(numScore.width * 0.5));
@@ -1610,7 +1614,7 @@ class PlayState extends MusicBeatState
 						dad.playAnim('singRIGHTmiss', true);
 				}
 		}
-		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3, 'songs'), FlxG.random.float(0.1, 0.2));
 	}
 
 	function goodNoteHit(note:Note):Void

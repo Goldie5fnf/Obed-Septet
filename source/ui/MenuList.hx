@@ -98,7 +98,7 @@ class MenuTypedList<T:MenuItem> extends FlxTypedGroup<T>
 
 		if (newIndex != selectedIndex)
 		{
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('scrollMenu', 'menus'));
 			selectItem(newIndex);
 		}
 
@@ -175,7 +175,7 @@ class MenuTypedList<T:MenuItem> extends FlxTypedGroup<T>
 		else
 		{
 			busy = true;
-			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.sound.play(Paths.sound('confirmMenu', 'menus'));
 			FlxFlicker.flicker(selected, 1, 0.06, true, false, function(_)
 			{
 				busy = false;

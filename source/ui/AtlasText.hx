@@ -234,7 +234,7 @@ private class AtlasFontData
 
 	public function new(name:AtlasFont)
 	{
-		atlas = Paths.getSparrowAtlas("fonts/" + name.getName().toLowerCase());
+		atlas = Paths.getSparrowAtlas("fonts/" + name.getName().toLowerCase(), 'global');
 		atlas.parent.destroyOnNoUse = false;
 		atlas.parent.persist = true;
 

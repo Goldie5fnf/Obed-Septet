@@ -62,10 +62,10 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing)
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(Paths.sound('freakyMenu', 'menus'));
 		}
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat', 'menus'));
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -169,7 +169,7 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(Paths.sound('cancelMenu', 'menus'));
 			FlxG.switchState(new MainMenuState());
 		}
 
@@ -182,7 +182,9 @@ class FreeplayState extends MusicBeatState
 
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
-			FlxG.switchState(new PlayState());
+			LoadingState.path = 'songs';
+			LoadingState.bullshit = new PlayState();
+			FlxG.switchState(new LoadingState());
 		}
 	}
 
@@ -205,7 +207,7 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('scrollMenu', 'menus'), 0.4);
 
 		curSelected += change;
 

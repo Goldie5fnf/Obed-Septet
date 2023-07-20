@@ -200,15 +200,7 @@ class Alphabet extends FlxSpriteGroup
 
 					letter.x += 90;
 				}
-
-				if (FlxG.random.bool(40))
-				{
-					var daSound:String = "GF_";
-					FlxG.sound.play(Paths.soundRandom(daSound, 1, 4));
-				}
-
 				add(letter);
-
 				lastSprite = letter;
 			}
 
@@ -245,7 +237,7 @@ class AlphaCharacter extends FlxSprite
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		var tex = Paths.getSparrowAtlas('alphabet');
+		var tex = Paths.getSparrowAtlas('alphabet', 'global');
 		frames = tex;
 
 		antialiasing = true;
