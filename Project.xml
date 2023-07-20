@@ -36,7 +36,7 @@
 
 	<define name="DISCORD" if="desktop" />
 
-    <assets path="assets/gfx/mobile" if="mobile" />
+    <assets path="assets/gfx/global/mobile" if="mobile" />
 	<assets path="assets/fonts" embed='true'/>
 	<assets path="assets"/>
 	<assets path="assets"/>

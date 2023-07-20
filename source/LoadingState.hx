@@ -36,17 +36,13 @@ class LoadingState extends MusicBeatState
 
 		for (image in Assets.list(IMAGE))
 		{
-			if (image.startsWith('assets/gfx/$path'))
+			if (image.startsWith('assets/gfx/$path') || image.startsWith('assets/gfx/global'))
 				imagesToCache.push(image);
-			else if (path != 'global')
-				Assets.cache.removeBitmapData(image);
 		}
 		for (sound in Assets.list(SOUND))
 		{
-			if (sound.startsWith('assets/sfx/$path'))
+			if (sound.startsWith('assets/sfx/$path') || sound.startsWith('assets/sfx/global'))
 				soundsToCache.push(sound);
-			else if (path != 'global')
-				Assets.cache.removeSound(sound);
 		}
 
 		screen.max = imagesToCache.length + soundsToCache.length;
@@ -56,17 +52,38 @@ class LoadingState extends MusicBeatState
 		FlxGraphic.defaultPersist = true;
 		Thread.create(() ->
 		{
+			FlxG.bitmap.dumpCache();
+			screen.setLoadingText("Unloading images...");
+			@:privateAccess
+			for (image in FlxG.bitmap._cache.keys()) {
+				if (image.startsWith('assets/gfx'))
+				{
+					trace('Uncaching image $image');
+					var graphic:Null<FlxGraphic> = FlxG.bitmap._cache.get(image);
+					Assets.cache.removeBitmapData(image);
+					FlxG.bitmap._cache.remove(image);
+					graphic.destroy();
+				}
+			}
+			screen.setLoadingText("Unloading sounds...");
+			for (sound in Assets.cache.getSoundKeys()) {
+				if (sound.startsWith('assets/sfx'))
+				{
+					trace('Uncaching sound $sound');
+					Assets.cache.removeSound(sound);
+				}
+			}
 			screen.setLoadingText("Loading images...");
 			for (image in imagesToCache)
 			{
-				trace('Caching $path image $image');
+				trace('Caching image $image');
 				FlxG.bitmap.add(image);
 				screen.progress += 1;
 			}
 			screen.setLoadingText("Loading sounds...");
 			for (sound in soundsToCache)
 			{
-				trace('Caching $path image $sound');
+				trace('Caching sound $sound');
 				FlxG.sound.cache(sound);
 				screen.progress += 1;
 			}
@@ -79,6 +96,16 @@ class LoadingState extends MusicBeatState
 			{
 				screen.kill();
 				screen.destroy();
+				imagesToCache = [];
+				soundsToCache = [];
+				@:privateAccess
+				for (key in FlxG.bitmap._cache.keys())
+				{
+					if (key.contains('assets'))
+					{
+						trace('key: ' + key + " is on mem");
+					}
+				}
 				FlxG.switchState(bullshit);
 			});
 		});
