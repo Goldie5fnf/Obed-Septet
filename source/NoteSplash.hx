@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 class NoteSplash extends FlxSprite
@@ -8,11 +9,12 @@ class NoteSplash extends FlxSprite
 	{
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('noteassets/NOTEsplash-$char');
+		var randomizer:Int = FlxG.random.int(1, 2);
+		frames = Paths.getSparrowAtlas('noteassets/NoteSplash$char$randomizer');
 
-		animation.addByPrefix('note', 'NOTEIMPACT', 24, false);
-		animation.play('note', true);
-		scale.set(0.8, 0.8);
+		animation.addByPrefix('splash', 'splash', 30, false);
+		animation.play('splash', true);
+		//scale.set(0.8, 0.8);
 		updateHitbox();
 		antialiasing = true;
 		offset.set(width * 0.4, height * 0.4);

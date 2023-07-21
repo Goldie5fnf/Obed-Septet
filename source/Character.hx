@@ -77,6 +77,19 @@ class Character extends FlxSprite
 
 				flipX = true;
 
+			case 'obedbf':
+				var tex = Paths.getSparrowAtlas('characters/OBED_BF');
+				frames = tex;
+				quickAnimAdd('idle', 'IDLE');
+				quickAnimAdd('singUP', 'UP');
+				quickAnimAdd('singLEFT', 'LEFT');
+				quickAnimAdd('singRIGHT', 'RIGHT');
+				quickAnimAdd('singDOWN', 'DOWN');
+
+				playAnim('idle');
+
+				flipX = true;
+
 			case 'pico':
 				frames = Paths.getSparrowAtlas('characters/peka');
 				quickAnimAdd('idle', 'idle');
@@ -123,7 +136,7 @@ class Character extends FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (!curCharacter.endsWith('bf'))
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;
@@ -154,7 +167,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.startsWith('bf'))
+		if (!curCharacter.endsWith('bf'))
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{

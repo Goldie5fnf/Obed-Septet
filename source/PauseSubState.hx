@@ -21,7 +21,6 @@ class PauseSubState extends MusicBeatSubstate
 		'Resume',
 		'Restart Song',
 		'Change Difficulty',
-		'Toggle Practice Mode',
 		'Exit to menu'
 	];
 	var difficultyChoices:Array<String> = ['FINE', 'OBED', 'BACK'];
@@ -71,14 +70,6 @@ class PauseSubState extends MusicBeatSubstate
 		deathCounter.updateHitbox();
 		add(deathCounter);
 
-		practiceText = new FlxText(20, 15 + 64 + 32, 0, "PRACTICE MODE", 32);
-		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
-		practiceText.updateHitbox();
-		practiceText.x = FlxG.width - (practiceText.width + 20);
-		practiceText.visible = PlayState.practiceMode;
-		add(practiceText);
-
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 		deathCounter.alpha = 0;
@@ -100,8 +91,6 @@ class PauseSubState extends MusicBeatSubstate
 		#if mobile
 		addVirtualPad(UP_DOWN, A);
 		#end
-
-		// cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	private function regenMenu():Void
@@ -158,11 +147,6 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.storyDifficulty = curSelected;
 
 					FlxG.resetState();
-
-				case 'Toggle Practice Mode':
-					PlayState.practiceMode = !PlayState.practiceMode;
-					practiceText.visible = PlayState.practiceMode;
-
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
 					regenMenu();
@@ -177,17 +161,16 @@ class PauseSubState extends MusicBeatSubstate
 				case "Exit to menu":
 					PlayState.seenCutscene = false;
 					PlayState.deathCounter = 0;
-					if (PlayState.isStoryMode)
-						FlxG.switchState(new StoryMenuState());
-					else
-						FlxG.switchState(new FreeplayState());
+					if (PlayState.isStoryMode) {
+						LoadingState.path = 'menus';
+						LoadingState.bullshit = new StoryMenuState();
+						FlxG.switchState(new LoadingState());
+					} else {
+						LoadingState.path = 'menus';
+						LoadingState.bullshit = new FreeplayState();
+						FlxG.switchState(new LoadingState());
+					}
 			}
-		}
-
-		if (FlxG.keys.justPressed.J)
-		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
 	}
 
@@ -217,12 +200,10 @@ class PauseSubState extends MusicBeatSubstate
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
 	}
