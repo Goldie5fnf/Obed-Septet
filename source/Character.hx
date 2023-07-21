@@ -37,7 +37,7 @@ class Character extends FlxSprite
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('characters/GF_assets');
+				tex = Paths.charAtlas('GF_assets', curCharacter);
 				frames = tex;
 				quickAnimAdd('cheer', 'GF Cheer');
 				quickAnimAdd('singLEFT', 'GF left note');
@@ -54,7 +54,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
+				tex = Paths.charAtlas('BOYFRIEND', curCharacter);
 				frames = tex;
 				quickAnimAdd('idle', 'BF idle dance');
 				quickAnimAdd('singUP', 'BF NOTE UP0');
@@ -78,7 +78,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'obedbf':
-				var tex = Paths.getSparrowAtlas('characters/OBED_BF');
+				tex = Paths.charAtlas('OBED_BF', curCharacter);
 				frames = tex;
 				quickAnimAdd('idle', 'IDLE');
 				quickAnimAdd('singUP', 'UP');
@@ -91,7 +91,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'pico':
-				frames = Paths.getSparrowAtlas('characters/peka');
+				frames = Paths.charAtlas('peka', curCharacter);
 				quickAnimAdd('idle', 'idle');
 				quickAnimAdd('singUP', 'up');
 				quickAnimAdd('singRIGHT', 'left');
@@ -109,7 +109,7 @@ class Character extends FlxSprite
 				scale.set(0.6, 0.6);
 				
 			case 'darnell':
-				frames = Paths.getSparrowAtlas('characters/N-WORD');
+				frames = Paths.charAtlas('N-WORD', curCharacter);
 				quickAnimAdd('idle', 'darnIdle');
 				quickAnimAdd('singUP', 'up');
 				quickAnimAdd('singRIGHT', 'left');
@@ -127,7 +127,7 @@ class Character extends FlxSprite
 				scale.set(0.6, 0.6);
 		}
 
-		loadOffsetFile(curCharacter);
+		loadOffsetFile();
 		dance();
 		animation.finish();
 
@@ -154,9 +154,9 @@ class Character extends FlxSprite
 		}
 	}
 
-	private function loadOffsetFile(offsetCharacter:String)
+	private function loadOffsetFile()
 	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("songs/characters/" + offsetCharacter + "Offsets.txt", IMAGE));
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file('songs/characters/$curCharacter/' + curCharacter + 'Offsets.txt', IMAGE));
 
 		for (i in daFile)
 		{
