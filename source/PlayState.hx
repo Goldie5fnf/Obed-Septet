@@ -1069,6 +1069,10 @@ class PlayState extends MusicBeatState
 							spr.centerOffsets();
 					});
 
+					if(!daNote.isSustainNote && FlxG.random.bool(75)) {
+						doNoteSplash(daNote, SONG.player2.toUpperCase());
+					}
+					
 					dad.holdTimer = 0;
 
 					if (SONG.needsVoices)
@@ -1261,8 +1265,7 @@ class PlayState extends MusicBeatState
 
 		if (daRating == 'sick')
 		{
-			var noteSplash:NoteSplash = new NoteSplash(daNote.x + 30, strumLine.y + 10, /*SONG.player1.toUpperCase()*/ 'BF');
-			grpNoteSplashes.add(noteSplash);
+			doNoteSplash(daNote, SONG.player1.toUpperCase());
 		}
 
 		songScore += score;
@@ -1371,6 +1374,11 @@ class PlayState extends MusicBeatState
 		{
 			camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 		}
+	}
+
+	function doNoteSplash(note:Note, player:String) {
+		var noteSplash:NoteSplash = new NoteSplash(note.x + 30, strumLine.y + 10, player);
+		grpNoteSplashes.add(noteSplash);
 	}
 
 	private function keyShit():Void

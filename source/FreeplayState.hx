@@ -30,14 +30,9 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 
 	var coolColors:Array<Int> = [
-		0xff9271fd,
-		0xff9271fd,
-		0xff223344,
-		0xFF941653,
-		0xFFfc96d7,
-		0xFFa0d1ff,
-		0xffff78bf,
-		0xfff6b604
+		0xffc7ff45,
+		0xffc7ff45,
+		0xff9271fd
 	];
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
@@ -56,8 +51,9 @@ class FreeplayState extends MusicBeatState
 
 		var isDebug:Bool = false;
 
-		songs.push(new SongMetadata('start', 1, 'darnell'));
-		songs.push(new SongMetadata('death-beat', 1, 'darnell'));
+		songs.push(new SongMetadata('death-beat', 1, 'pico'));
+
+		songs.push(new SongMetadata('metal-pipe', 2, 'darnell'));
 
 		if (FlxG.sound.music != null)
 		{
