@@ -205,7 +205,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		boom = new FlxSprite(0, 0).loadGraphic(Paths.image('other/L', 'songs'));
+		boom = new FlxSprite(0, 0).loadGraphic(Paths.image('L', 'songs'));
 		boom.antialiasing = true;
 		boom.updateHitbox();
 		boom.scrollFactor.set();
@@ -279,14 +279,14 @@ class PlayState extends MusicBeatState
 		var barWH:Array<Int> = [340, 44];
 
 		barP1BG = new FlxSprite(barX + 670, barY);
-		barP1BG.frames = Paths.getSparrowAtlas('other/HPBARMAINPATTERN_');
+		barP1BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
 		barP1BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
 		barP1BG.animation.play('idle');
 		barP1BG.flipX = true;
 		barP1BG.scrollFactor.set();
 
 		barP2BG = new FlxSprite(barX, barY);
-		barP2BG.frames = Paths.getSparrowAtlas('other/HPBARMAINPATTERN_');
+		barP2BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
 		barP2BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
 		barP2BG.animation.play('idle');
 		barP2BG.scrollFactor.set();
@@ -297,11 +297,11 @@ class PlayState extends MusicBeatState
 		barP1 = new FlxBar(barP1BG.x + 325, barP1BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
-		barP1.createImageBar(Paths.image('other/defhp', 'songs'), Paths.charImage('Hpbarhp-$p1PART', p1PART));
+		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p1PART', 'songs'));
 
 		barP2 = new FlxBar(barP2BG.x + 245, barP2BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
-		barP2.createImageBar(Paths.image('other/defhp', 'songs'), Paths.charImage('Hpbarhp-$p2PART', p2PART));
+		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p2PART', 'songs'));
 
 		barP1.scale.x = barP2.scale.x = 0.9;
 		
@@ -429,7 +429,7 @@ class PlayState extends MusicBeatState
 			];
 
 			if (swagCounter > 0)
-				readySetGo('other/' + introSprPaths[swagCounter - 1]);
+				readySetGo(introSprPaths[swagCounter - 1]);
 			FlxG.sound.play(Paths.sound(introSndPaths[swagCounter], 'songs'), 0.6);
 
 			swagCounter += 1;
@@ -609,8 +609,8 @@ class PlayState extends MusicBeatState
 			var crashArrow:FlxSprite = new FlxSprite();
 			crashArrow.alpha = 0;
 
-			babyArrow.frames = Paths.charAtlas('NOTE_assets-$arrowPathShit', arrowPathShit);
-			crashArrow.frames = Paths.getSparrowAtlas('other/CRASHNOTE_assets');
+			babyArrow.frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-$arrowPathShit');
+			crashArrow.frames = Paths.getSparrowAtlas('noteassets/CRASHNOTE_assets');
 
 			babyArrow.animation.addByPrefix('green', 'arrowUP');
 			babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
@@ -1353,7 +1353,7 @@ class PlayState extends MusicBeatState
 		else
 			enemyScore += score;
 
-		rating.loadGraphic(Paths.image('other/' + daRating, 'songs'));
+		rating.loadGraphic(Paths.image(daRating, 'songs'));
 		rating.x = FlxG.width * 0.55 + 200;
 		if (player != 1)
 			rating.x -= 600;
@@ -1422,7 +1422,7 @@ class PlayState extends MusicBeatState
 		var daLoop:Int = 1;
 		for (i in seperatedScore)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('other/num' + Std.int(i), 'songs'));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('num' + Std.int(i), 'songs'));
 			numScore.y = comboSpr.y;
 			numScore.antialiasing = true;
 			numScore.setGraphicSize(Std.int(numScore.width * 0.5));

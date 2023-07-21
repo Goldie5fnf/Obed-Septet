@@ -59,7 +59,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		frames = Paths.charAtlas('NOTE_assets-$char', char.toLowerCase());
+		frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-$char');
 
 		animation.addByPrefix('greenScroll', 'upnote');
 		animation.addByPrefix('redScroll', 'rightnote');

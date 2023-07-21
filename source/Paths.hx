@@ -64,14 +64,6 @@ class Paths
 		return 'assets/fonts/$key';
 	}
 
-	inline static public function charImage(file:String, char:String) {
-		return image('characters/$char/$file', 'songs');
-	}
-
-	inline static public function charAtlas(file:String, char:String) {
-		return getSparrowAtlas('characters/$char/$file');
-	}
-
 	inline static public function getSparrowAtlas(key:String, folder:String = 'songs')
 	{
 		return FlxAtlasFrames.fromSparrow(image(key, folder), image(key, folder).replace('.png', '.xml'));

@@ -10,7 +10,7 @@ class NoteSplash extends FlxSprite
 		super(x, y);
 
 		var randomizer:Int = FlxG.random.int(1, 2);
-		frames = Paths.charAtlas('NoteSplash$char$randomizer', char);
+		frames = Paths.getSparrowAtlas('noteassets/NoteSplash$char$randomizer');
 
 		animation.addByPrefix('splash', 'splash', 30, false);
 		animation.play('splash', true);
