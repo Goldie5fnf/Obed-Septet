@@ -357,7 +357,7 @@ class ChartingState extends MusicBeatState
 
 		var daPenis:String = '';
 		switch (daSong.toLowerCase()) {
-			case 'start':
+			case 'metal-pipe':
 				daPenis = 'Pico';
 			case 'death-beat':
 				daPenis = 'BF';
@@ -365,7 +365,7 @@ class ChartingState extends MusicBeatState
 		vocalsP1 = new FlxSound().loadEmbedded(Paths.voices(daSong, daPenis));
 		
 		switch (daSong.toLowerCase()) {
-			case 'start':
+			case 'metal-pipe':
 				daPenis = 'Darnell';
 			case 'death-beat':
 				daPenis = 'Kartoshka';
