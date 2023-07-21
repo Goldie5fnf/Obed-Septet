@@ -34,6 +34,7 @@ class FPS extends TextField
 
 	@:noCompletion private var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
+	@:noCompletion private var currentMemoryPeak:UInt;
 	@:noCompletion private var times:Array<Float>;
 
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
@@ -51,6 +52,7 @@ class FPS extends TextField
 		multiline = true;
 		text = "FPS: ";
 
+		currentMemoryPeak = 0;
 		cacheCount = 0;
 		currentTime = 0;
 		times = [];
@@ -76,6 +78,10 @@ class FPS extends TextField
 
 		var currentCount = times.length;
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
+
+		var currentMemory:UInt = System.totalMemory;
+		if (currentMemory > currentMemoryPeak)
+			currentMemoryPeak = currentMemory;
 		
 		if (currentCount != cacheCount) {
 			text = "FPS: " + currentFPS;
@@ -83,7 +89,7 @@ class FPS extends TextField
 			
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-			text += "\nMemory: " + memoryMegas + " MB";
+			text += '\nMemory: ${getMemorySize(currentMemory)} / ${getMemorySize(currentMemoryPeak)}';
 			#end
 
 			textColor = 0xFFFFFFFF;
@@ -98,5 +104,25 @@ class FPS extends TextField
 		}
 
 		cacheCount = currentCount;
+	}
+
+	public static function getMemorySize(memory:UInt):String {
+		var size:Float = memory;
+		var label:Int = 0;
+		var labels:Array<String> = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+		while (size >= 1000 && (label < labels.length - 1)) {
+			label++;
+			size /= 1000;
+		}
+
+		return '${Std.int(size) + "." + addZeros(Std.string(Std.int((size % 1) * 100)), 2)}${labels[label]}';
+	}
+
+	public static inline function addZeros(str:String, num:Int) {
+		while (str.length < num)
+			str = '0${str}';
+
+		return str;
 	}
 }
