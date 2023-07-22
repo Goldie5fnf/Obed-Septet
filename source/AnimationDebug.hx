@@ -224,7 +224,7 @@ class AnimationDebug extends FlxState
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);
 			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-			_file.save(saveString, daAnim + "Offsets.txt");
+			_file.save(saveString, "offsets.txt");
 		}
 	}
 

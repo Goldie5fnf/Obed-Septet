@@ -110,8 +110,6 @@ class PlayState extends MusicBeatState
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
 
-	private var iconP1:HealthIcon;
-	private var iconP2:HealthIcon;
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
@@ -174,7 +172,7 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase())
 		{
 			default:
-				defaultCamZoom = 0.9;
+				defaultCamZoom = 0.7;
 				curStage = 'stage';
 		}
 
@@ -183,7 +181,7 @@ class PlayState extends MusicBeatState
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new Character(100, 100, SONG.player2);
+		dad = new Character(70, 100, SONG.player2);
 
 		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -196,9 +194,25 @@ class PlayState extends MusicBeatState
 				{
 					camPos.x += 600;
 				}
+			case 'darnell':
+				dad.y += 100;
+				camPos.y += 100;
+			case 'goldie':
+				dad.y += 105;
+				camPos.y += 100;
 		}
 
-		boyfriend = new Boyfriend(770, 450, SONG.player1);
+		boyfriend = new Boyfriend(1000, 450, SONG.player1);
+		
+		switch (SONG.player1)
+		{
+			case 'pico':
+				gf.visible = false;
+				boyfriend.y -= 200;
+				boyfriend.x -= 300;
+				camPos.y += 500;
+		}
+
 		add(gf);
 		add(dad);
 		add(boyfriend);
@@ -279,15 +293,15 @@ class PlayState extends MusicBeatState
 		var barWH:Array<Int> = [340, 44];
 
 		barP1BG = new FlxSprite(barX + 670, barY);
-		barP1BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
-		barP1BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
+		barP1BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN');
+		barP1BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN', 24, true);
 		barP1BG.animation.play('idle');
 		barP1BG.flipX = true;
 		barP1BG.scrollFactor.set();
 
 		barP2BG = new FlxSprite(barX, barY);
-		barP2BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN_');
-		barP2BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN  instance', 24, true);
+		barP2BG.frames = Paths.getSparrowAtlas('barassets/HPBARMAINPATTERN');
+		barP2BG.animation.addByPrefix('idle', 'HPBARMAINPATTERN', 24, true);
 		barP2BG.animation.play('idle');
 		barP2BG.scrollFactor.set();
 
@@ -297,11 +311,11 @@ class PlayState extends MusicBeatState
 		barP1 = new FlxBar(barP1BG.x + 325, barP1BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
-		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p1PART/Hpbarhp', 'songs'));
+		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p1PART/hpbar', 'songs'));
 
 		barP2 = new FlxBar(barP2BG.x + 245, barP2BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
-		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p2PART/Hpbarhp', 'songs'));
+		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p2PART/hpbar', 'songs'));
 
 		barP1.scale.x = barP2.scale.x = 0.9;
 		
@@ -326,20 +340,6 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
-
-		iconP1 = new HealthIcon(SONG.player1, true);
-		barP1grp.add(iconP1);
-		iconP2 = new HealthIcon(SONG.player2, false);
-		barP2grp.add(iconP2);
-		iconP1.y = iconP2.y = barY + 65;
-
-		iconP2.x = barX + 190;
-		iconP1.x = iconP2.x * 27.5;
-
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(100, iconP1.width, 0.7)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(100, iconP2.width, 0.7)));
-		iconP1.updateHitbox();
-		iconP2.updateHitbox();
 
 		boom.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -859,16 +859,6 @@ class PlayState extends MusicBeatState
 			healthP2 = 2;
 		else if (healthP2 < 0)
 			healthP2 = 0;
-
-		if (barP1.percent < 20)
-			iconP1.animation.curAnim.curFrame = 1;
-		else
-			iconP1.animation.curAnim.curFrame = 0;
-
-		if (barP2.percent < 20)
-			iconP2.animation.curAnim.curFrame = 1;
-		else
-			iconP2.animation.curAnim.curFrame = 0;
 
 		if (barP1.percent >= 100)
 			healthP1TXT.x = hp1txtX;

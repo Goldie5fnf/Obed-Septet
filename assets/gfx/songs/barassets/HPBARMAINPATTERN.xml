@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<TextureAtlas imagePath="HPBARMAINPATTERN .png">
+	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="HPBARMAINPATTERN0000" x="0" y="0" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0001" x="0" y="0" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0002" x="906" y="0" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0003" x="906" y="0" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0004" x="0" y="257" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0005" x="0" y="257" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0006" x="906" y="257" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0007" x="906" y="257" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0008" x="0" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0009" x="0" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0010" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0011" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0012" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0013" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0014" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0015" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0016" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0017" x="906" y="514" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0018" x="0" y="771" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0019" x="0" y="771" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0020" x="906" y="771" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0021" x="906" y="771" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0022" x="0" y="1028" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0023" x="0" y="1028" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0024" x="906" y="1028" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0025" x="906" y="1028" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0026" x="0" y="1285" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0027" x="0" y="1285" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0028" x="906" y="1285" width="906" height="257"/>
+	<SubTexture name="HPBARMAINPATTERN0029" x="906" y="1285" width="906" height="257"/>
+</TextureAtlas>

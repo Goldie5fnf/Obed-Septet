@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-16"?>
-<TextureAtlas imagePath="NoteSplashDARNELL1.png">
+<TextureAtlas imagePath="NoteSplash1.png">
 	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
 	<!-- http://www.adobe.com/products/flash.html -->
 	<SubTexture name="splash0000" x="0" y="0" width="39" height="37" frameX="-139" frameY="-162" frameWidth="312" frameHeight="343"/>

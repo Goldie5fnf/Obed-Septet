@@ -30,15 +30,13 @@ class Character extends FlxSprite
 		curCharacter = character;
 		this.isPlayer = isPlayer;
 
-		var tex:FlxAtlasFrames;
 		antialiasing = true;
 
 		switch (curCharacter)
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('characters/$curCharacter/GF_assets');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/GF_assets');
 				quickAnimAdd('cheer', 'GF Cheer');
 				quickAnimAdd('singLEFT', 'GF left note');
 				quickAnimAdd('singRIGHT', 'GF Right Note');
@@ -54,8 +52,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('characters/$curCharacter/BOYFRIEND');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/BOYFRIEND');
 				quickAnimAdd('idle', 'BF idle dance');
 				quickAnimAdd('singUP', 'BF NOTE UP0');
 				quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
@@ -78,8 +75,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'obedbf':
-				var tex = Paths.getSparrowAtlas('characters/$curCharacter/OBED_BF');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/OBED_BF');
 				quickAnimAdd('idle', 'IDLE');
 				quickAnimAdd('singUP', 'UP');
 				quickAnimAdd('singLEFT', 'LEFT');
@@ -90,12 +86,22 @@ class Character extends FlxSprite
 
 				flipX = true;
 
+			case 'goldie':
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/death_golda');
+				quickAnimAdd('idle', 'idle');
+				quickAnimAdd('singUP', 'idle');
+				quickAnimAdd('singLEFT', 'idle');
+				quickAnimAdd('singRIGHT', 'idle');
+				quickAnimAdd('singDOWN', 'idle');
+
+				playAnim('idle');
+
 			case 'pico':
 				frames = Paths.getSparrowAtlas('characters/$curCharacter/peka');
 				quickAnimAdd('idle', 'idle');
 				quickAnimAdd('singUP', 'up');
-				quickAnimAdd('singRIGHT', 'left');
-				quickAnimAdd('singLEFT', 'right');
+				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singLEFT', 'left');
 				quickAnimAdd('singDOWN', 'down');
 				quickAnimAdd('singUPmiss', 'up');
 				quickAnimAdd('singLEFTmiss', 'left');
@@ -116,8 +122,8 @@ class Character extends FlxSprite
 				quickAnimAdd('singLEFT', 'right');
 				quickAnimAdd('singDOWN', 'down');
 				quickAnimAdd('singUPmiss', 'up');
-				quickAnimAdd('singLEFTmiss', 'left');
-				quickAnimAdd('singRIGHTmiss', 'right');
+				quickAnimAdd('singLEFTmiss', 'right');
+				quickAnimAdd('singRIGHTmiss', 'left');
 				quickAnimAdd('singDOWNmiss', 'down');
 
 				playAnim('idle');
@@ -127,36 +133,19 @@ class Character extends FlxSprite
 				scale.set(0.6, 0.6);
 		}
 
-		loadOffsetFile(curCharacter);
+		loadOffsetFile();
 		dance();
 		animation.finish();
 
 		if (isPlayer)
 		{
 			flipX = !flipX;
-
-			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.endsWith('bf'))
-			{
-				// var animArray
-				var oldRight = animation.getByName('singRIGHT').frames;
-				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
-				animation.getByName('singLEFT').frames = oldRight;
-
-				// IF THEY HAVE MISS ANIMATIONS??
-				if (animation.getByName('singRIGHTmiss') != null)
-				{
-					var oldMiss = animation.getByName('singRIGHTmiss').frames;
-					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
-					animation.getByName('singLEFTmiss').frames = oldMiss;
-				}
-			}
 		}
 	}
 
-	private function loadOffsetFile(offsetCharacter:String)
+	private function loadOffsetFile()
 	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("songs/characters/" + curCharacter + '/' + offsetCharacter + "Offsets.txt", IMAGE));
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("songs/characters/" + curCharacter + "/offsets.txt", IMAGE));
 
 		for (i in daFile)
 		{
@@ -167,7 +156,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.endsWith('bf'))
+		if (!isPlayer)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{
