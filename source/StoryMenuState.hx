@@ -22,12 +22,12 @@ class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
 
-	var weekData:Array<Dynamic> = [['Tutorial']];
+	var weekData:Array<Dynamic> = [['Death-Beat']];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, true];
 
-	var weekNames:Array<String> = [""];
+	var weekNames:Array<String> = ["SEX"];
 
 	var txtWeekTitle:FlxText;
 
@@ -249,9 +249,9 @@ class StoryMenuState extends MusicBeatState
 			switch (curDifficulty)
 			{
 				case 0:
-					diffic = '-easy';
-				case 2:
-					diffic = '-hard';
+					diffic = '-fine';
+				case 1:
+					diffic = '-obed';
 			}
 
 			PlayState.storyDifficulty = curDifficulty;
@@ -263,6 +263,7 @@ class StoryMenuState extends MusicBeatState
 			{
 				LoadingState.path = 'songs';
 				LoadingState.bullshit = new PlayState();
+				LoadingState.daSong = PlayState.SONG;
 				FlxG.switchState(new LoadingState());
 			});
 		}

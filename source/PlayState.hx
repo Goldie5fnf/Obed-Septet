@@ -225,7 +225,7 @@ class PlayState extends MusicBeatState
 
 		for (i in 0...2)
 		{	
-			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image((i == 1) ? 'noteassets/bar-$p1PART' : 'noteassets/bar-$p2PART', 'songs'));
+			var arrowBar:FlxSprite = new FlxSprite(47.5 + (i * 640), strumLine.y + 17.5).loadGraphic(Paths.image((i == 1) ? 'characters/$p1PART/bar' : 'characters/$p2PART/bar', 'songs'));
 			arrowBar.antialiasing = true;
 			arrowBar.setGraphicSize(Std.int(arrowBar.width * 0.7));
 			arrowBar.updateHitbox();
@@ -297,11 +297,11 @@ class PlayState extends MusicBeatState
 		barP1 = new FlxBar(barP1BG.x + 325, barP1BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP1', 0, 2);
 		barP1.flipX = barP1BG.flipX;
 		barP1.scrollFactor.set();
-		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p1PART', 'songs'));
+		barP1.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p1PART/Hpbarhp', 'songs'));
 
 		barP2 = new FlxBar(barP2BG.x + 245, barP2BG.y + 114, LEFT_TO_RIGHT, barWH[0], barWH[1], this, 'healthP2', 0, 2);
 		barP2.scrollFactor.set();
-		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('barassets/Hpbarhp-$p2PART', 'songs'));
+		barP2.createImageBar(Paths.image('barassets/defhp', 'songs'), Paths.image('characters/$p2PART/Hpbarhp', 'songs'));
 
 		barP1.scale.x = barP2.scale.x = 0.9;
 		
@@ -553,7 +553,7 @@ class PlayState extends MusicBeatState
 				else
 					songNotes[4] = true;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, songNotes[4] ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase(), oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, songNotes[4] ? SONG.player1.toLowerCase() : SONG.player2.toLowerCase(), oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.altNote = songNotes[3];
 				swagNote.isPlayerNote = songNotes[4];
@@ -568,7 +568,7 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, songNotes[4] ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase(), oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, songNotes[4] ? SONG.player1.toLowerCase() : SONG.player2.toLowerCase(), oldNote, true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -602,15 +602,15 @@ class PlayState extends MusicBeatState
 
 	private function generateStaticArrows(player:Int):Void
 	{
-		var arrowPathShit:String = (player == 1) ? SONG.player1.toUpperCase() : SONG.player2.toUpperCase();
+		var arrowPathShit:String = (player == 1) ? SONG.player1.toLowerCase() : SONG.player2.toLowerCase();
 		for (i in 0...4)
 		{
 			var babyArrow:FlxSprite = new FlxSprite(25, strumLine.y);
 			var crashArrow:FlxSprite = new FlxSprite();
 			crashArrow.alpha = 0;
 
-			babyArrow.frames = Paths.getSparrowAtlas('noteassets/NOTE_assets-$arrowPathShit');
-			crashArrow.frames = Paths.getSparrowAtlas('noteassets/CRASHNOTE_assets');
+			babyArrow.frames = Paths.getSparrowAtlas('characters/$arrowPathShit/NOTE_assets');
+			crashArrow.frames = Paths.getSparrowAtlas('CRASHNOTE_assets');
 
 			babyArrow.animation.addByPrefix('green', 'arrowUP');
 			babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
@@ -1285,7 +1285,10 @@ class PlayState extends MusicBeatState
 				prevCamFollow = camFollow;
 
 				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-				FlxG.switchState(new PlayState());
+				LoadingState.path = 'songs';
+				LoadingState.bullshit = new PlayState();
+				LoadingState.daSong = SONG;
+				FlxG.switchState(new LoadingState());
 			}
 		}
 		else
@@ -1343,9 +1346,9 @@ class PlayState extends MusicBeatState
 		if (daRating == 'sick')
 		{
 			if (player == 1)
-				doNoteSplash(daNote, SONG.player1.toUpperCase());
+				doNoteSplash(daNote, SONG.player1.toLowerCase());
 			else
-				doNoteSplash(daNote, SONG.player2.toUpperCase());
+				doNoteSplash(daNote, SONG.player2.toLowerCase());
 		}
 
 		if (player == 1)

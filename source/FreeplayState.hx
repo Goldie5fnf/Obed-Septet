@@ -180,6 +180,7 @@ class FreeplayState extends MusicBeatState
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.path = 'songs';
 			LoadingState.bullshit = new PlayState();
+			LoadingState.daSong = PlayState.SONG;
 			FlxG.switchState(new LoadingState());
 		}
 	}

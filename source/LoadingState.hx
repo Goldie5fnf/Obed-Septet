@@ -1,5 +1,6 @@
 package;
 
+import Song.SwagSong;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 import flixel.FlxState;
@@ -21,9 +22,11 @@ using StringTools;
 
 class LoadingState extends MusicBeatState
 {
+	public static var daSong:SwagSong;
 	public static var path:String = "menus";
 	public static var bullshit:FlxState = new TitleState();
 	var screen:LoadingScreen;
+	static var charsToCache:Array<String> = [];
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
 
@@ -34,10 +37,21 @@ class LoadingState extends MusicBeatState
 		screen = new LoadingScreen();
 		add(screen);
 
+		if(path == 'songs')
+			charsToCache = [daSong.player1, daSong.player2, 'gf'];
+
 		for (image in Assets.list(IMAGE))
 		{
-			if (image.startsWith('assets/gfx/$path') || image.startsWith('assets/gfx/global'))
-				imagesToCache.push(image);
+			if (image.startsWith('assets/gfx/$path') || image.startsWith('assets/gfx/global')) {
+				if (image.startsWith('assets/gfx/songs/characters/')) {
+					for (char in charsToCache) {
+						if (image.startsWith('assets/gfx/songs/characters/$char'))
+							imagesToCache.push(image);
+					}
+				} else {
+					imagesToCache.push(image);
+				}
+			}
 		}
 		for (sound in Assets.list(SOUND))
 		{

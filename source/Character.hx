@@ -37,7 +37,7 @@ class Character extends FlxSprite
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('characters/GF_assets');
+				tex = Paths.getSparrowAtlas('characters/$curCharacter/GF_assets');
 				frames = tex;
 				quickAnimAdd('cheer', 'GF Cheer');
 				quickAnimAdd('singLEFT', 'GF left note');
@@ -54,7 +54,7 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
+				var tex = Paths.getSparrowAtlas('characters/$curCharacter/BOYFRIEND');
 				frames = tex;
 				quickAnimAdd('idle', 'BF idle dance');
 				quickAnimAdd('singUP', 'BF NOTE UP0');
@@ -78,7 +78,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'obedbf':
-				var tex = Paths.getSparrowAtlas('characters/OBED_BF');
+				var tex = Paths.getSparrowAtlas('characters/$curCharacter/OBED_BF');
 				frames = tex;
 				quickAnimAdd('idle', 'IDLE');
 				quickAnimAdd('singUP', 'UP');
@@ -91,7 +91,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'pico':
-				frames = Paths.getSparrowAtlas('characters/peka');
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/peka');
 				quickAnimAdd('idle', 'idle');
 				quickAnimAdd('singUP', 'up');
 				quickAnimAdd('singRIGHT', 'left');
@@ -109,7 +109,7 @@ class Character extends FlxSprite
 				scale.set(0.6, 0.6);
 				
 			case 'darnell':
-				frames = Paths.getSparrowAtlas('characters/N-WORD');
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/N-WORD');
 				quickAnimAdd('idle', 'darnIdle');
 				quickAnimAdd('singUP', 'up');
 				quickAnimAdd('singRIGHT', 'left');
@@ -156,7 +156,7 @@ class Character extends FlxSprite
 
 	private function loadOffsetFile(offsetCharacter:String)
 	{
-		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("songs/characters/" + offsetCharacter + "Offsets.txt", IMAGE));
+		var daFile:Array<String> = CoolUtil.coolTextFile(Paths.file("songs/characters/" + curCharacter + '/' + offsetCharacter + "Offsets.txt", IMAGE));
 
 		for (i in daFile)
 		{

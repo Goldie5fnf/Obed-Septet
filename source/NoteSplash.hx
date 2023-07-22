@@ -5,12 +5,12 @@ import flixel.FlxSprite;
 
 class NoteSplash extends FlxSprite
 {
-	public function new(x:Float, y:Float, ?char:String = "BF"):Void
+	public function new(x:Float, y:Float, ?char:String = "bf"):Void
 	{
 		super(x, y);
 
 		var randomizer:Int = FlxG.random.int(1, 2);
-		frames = Paths.getSparrowAtlas('noteassets/NoteSplash$char$randomizer');
+		frames = Paths.getSparrowAtlas('characters/$char/NoteSplash$randomizer');
 
 		animation.addByPrefix('splash', 'splash', 30, false);
 		animation.play('splash', true);
