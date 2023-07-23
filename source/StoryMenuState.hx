@@ -23,7 +23,7 @@ class StoryMenuState extends MusicBeatState
 	var scoreText:FlxText;
 
 	var weekData:Array<Dynamic> = [['Death-Beat']];
-	var curDifficulty:Int = 1;
+	var curDifficulty:Int = 0;
 
 	public static var weekUnlocked:Array<Bool> = [true, true];
 
@@ -124,10 +124,9 @@ class StoryMenuState extends MusicBeatState
 
 		sprDifficulty = new FlxSprite(leftArrow.x + 130, leftArrow.y);
 		sprDifficulty.frames = ui_tex;
-		sprDifficulty.animation.addByPrefix('easy', 'EASY');
-		sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
-		sprDifficulty.animation.addByPrefix('hard', 'HARD');
-		sprDifficulty.animation.play('easy');
+		sprDifficulty.animation.addByPrefix('fine', 'NORMAL');
+		sprDifficulty.animation.addByPrefix('obed', 'HARD');
+		sprDifficulty.animation.play('fine');
 		changeDifficulty();
 
 		difficultySelectors.add(sprDifficulty);
@@ -274,8 +273,8 @@ class StoryMenuState extends MusicBeatState
 		curDifficulty += change;
 
 		if (curDifficulty < 0)
-			curDifficulty = 2;
-		if (curDifficulty > 2)
+			curDifficulty = 1;
+		if (curDifficulty > 1)
 			curDifficulty = 0;
 
 		sprDifficulty.offset.x = 0;
@@ -283,19 +282,15 @@ class StoryMenuState extends MusicBeatState
 		switch (curDifficulty)
 		{
 			case 0:
-				sprDifficulty.animation.play('easy');
+				sprDifficulty.animation.play('fine');
 				sprDifficulty.offset.x = 20;
 			case 1:
-				sprDifficulty.animation.play('normal');
+				sprDifficulty.animation.play('obed');
 				sprDifficulty.offset.x = 70;
-			case 2:
-				sprDifficulty.animation.play('hard');
-				sprDifficulty.offset.x = 20;
 		}
 
 		sprDifficulty.alpha = 0;
 
-		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
 
