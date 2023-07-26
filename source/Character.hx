@@ -89,10 +89,10 @@ class Character extends FlxSprite
 			case 'prettyboy':
 				frames = Paths.getSparrowAtlas('characters/$curCharacter/prettyboy');
 				quickAnimAdd('idle', 'idle');
-				quickAnimAdd('singUP', 'up');
-				quickAnimAdd('singLEFT', 'LEFT');
-				quickAnimAdd('singRIGHT', 'right');
-				quickAnimAdd('singDOWN', 'down');
+				quickAnimAdd('singUP', 'down');
+				quickAnimAdd('singLEFT', 'right');
+				quickAnimAdd('singRIGHT', 'up');
+				quickAnimAdd('singDOWN', 'LEFT');
 
 				playAnim('idle');
 
