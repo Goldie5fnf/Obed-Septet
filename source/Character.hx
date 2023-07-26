@@ -86,6 +86,18 @@ class Character extends FlxSprite
 
 				flipX = true;
 
+			case 'prettyboy':
+				frames = Paths.getSparrowAtlas('characters/$curCharacter/prettyboy');
+				quickAnimAdd('idle', 'idle');
+				quickAnimAdd('singUP', 'up');
+				quickAnimAdd('singLEFT', 'LEFT');
+				quickAnimAdd('singRIGHT', 'right');
+				quickAnimAdd('singDOWN', 'down');
+
+				playAnim('idle');
+
+				flipX = true;
+
 			case 'goldie':
 				frames = Paths.getSparrowAtlas('characters/$curCharacter/death_golda');
 				quickAnimAdd('idle', 'idle');
