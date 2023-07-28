@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="loading.png">
+	<!-- Created with Adobe Animate version 20.5.1.31044 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="loading0000" x="0" y="0" width="243" height="266" frameX="-1" frameY="0" frameWidth="244" frameHeight="266"/>
+	<SubTexture name="loading0001" x="243" y="0" width="244" height="266"/>
+</TextureAtlas>

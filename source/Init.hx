@@ -16,7 +16,7 @@ class Init
 	{
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = [ZERO];
-		FlxG.save.bind('funkin', 'ninjamuffin99');
+		FlxG.save.bind('obedseptet', 'kawaiisex');
 		PreferencesMenu.initPrefs();
 		PlayerSettings.init();
 		Highscore.load();

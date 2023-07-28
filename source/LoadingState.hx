@@ -30,9 +30,13 @@ class LoadingState extends MusicBeatState
 	static var imagesToCache:Array<String> = [];
 	static var soundsToCache:Array<String> = [];
 
-	override function create()
-	{
+	override function create() {
 		super.create();
+
+		if (FlxG.save.data.volume != null)
+			FlxG.sound.volume = FlxG.save.data.volume;
+		if (FlxG.save.data.mute != null)
+			FlxG.sound.muted = FlxG.save.data.mute;
 
 		screen = new LoadingScreen();
 		add(screen);
@@ -40,8 +44,7 @@ class LoadingState extends MusicBeatState
 		if(path == 'songs')
 			charsToCache = [daSong.player1, daSong.player2, 'gf'];
 
-		for (image in Assets.list(IMAGE))
-		{
+		for (image in Assets.list(IMAGE)) {
 			if (image.startsWith('assets/gfx/$path') || image.startsWith('assets/gfx/global')) {
 				if (image.startsWith('assets/gfx/songs/characters/')) {
 					for (char in charsToCache) {
@@ -53,73 +56,52 @@ class LoadingState extends MusicBeatState
 				}
 			}
 		}
-		for (sound in Assets.list(SOUND))
-		{
+		
+		for (sound in Assets.list(SOUND)) {
 			if (sound.startsWith('assets/sfx/$path') || sound.startsWith('assets/sfx/global'))
 				soundsToCache.push(sound);
 		}
 
-		screen.max = imagesToCache.length + soundsToCache.length;
-
 		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 
 		FlxGraphic.defaultPersist = true;
-		Thread.create(() ->
-		{
+		Thread.create(() -> {
 			FlxG.bitmap.dumpCache();
 			screen.setLoadingText("Unloading images...");
 			@:privateAccess
 			for (image in FlxG.bitmap._cache.keys()) {
-				if (image.startsWith('assets/gfx'))
-				{
-					trace('Uncaching image $image');
+				if (image.startsWith('assets/gfx') && !image.startsWith('assets/gfx/global/')) {
 					var graphic:Null<FlxGraphic> = FlxG.bitmap._cache.get(image);
 					Assets.cache.removeBitmapData(image);
 					FlxG.bitmap._cache.remove(image);
 					graphic.destroy();
 				}
 			}
+
 			screen.setLoadingText("Unloading sounds...");
 			for (sound in Assets.cache.getSoundKeys()) {
-				if (sound.startsWith('assets/sfx'))
-				{
-					trace('Uncaching sound $sound');
+				if (sound.startsWith('assets/sfx') && !sound.startsWith('assets/sfx/global'))
 					Assets.cache.removeSound(sound);
-				}
 			}
+
 			screen.setLoadingText("Loading images...");
 			for (image in imagesToCache)
-			{
-				trace('Caching image $image');
 				FlxG.bitmap.add(image);
-				screen.progress += 1;
-			}
+
 			screen.setLoadingText("Loading sounds...");
 			for (sound in soundsToCache)
-			{
-				trace('Caching sound $sound');
 				FlxG.sound.cache(sound);
-				screen.progress += 1;
-			}
+			
 			FlxGraphic.defaultPersist = false;
 			screen.setLoadingText("Done!");
-			trace("Done caching");
 
 			FlxG.camera.fade(FlxColor.BLACK, 1, false);
-			new FlxTimer().start(1, function(_:FlxTimer)
-			{
+			new FlxTimer().start(1, function(_:FlxTimer) {
 				screen.kill();
 				screen.destroy();
 				imagesToCache = [];
 				soundsToCache = [];
-				@:privateAccess
-				for (key in FlxG.bitmap._cache.keys())
-				{
-					if (key.contains('assets'))
-					{
-						trace('key: ' + key + " is on mem");
-					}
-				}
+				
 				FlxG.switchState(bullshit);
 			});
 		});

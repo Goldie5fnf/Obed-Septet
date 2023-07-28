@@ -1049,9 +1049,7 @@ class PlayState extends MusicBeatState
 					enemyStrums.forEach(function(spr:FlxSprite)
 					{
 						if (Math.abs(daNote.noteData) == spr.ID)
-						{
 							spr.animation.play('confirm', true);
-						}
 						else
 							spr.animation.play('static', true);
 						
