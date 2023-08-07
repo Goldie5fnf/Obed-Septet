@@ -33,14 +33,11 @@ class LoadingState extends MusicBeatState
 	override function create() {
 		super.create();
 
-		if (FlxG.save.data.volume != null)
-			FlxG.sound.volume = FlxG.save.data.volume;
-		if (FlxG.save.data.mute != null)
-			FlxG.sound.muted = FlxG.save.data.mute;
-
 		screen = new LoadingScreen();
 		add(screen);
 
+		FlxG.mouse.visible = false;
+		
 		if(path == 'songs')
 			charsToCache = [daSong.player1, daSong.player2, 'gf'];
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<TextureAtlas imagePath="freeplay_select.png">
+	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="freeplay0000" x="0" y="0" width="823" height="188" frameX="-168" frameY="-113" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplay0001" x="823" y="0" width="941" height="251" frameX="-111" frameY="-83" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplay0002" x="0" y="251" width="1016" height="328" frameX="-73" frameY="-45" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplay0003" x="0" y="579" width="1103" height="380" frameX="-30" frameY="-19" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplay0004" x="0" y="959" width="1162" height="418"/>
+	<SubTexture name="freeplay0005" x="0" y="1377" width="1162" height="418"/>
+	<SubTexture name="freeplay0006" x="0" y="0" width="823" height="188" frameX="-168" frameY="-113" frameWidth="1162" frameHeight="418"/>
+</TextureAtlas>
