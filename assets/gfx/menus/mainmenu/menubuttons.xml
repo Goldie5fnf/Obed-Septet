@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<TextureAtlas imagePath="menubuttons.png">
+	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="freeplay0000" x="587" y="0" width="823" height="188" frameX="0" frameY="0" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplayS0000" x="587" y="0" width="823" height="188" frameX="-168" frameY="-113" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplayS0001" x="1410" y="0" width="941" height="251" frameX="-111" frameY="-83" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplayS0002" x="2351" y="0" width="1016" height="328" frameX="-73" frameY="-45" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplayS0003" x="0" y="328" width="1103" height="380" frameX="-30" frameY="-19" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="freeplayS0004" x="1103" y="328" width="1162" height="418"/>
+	<SubTexture name="freeplayS0005" x="2265" y="328" width="1162" height="418"/>
+	<SubTexture name="freeplayS0006" x="587" y="0" width="823" height="188" frameX="-168" frameY="-113" frameWidth="1162" frameHeight="418"/>
+	<SubTexture name="options0000" x="0" y="0" width="587" height="89"/>
+	<SubTexture name="optionsS0000" x="3427" y="328" width="586" height="90" frameX="-192" frameY="-104" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0001" x="0" y="746" width="690" height="152" frameX="-142" frameY="-75" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0002" x="690" y="746" width="764" height="208" frameX="-105" frameY="-47" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0003" x="1454" y="746" width="860" height="258" frameX="-57" frameY="-22" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0004" x="2314" y="746" width="974" height="260" frameX="0" frameY="-21" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0005" x="0" y="1006" width="974" height="260" frameX="0" frameY="-21" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="optionsS0006" x="974" y="1006" width="974" height="303"/>
+	<SubTexture name="optionsS0007" x="3427" y="328" width="586" height="90" frameX="-192" frameY="-104" frameWidth="974" frameHeight="303"/>
+	<SubTexture name="storymenu0000" x="1212" y="1889" width="740" height="220"/>
+	<SubTexture name="storymenuS0000" x="1948" y="1006" width="741" height="221" frameX="-234" frameY="-177" frameWidth="1212" frameHeight="578"/>
+	<SubTexture name="storymenuS0001" x="2689" y="1006" width="886" height="305" frameX="-163" frameY="-137" frameWidth="1212" frameHeight="578"/>
+	<SubTexture name="storymenuS0002" x="0" y="1311" width="946" height="346" frameX="-133" frameY="-116" frameWidth="1212" frameHeight="578"/>
+	<SubTexture name="storymenuS0003" x="946" y="1311" width="1069" height="452" frameX="-72" frameY="-63" frameWidth="1212" frameHeight="578"/>
+	<SubTexture name="storymenuS0004" x="2015" y="1311" width="1212" height="578"/>
+	<SubTexture name="storymenuS0005" x="0" y="1889" width="1212" height="578"/>
+	<SubTexture name="storymenuS0006" x="1948" y="1006" width="741" height="221" frameX="-234" frameY="-177" frameWidth="1212" frameHeight="578"/>
+</TextureAtlas>
