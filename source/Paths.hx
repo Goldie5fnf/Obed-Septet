@@ -74,8 +74,8 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, folder), image(key, folder).replace('.png', '.txt'));
 	}
 
-	inline static public function videos(key:String)
+	inline static public function swf(key:String)
 	{
-		return SUtil.getStorageDirectory() + 'assets/videos/$key';
+		return 'assets/swf/$key';
 	}
 }

@@ -39,17 +39,17 @@
     <assets path="assets/gfx/global/mobile" if="mobile" />
 	<assets path="assets/fonts" embed='true'/>
 	<assets path="assets"/>
-	<assets path="assets"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" />
-	<haxedev set='webgl' />
-	<haxelib name="flixel-addons" />
-	<haxelib name="flixel-ui" />
+	<haxelib name="flixel"/>
+	<haxedev set='webgl'/>
+	<haxelib name="flixel-addons"/>
+	<haxelib name="flixel-ui"/>
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD"/>
 	<haxelib name="extension-androidtools" if="android"/>
+	<haxelib name="swf"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

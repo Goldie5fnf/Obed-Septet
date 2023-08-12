@@ -33,11 +33,6 @@ class LoadingState extends MusicBeatState
 	override function create() {
 		super.create();
 
-		if (FlxG.save.data.volume != null)
-			FlxG.sound.volume = FlxG.save.data.volume;
-		if (FlxG.save.data.mute != null)
-			FlxG.sound.muted = FlxG.save.data.mute;
-
 		screen = new LoadingScreen();
 		add(screen);
 
@@ -51,9 +46,8 @@ class LoadingState extends MusicBeatState
 						if (image.startsWith('assets/gfx/songs/characters/$char'))
 							imagesToCache.push(image);
 					}
-				} else {
+				} else
 					imagesToCache.push(image);
-				}
 			}
 		}
 		

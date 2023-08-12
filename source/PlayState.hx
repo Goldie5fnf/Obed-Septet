@@ -41,6 +41,7 @@ import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import ui.PreferencesMenu;
+import video.SwfVideo;
 
 using StringTools;
 
@@ -356,18 +357,18 @@ class PlayState extends MusicBeatState
 
 		startingSong = true;
 
-		if (isStoryMode && !seenCutscene)
+		if (!seenCutscene)
 		{
 			seenCutscene = true;
 
 			switch (curSong.toLowerCase())
 			{
+				case 'death-beat':
+					startSWF('sex');
 				default:
 					startCountdown();
 			}
 		}
-		else
-			startCountdown();
 
 		super.create();
 	}
@@ -450,6 +451,16 @@ class PlayState extends MusicBeatState
 			{
 				spr.destroy();
 			}
+		});
+	}
+
+	public function startSWF(name:String) {
+		inCutscene = true;
+
+		var video:SwfVideo = new SwfVideo(Paths.swf(name + '.swf'), Paths.swf(name + '.ogg'), function()
+		{
+			startCountdown();
+			return;
 		});
 	}
 
