@@ -23,8 +23,9 @@ class SwfVideo extends Sprite
         barRight = new Sprite();
 
         var audio:FlxSound = new FlxSound().loadEmbedded(sound);
-        Assets.loadLibrary('$movieClip').onComplete(function(_) {
-            clip = Assets.getMovieClip('$movieClip:');
+        
+        Assets.loadLibrary('assets/swf/$movieClip').onComplete(function(_) {
+            clip = Assets.getMovieClip('assets/swf/$movieClip:');
             addChild(clip);
 
             addChild(barLeft);
@@ -66,6 +67,11 @@ class SwfVideo extends Sprite
 
         if (clip != null)
 			clip.x = Math.ceil((FlxG.stage.stageWidth - preX) * 0.5);
+
+        if (clip != null)
+            trace('SEXX!!!!!!');
+        else
+            trace('no sex');
 
         barLeft.graphics.clear();
         barRight.graphics.clear();

@@ -457,7 +457,7 @@ class PlayState extends MusicBeatState
 	public function startSWF(name:String) {
 		inCutscene = true;
 
-		var video:SwfVideo = new SwfVideo(Paths.swf(name + '.swf'), Paths.swf(name + '.ogg'), function()
+		var video:SwfVideo = new SwfVideo(name + '.swf', 'assets/swf/' + name + '.ogg', function()
 		{
 			startCountdown();
 			return;

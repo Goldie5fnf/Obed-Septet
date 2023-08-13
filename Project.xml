@@ -39,6 +39,7 @@
     <assets path="assets/gfx/global/mobile" if="mobile" />
 	<assets path="assets/fonts" embed='true'/>
 	<assets path="assets"/>
+	<library path="assets/swf/sex.swf" preload="true"/>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel"/>
@@ -49,7 +50,6 @@
 	<haxelib name="hxcpp-debug-server" if="desktop debug"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD"/>
 	<haxelib name="extension-androidtools" if="android"/>
-	<haxelib name="swf"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
