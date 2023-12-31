@@ -236,9 +236,9 @@ class TitleState extends MusicBeatState
 				switch (i + 1)
 				{
 					case 1:
-						createCoolText(['kawaii sex']);
+						createCoolText(['project']);
 					case 3:
-						addMoreText('present');
+						addMoreText('ellipsis');
 					case 4:
 						deleteCoolText();
 					case 5:
@@ -256,9 +256,9 @@ class TitleState extends MusicBeatState
 					case 12:
 						deleteCoolText();
 					case 13:
-						addMoreText('Obed');
+						addMoreText('NeforFunk');
 					case 14:
-						addMoreText('Septet');
+						addMoreText('...');
 					case 16:
 						skipIntro();
 				}
