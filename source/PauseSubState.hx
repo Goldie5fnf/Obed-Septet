@@ -159,7 +159,6 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 					FlxG.resetState();
 				case "Exit to menu":
-					PlayState.seenCutscene = false;
 					PlayState.deathCounter = 0;
 					if (PlayState.isStoryMode) {
 						LoadingState.path = 'menus';

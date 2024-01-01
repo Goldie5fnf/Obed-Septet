@@ -113,8 +113,6 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	public static var seenCutscene:Bool = false;
-
 	var songScore:Int = 0;
 	var enemyScore:Int = 0;
 	var scoreTxt:FlxText;
@@ -356,17 +354,13 @@ class PlayState extends MusicBeatState
 
 		startingSong = true;
 
-		if (!seenCutscene)
+
+		switch (curSong.toLowerCase())
 		{
-			seenCutscene = true;
-
-			switch (curSong.toLowerCase())
-			{
-				default:
-					startCountdown();
-			}
+			default:
+				startCountdown();
 		}
-
+		
 		super.create();
 	}
 
@@ -1209,7 +1203,6 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
-		seenCutscene = false;
 		deathCounter = 0;
 		canPause = false;
 		FlxG.sound.music.volume = 0;
