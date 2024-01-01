@@ -803,7 +803,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Player Score:" + songScore + " Enemy Score:" + enemyScore + " Player Missed:" + playerMisses + " Enemy Missed:" + enemyMisses;
+		scoreTxt.text = "Enemy Score:" + enemyScore  + " | Enemy Missed:" + enemyMisses + " || Player Score:" + songScore + " | Player Missed:" + playerMisses;
 		scoreTxt.screenCenter(X);
 		healthP1TXT.text = barP1.percent + '%';
 		healthP2TXT.text = barP2.percent + '%';
