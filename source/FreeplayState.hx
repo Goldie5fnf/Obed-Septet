@@ -41,21 +41,17 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var scoreBG:FlxSprite;
 
-	override function create()
-	{
+	override function create() {
 		#if DISCORD
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("Freeplay", null);
 		#end
 
 		var isDebug:Bool = false;
 
-		songs.push(new SongMetadata('death-beat', 1, 'pico'));
+		songs.push(new SongMetadata('death-beat', 1));
 
-		songs.push(new SongMetadata('metal-pipe', 2, 'darnell'));
-
-		if (FlxG.sound.music != null)
-		{
+		if (FlxG.sound.music != null) {
 			if (!FlxG.sound.music.playing)
 				FlxG.sound.playMusic(Paths.sound('freakyMenu', 'menus'));
 		}
@@ -99,9 +95,9 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String)
+	public function addSong(songName:String, weekNum:Int)
 	{
-		songs.push(new SongMetadata(songName, weekNum, songCharacter));
+		songs.push(new SongMetadata(songName, weekNum));
 	}
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
@@ -247,12 +243,10 @@ class SongMetadata
 {
 	public var songName:String = "";
 	public var week:Int = 0;
-	public var songCharacter:String = "";
 
-	public function new(song:String, week:Int, songCharacter:String)
+	public function new(song:String, week:Int)
 	{
 		this.songName = song;
 		this.week = week;
-		this.songCharacter = songCharacter;
 	}
 }

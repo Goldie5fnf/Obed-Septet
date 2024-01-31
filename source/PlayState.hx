@@ -142,8 +142,7 @@ class PlayState extends MusicBeatState
 	var boom:FlxSprite;
 	var boomTween:FlxTween;
 
-	override public function create()
-	{
+	override public function create() {
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -167,10 +166,9 @@ class PlayState extends MusicBeatState
 		initDiscord();
 		#end
 
-		switch (SONG.song.toLowerCase())
-		{
+		switch (SONG.song.toLowerCase()) {
 			default:
-				defaultCamZoom = 0.7;
+				defaultCamZoom = 0.5;
 				curStage = 'stage';
 		}
 
@@ -189,9 +187,7 @@ class PlayState extends MusicBeatState
 				dad.setPosition(gf.x, gf.y);
 				gf.visible = false;
 				if (isStoryMode)
-				{
 					camPos.x += 600;
-				}
 			case 'darnell':
 				dad.y += 100;
 				camPos.y += 100;
