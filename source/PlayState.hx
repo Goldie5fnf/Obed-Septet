@@ -143,7 +143,7 @@ class PlayState extends MusicBeatState {
 	var smoke:FlxSprite;
 	var smoke2:FlxSprite;
 
-	var randomizer:Array<Float> = [0, 0, 0, 0]; //used for random opponent ratings
+	var randomizer:Array<Float> = [5, 10, 30, 5]; //used for random opponent ratings
 
 	override public function create() {
 		if (FlxG.sound.music != null)
@@ -252,7 +252,7 @@ class PlayState extends MusicBeatState {
 		// shit/bad/good/miss
 		switch (daun.curCharacter) {
 			case 'goldie':
-				randomizer = [5, 20, 60, 5];
+				randomizer = [3, 10, 30, 3];
 			case 'absolute':
 				randomizer = [2, 7, 30, 1];
 			case 'shyllis':
