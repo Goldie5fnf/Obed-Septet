@@ -27,17 +27,14 @@ using StringTools;
 import DiscordClient.DiscordClient;
 #end
 
-class MainMenuState extends MusicBeatState
-{
+class MainMenuState extends MusicBeatState {
 	var menuItems:MainMenuList;
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	override function create()
-	{
+	override function create() {
 		#if DISCORD
-		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -45,9 +42,7 @@ class MainMenuState extends MusicBeatState
 		transOut = FlxTransitionableState.defaultTransOut;
 
 		if (!FlxG.sound.music.playing)
-		{
 			FlxG.sound.playMusic(Paths.sound('freakyMenu', 'menus'));
-		}
 
 		persistentUpdate = persistentDraw = true;
 
@@ -78,26 +73,22 @@ class MainMenuState extends MusicBeatState
 		menuItems = new MainMenuList();
 		add(menuItems);
 		menuItems.onChange.add(onMenuItemChange);
-		menuItems.onAcceptPress.add(function(_)
-		{
+		menuItems.onAcceptPress.add(function(_) {
 			FlxFlicker.flicker(magenta, 1.1, 0.15, false, true);
 		});
 
-		menuItems.enabled = false; // disable for intro
+		menuItems.enabled = false;
 		menuItems.createItem('story mode', function() startExitState(new StoryMenuState()));
 		menuItems.createItem('freeplay', function() startExitState(new FreeplayState()));
-		// addMenuItem('options', function () startExitState(new OptionMenu()));
 		#if CAN_OPEN_LINKS
 		var hasPopupBlocker = #if web true #else false #end;
 		menuItems.createItem('donate', selectDonate, hasPopupBlocker);
 		#end
 		menuItems.createItem('options', function() startExitState(new OptionsState()));
 
-		// center vertically
 		var spacing = 160;
 		var top = (FlxG.height - (spacing * (menuItems.length - 1))) / 2;
-		for (i in 0...menuItems.length)
-		{
+		for (i in 0...menuItems.length) {
 			var menuItem = menuItems.members[i];
 			menuItem.x = FlxG.width / 2;
 			menuItem.y = top + spacing * i;
@@ -105,14 +96,12 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.cameras.reset(new SwagCamera());
 		FlxG.camera.follow(camFollow, null, 0.06);
-		// FlxG.camera.setScrollBounds(bg.x, bg.x + bg.width, bg.y, bg.y + bg.height * 1.2);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Obed Engine v" + Application.current.meta.get('version'), 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "N.E.F.O.R Engine v" + Application.current.meta.get('version'), 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
-		// NG.core.calls.event.logEvent('swag').send();
 		#if mobile
 		addVirtualPad(UP_DOWN, A_B);
 		#end
@@ -120,40 +109,33 @@ class MainMenuState extends MusicBeatState
 		super.create();
 	}
 
-	override function finishTransIn()
-	{
+	override function finishTransIn() {
 		super.finishTransIn();
 
 		menuItems.enabled = true;
 	}
 
-	function onMenuItemChange(selected:MenuItem)
-	{
+	function onMenuItemChange(selected:MenuItem) {
 		camFollow.setPosition(selected.getGraphicMidpoint().x, selected.getGraphicMidpoint().y);
 	}
 
 	#if CAN_OPEN_LINKS
-	function selectDonate()
-	{
+	function selectDonate() {
 		#if linux
-		// Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
 		Sys.command('/usr/bin/xdg-open', [
 			"https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game/",
 			"&"
 		]);
 		#else
-		// FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
 
 		FlxG.openURL('https://www.kickstarter.com/projects/funkin/friday-night-funkin-the-full-ass-game/');
 		#end
 	}
 	#end
 
-	public function openPrompt(prompt:Prompt, onClose:Void->Void)
-	{
+	public function openPrompt(prompt:Prompt, onClose:Void->Void) {
 		menuItems.enabled = false;
-		prompt.closeCallback = function()
-		{
+		prompt.closeCallback = function() {
 			menuItems.enabled = true;
 			if (onClose != null)
 				onClose();
@@ -162,34 +144,23 @@ class MainMenuState extends MusicBeatState
 		openSubState(prompt);
 	}
 
-	function startExitState(state:FlxState)
-	{
-		menuItems.enabled = false; // disable for exit
+	function startExitState(state:FlxState) {
+		menuItems.enabled = false;
 		var duration = 0.4;
-		menuItems.forEach(function(item)
-		{
+		menuItems.forEach(function(item) {
 			if (menuItems.selectedIndex != item.ID)
-			{
 				FlxTween.tween(item, {alpha: 0}, duration, {ease: FlxEase.quadOut});
-			}
 			else
-			{
 				item.visible = false;
-			}
 		});
 
 		new FlxTimer().start(duration, function(_) FlxG.switchState(state));
 	}
 
-	override function update(elapsed:Float)
-	{
-		// FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
-
+	override function update(elapsed:Float) {
 		if (FlxG.sound.music.volume < 0.8)
-		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
-
+		
 		if (_exiting)
 			menuItems.enabled = false;
 

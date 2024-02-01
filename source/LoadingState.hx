@@ -37,7 +37,7 @@ class LoadingState extends MusicBeatState
 		add(screen);
 
 		if(path == 'songs')
-			charsToCache = [daSong.player1, daSong.player2, 'gf'];
+			charsToCache = [daSong.player1, daSong.player2];
 
 		for (image in Assets.list(IMAGE)) {
 			if (image.startsWith('assets/gfx/$path') || image.startsWith('assets/gfx/global')) {
