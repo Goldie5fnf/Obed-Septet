@@ -14,8 +14,7 @@ using StringTools;
 import polymod.format.ParseRules.TargetSignatureElement;
 #end
 
-class Note extends FlxSprite
-{
+class Note extends FlxSprite {
 	public var strumTime:Float = 0;
 
 	public var mustPress:Bool = false;
@@ -42,8 +41,7 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
-	public function new(strumTime:Float, noteData:Int, ?char:String = 'bf', ?prevNote:Note, ?sustainNote:Bool = false)
-	{
+	public function new(strumTime:Float, noteData:Int, ?char:String = 'bf', ?prevNote:Note, ?sustainNote:Bool = false) {
 		super();
 
 		if (prevNote == null)
@@ -52,7 +50,7 @@ class Note extends FlxSprite
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
-		x += 87.5;
+		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
@@ -61,96 +59,113 @@ class Note extends FlxSprite
 
 		frames = Paths.getSparrowAtlas('characters/$char/NOTE_assets');
 
-		animation.addByPrefix('greenScroll', 'upnote');
-		animation.addByPrefix('redScroll', 'rightnote');
-		animation.addByPrefix('blueScroll', 'downnote');
-		animation.addByPrefix('purpleScroll', 'leftnote');
+		animation.addByPrefix('greenScroll', 'upletlet', 24, false);
+		animation.addByPrefix('redScroll', 'rightletlet', 24, false);
+		animation.addByPrefix('blueScroll', 'downletlet', 24, false);
+		animation.addByPrefix('purpleScroll', 'leftletlet', 24, false);
 
-		animation.addByPrefix('holdend', 'note end hold');
-		animation.addByPrefix('hold', 'note hold piece');
+		animation.addByPrefix('holdend1', 'slide zhopkaa');
+		animation.addByPrefix('hold1', 'slide siska');
+		animation.addByPrefix('holdend2', 'slide zhopka');
+		animation.addByPrefix('hold2', 'slide sisk');
 
-		setGraphicSize(Std.int(width * 0.7));
+		if(char == 'prettyboy') {
+			animation.addByPrefix('holdend', 'slideend');
+			animation.addByPrefix('hold', 'slideser');
+		}
+
+		setGraphicSize(Std.int(width * 0.6));
 		updateHitbox();
 		antialiasing = true;
 
-		switch (noteData)
-		{
+		switch (noteData) {
 			case 0:
-				animation.play('purpleScroll');
+				animation.play('purpleScroll', true);
 			case 1:
-				x += swagWidth * 1 - 7;
-				animation.play('blueScroll');
+				x += swagWidth * 1 - 2;
+				animation.play('blueScroll', true);
 			case 2:
-				x += swagWidth * 2 - 2.5;
-				animation.play('greenScroll');
+				x += swagWidth * 2 + 3;
+				animation.play('greenScroll', true);
 			case 3:
 				x += swagWidth * 3;
-				animation.play('redScroll');
+				animation.play('redScroll', true);
 		}
 
-		if (isSustainNote && prevNote != null)
-		{
+		if (isSustainNote && prevNote != null) {
 			noteScore * 0.2;
 			alpha = 0.6;
 
 			if (PreferencesMenu.getPref('downscroll'))
 				angle = 180;
 
-			x += width / 2;
-			animation.play('holdend');
+			//x += width / 2;
+			if (noteData == 0 || noteData == 2)
+				animation.play('holdend1');
+			else if (noteData == 1 || noteData == 3)
+				animation.play('holdend2');
+			else if (char == 'prettyboy')
+				animation.play('holdend');
 
 			updateHitbox();
 
 			x -= width / 4.25;
-			if (prevNote.isSustainNote)
-			{
-				prevNote.animation.play('hold');
+			if (prevNote.isSustainNote) {
+				if (noteData == 0 || noteData == 2)
+					animation.play('hold1');
+				else if (noteData == 1 || noteData == 3)
+					animation.play('hold2');
+				else if (char == 'prettyboy')
+					animation.play('hold');
+
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 			}
-			if (animation.name.endsWith('end'))
-				offset.x += width / 4.25; // i woke up in a new buggatti:fire:
+			
+			if (animation.name.startsWith('holde'))
+				offset.x += width / 4.25; 
 		}
 	}
 
-	override function update(elapsed:Float)
-	{
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (mustPress)
-		{
-			// miss on the NEXT frame so lag doesnt make u miss notes
-			if (willMiss && !wasGoodHit)
-			{
+		if (mustPress) {
+			if (willMiss && !wasGoodHit) {
 				tooLate = true;
 				canBeHit = false;
-			}
-			else
-			{
-				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset)
-				{ // The * 0.5 is so that it's easier to hit them too late, instead of too early
+			} else {
+				if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset) {
 					if (strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 						canBeHit = true;
-				}
-				else
-				{
+				} else {
 					canBeHit = true;
 					willMiss = true;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			canBeHit = false;
 
 			if (strumTime <= Conductor.songPosition)
 				wasGoodHit = true;
 		}
 
-		if (tooLate)
-		{
+		if (tooLate) {
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+	}
+	
+	public function beatHit() {
+		switch (noteData) {
+			case 0:
+				animation.play('purpleScroll', true);
+			case 1:
+				animation.play('blueScroll', true);
+			case 2:
+				animation.play('greenScroll', true);
+			case 3:
+				animation.play('redScroll', true);
 		}
 	}
 }
