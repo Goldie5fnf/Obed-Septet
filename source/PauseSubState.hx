@@ -87,10 +87,6 @@ class PauseSubState extends MusicBeatSubstate
 		add(grpMenuShit);
 
 		regenMenu();
-
-		#if mobile
-		addVirtualPad(UP_DOWN, A);
-		#end
 	}
 
 	private function regenMenu():Void
@@ -141,9 +137,7 @@ class PauseSubState extends MusicBeatSubstate
 				case "Resume":
 					close();
 				case "FINE" | 'OBED':
-					PlayState.SONG = Song.loadFromJson(Highscore.formatSong(PlayState.SONG.song.toLowerCase(), curSelected),
-						PlayState.SONG.song.toLowerCase());
-
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase() + '-' + CoolUtil.difficultyArray[curSelected], PlayState.SONG.song.toLowerCase());
 					PlayState.storyDifficulty = curSelected;
 
 					FlxG.resetState();

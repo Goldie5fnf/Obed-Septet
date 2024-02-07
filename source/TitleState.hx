@@ -47,7 +47,6 @@ class TitleState extends MusicBeatState
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
 
-	var curWacky:Array<String> = [];
 	var lastBeat:Int = 0;
 
 	override public function create():Void
@@ -56,13 +55,7 @@ class TitleState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		#if android
-		FlxG.android.preventDefaultKeys = [BACK];
-		#end
-
 		startedIntro = false;
-
-		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		super.create();
 
@@ -129,17 +122,14 @@ class TitleState extends MusicBeatState
 		startedIntro = true;
 	}
 
-	function getIntroTextShit():Array<Array<String>>
-	{
+	function getIntroTextShit():Array<Array<String>> {
 		var fullText:String = Assets.getText(Paths.txt('introText'));
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
 
 		for (i in firstArray)
-		{
 			swagGoodArray.push(i.split('--'));
-		}
 
 		return swagGoodArray;
 	}
@@ -156,23 +146,13 @@ class TitleState extends MusicBeatState
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
 
-		#if mobile
-		for (touch in FlxG.touches.list)
+		if (FlxG.gamepads.lastActive != null)
 		{
-			if (touch.justPressed)
-				pressedEnter = true;
-		}
-		#end
-
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-
-		if (gamepad != null)
-		{
-			if (gamepad.justPressed.START)
+			if (FlxG.gamepads.lastActive.justPressed.START)
 				pressedEnter = true;
 
 			#if switch
-			if (gamepad.justPressed.B)
+			if (FlxG.gamepads.lastActive.justPressed.B)
 				pressedEnter = true;
 			#end
 		}
@@ -250,9 +230,9 @@ class TitleState extends MusicBeatState
 						deleteCoolText();
 						ngSpr.visible = false;
 					case 9:
-						createCoolText([curWacky[0]]);
+						createCoolText([FlxG.random.getObject(getIntroTextShit())[0]]);
 					case 11:
-						addMoreText(curWacky[1]);
+						addMoreText(FlxG.random.getObject(getIntroTextShit())[1]);
 					case 12:
 						deleteCoolText();
 					case 13:

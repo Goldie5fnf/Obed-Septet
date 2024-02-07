@@ -1,5 +1,6 @@
 package;
 
+import Highscore.HighscoreMap;
 import Song.SwagSection;
 import Song.SwagSong;
 import flixel.FlxBasic;
@@ -122,6 +123,7 @@ class PlayState extends MusicBeatState {
 	var isEnemyMiss:Bool = false;
 
 	public static var campaignScore:Int = 0;
+	public static var campaignMisses:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
 
@@ -143,6 +145,8 @@ class PlayState extends MusicBeatState {
 	var layer:FlxSprite;
 	var smoke:FlxSprite;
 	var smoke2:FlxSprite;
+
+	var scoreShit:HighscoreMap = {score: 0, misses: 0};
 
 	override public function create() {
 		if (FlxG.sound.music != null)
@@ -170,7 +174,7 @@ class PlayState extends MusicBeatState {
 
 		switch (SONG.song.toLowerCase()) {
 			default:
-				defaultCamZoom = 0.45;
+				defaultCamZoom = 0.4;
 				curStage = 'main';
 
 				var sky:FlxSprite = new FlxSprite(-1680, -1000).loadGraphic(Paths.image('bgs/main/sky', 'songs'));
@@ -403,11 +407,6 @@ class PlayState extends MusicBeatState {
 		barP2grp.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 
-		#if android
-		addHitbox(false);
-		addHitboxCamera(false);
-		#end
-
 		startingSong = true;
 
 
@@ -441,9 +440,6 @@ class PlayState extends MusicBeatState {
 	{
 		inCutscene = false;
 		camHUD.visible = true;
-		#if android
-		hitbox.visible = true;
-		#end
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
@@ -847,7 +843,7 @@ class PlayState extends MusicBeatState {
 		healthP1TXT.text = barP1.percent + '%';
 		healthP2TXT.text = barP2.percent + '%';
 
-		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause) {
+		if (controls.PAUSE && startedCountdown && canPause) {
 			persistentUpdate = false;
 			persistentDraw = true;
 			paused = true;
@@ -1113,8 +1109,15 @@ class PlayState extends MusicBeatState {
 
 	function killCombo(player:Int = 1):Void {
 		if (player == 1) {
-			if (combo > 50)
-				LLLLL();
+			if (combo > 50) {
+				if(boomTween != null)
+					boomTween.cancel();
+		
+				boom.alpha = 1;
+				boomTween = FlxTween.tween(boom, {alpha: 0}, 1);
+				FlxG.sound.play(Paths.sound('vineBoom', 'songs'));
+			}
+
 			if (combo != 0) {
 				combo = 0;
 				displayCombo();
@@ -1127,52 +1130,19 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function LLLLL()
-	{
-		if(boomTween != null)
-			boomTween.cancel();
-
-		boom.alpha = 1;
-		boomTween = FlxTween.tween(boom, {alpha: 0}, 1);
-		FlxG.sound.play(Paths.sound('vineBoom', 'songs'));
-	}
-
 	var scoreTween:FlxTween;
 	var scoreTxtVisible:Bool = false;
-	function showScore()
-	{
+	function showScore() {
+		!scoreTxtVisible;
+
 		if(scoreTween != null)
 			scoreTween.cancel();
 
-		if (!scoreTxtVisible) {
-			scoreTxtVisible = true;
+		if (!scoreTxtVisible)
 			scoreTween = FlxTween.tween(scoreTxt, {y: 18}, 0.5, {ease: FlxEase.cubeInOut});
-		} else {
-			scoreTxtVisible = false;
+		else
 			scoreTween = FlxTween.tween(scoreTxt, {y: -20}, 0.5, {ease: FlxEase.cubeInOut});
-		}
 	}
-
-	#if debug
-	function changeSection(sec:Int):Void
-	{
-		FlxG.sound.music.pause();
-
-		var daBPM:Float = SONG.bpm;
-		var daPos:Float = 0;
-		for (i in 0...(Std.int(curStep / 16 + sec)))
-		{
-			if (SONG.notes[i].changeBPM)
-			{
-				daBPM = SONG.notes[i].bpm;
-			}
-			daPos += 4 * (1000 * 60 / daBPM);
-		}
-		Conductor.songPosition = FlxG.sound.music.time = daPos;
-		updateCurStep();
-		resyncVocals();
-	}
-	#end
 
 	function endSong():Void
 	{
@@ -1181,29 +1151,24 @@ class PlayState extends MusicBeatState {
 		FlxG.sound.music.volume = 0;
 		for (vocals in vocalArray)
 			vocals.volume = 0;
-		#if android
-		removeHitbox();
-		#end
-		if (SONG.validScore)
-		{
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
-		}
 
-		if (isStoryMode)
-		{
+		scoreShit = {score: songScore, misses: playerMisses};
+		if (SONG.validScore)
+			Highscore.saveSongScore(SONG.song.toLowerCase() + '-' + CoolUtil.difficultyArray[storyDifficulty], scoreShit);
+
+		if (isStoryMode) {
 			campaignScore += songScore;
+			campaignMisses += playerMisses;
 
 			storyPlaylist.remove(storyPlaylist[0]);
 
-			if (storyPlaylist.length <= 0)
-			{
+			if (storyPlaylist.length <= 0) {
 				FlxG.sound.playMusic(Paths.sound('freakyMenu', 'menus'));
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				switch (PlayState.storyWeek)
-				{
+				switch (PlayState.storyWeek) {
 					default:
 						LoadingState.path = 'menus';
 						LoadingState.bullshit = new StoryMenuState();
@@ -1212,22 +1177,13 @@ class PlayState extends MusicBeatState {
 
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
 
+				scoreShit = {score: campaignScore, misses: campaignMisses};
 				if (SONG.validScore)
-					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+					Highscore.saveWeekScore(storyWeek, '-' + CoolUtil.difficultyArray[storyDifficulty], scoreShit);
 
 				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 				FlxG.save.flush();
-			}
-			else
-			{
-				var difficulty:String = "";
-
-				if (storyDifficulty == 0)
-					difficulty = '-fine';
-
-				if (storyDifficulty == 1)
-					difficulty = '-obed';
-
+			} else {
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
 
@@ -1236,15 +1192,13 @@ class PlayState extends MusicBeatState {
 					vocals.stop();
 				prevCamFollow = camFollow;
 
-				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
+				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + '-' + CoolUtil.difficultyArray[storyDifficulty], storyPlaylist[0]);
 				LoadingState.path = 'songs';
 				LoadingState.bullshit = new PlayState();
 				LoadingState.daSong = SONG;
 				FlxG.switchState(new LoadingState());
 			}
-		}
-		else
-		{
+		} else {
 			LoadingState.path = 'menus';
 			LoadingState.bullshit = new FreeplayState();
 			FlxG.switchState(new LoadingState());
@@ -1252,16 +1206,10 @@ class PlayState extends MusicBeatState {
 	}
 
 	private function ratingPizdos() {
-		var daRating:String = 'sick';
-		
-		if (FlxG.random.bool(randomizer[0]))
-			daRating = 'shit';
-		else if (FlxG.random.bool(randomizer[1]) && daRating != 'shit')
-			daRating = 'bad';
-		else if (FlxG.random.bool(randomizer[2]) && daRating != 'shit' && daRating != 'bad')
-			daRating = 'good';
-		
-		return daRating;
+		if (FlxG.random.bool(randomizer[0])) return 'shit';
+		if (FlxG.random.bool(randomizer[1])) return 'bad';
+		if (FlxG.random.bool(randomizer[2])) return 'good';
+		return 'sick';
 	}
 
 	private function popUpScore(strumtime:Float, daNote:Note, player:Int = 1):Void {
@@ -1312,13 +1260,11 @@ class PlayState extends MusicBeatState {
 
 		rating.loadGraphic(Paths.image(daRating, 'songs'));
 		rating.x = FlxG.width * 0.55 + 200;
-		if (player != 1)
-			rating.x -= 600;
+		if (player != 1) rating.x -= 600;
 		if (rating.x < FlxG.camera.scroll.x)
 			rating.x = FlxG.camera.scroll.x;
 		else if (rating.x > FlxG.camera.scroll.x + FlxG.camera.width - rating.width)
 			rating.x = FlxG.camera.scroll.x + FlxG.camera.width - rating.width;
-
 		rating.y = FlxG.camera.scroll.y + FlxG.camera.height * 0.4 - 60;
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
@@ -1651,10 +1597,10 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (curSong.toLowerCase() == 'death-beat' && curBeat == 204) {
-			defaultCamZoom = 0.5;
+			defaultCamZoom = 0.45;
 			camZooming = false;
 		} else if (curSong.toLowerCase() == 'death-beat' && curBeat == 266) {
-			defaultCamZoom = 0.45;
+			defaultCamZoom = 0.4;
 			camZooming = true;
 		}
 

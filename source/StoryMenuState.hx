@@ -179,17 +179,11 @@ class StoryMenuState extends MusicBeatState
 
 		if (!movedBack)
 		{
-			if (!selectedWeek)
-			{
+			if (!selectedWeek) {
 				if (controls.UI_UP_P)
-				{
 					changeWeek(-1);
-				}
-
 				if (controls.UI_DOWN_P)
-				{
 					changeWeek(1);
-				}
 
 				if (controls.UI_RIGHT)
 					rightArrow.animation.play('press')
@@ -243,19 +237,9 @@ class StoryMenuState extends MusicBeatState
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 
-			var diffic = "";
-
-			switch (curDifficulty)
-			{
-				case 0:
-					diffic = '-fine';
-				case 1:
-					diffic = '-obed';
-			}
-
 			PlayState.storyDifficulty = curDifficulty;
 
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + '-' + CoolUtil.difficultyArray[curDifficulty], PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.storyWeek = curWeek;
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -292,7 +276,7 @@ class StoryMenuState extends MusicBeatState
 		sprDifficulty.alpha = 0;
 
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, '-' + CoolUtil.difficultyArray[curDifficulty]).score;
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
 	}
@@ -300,8 +284,7 @@ class StoryMenuState extends MusicBeatState
 	var lerpScore:Float = 0;
 	var intendedScore:Int = 0;
 
-	function changeWeek(change:Int = 0):Void
-	{
+	function changeWeek(change:Int = 0):Void {
 		curWeek += change;
 
 		if (curWeek >= weekData.length)
@@ -311,8 +294,7 @@ class StoryMenuState extends MusicBeatState
 
 		var bullShit:Int = 0;
 
-		for (item in grpWeekText.members)
-		{
+		for (item in grpWeekText.members) {
 			item.targetY = bullShit - curWeek;
 			if (item.targetY == Std.int(0) && weekUnlocked[curWeek])
 				item.alpha = 1;
@@ -342,6 +324,6 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.screenCenter(X);
 		txtTracklist.x -= FlxG.width * 0.35;
 
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek,  '-' + CoolUtil.difficultyArray[curDifficulty]).score;
 	}
 }

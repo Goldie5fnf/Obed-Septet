@@ -82,10 +82,6 @@ class FreeplayState extends MusicBeatState {
 		changeSelection();
 		changeDiff();
 
-		var swag:Alphabet = new Alphabet(1, 0, "swag");
-		#if mobile
-		addVirtualPad(LEFT_FULL, A_B);
-		#end
 		super.create();
 	}
 
@@ -114,13 +110,9 @@ class FreeplayState extends MusicBeatState {
 
 		positionHighscore();
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
-
-		if (upP)
+		if (controls.UI_UP_P)
 			changeSelection(-1);
-		if (downP)
+		if (controls.UI_DOWN_P)
 			changeSelection(1);
 
 		if (FlxG.mouse.wheel != 0)
@@ -136,9 +128,8 @@ class FreeplayState extends MusicBeatState {
 			FlxG.switchState(new MainMenuState());
 		}
 
-		if (accepted) {
-			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+		if (controls.ACCEPT) {
+			PlayState.SONG = Song.loadFromJson(songs[curSelected].songName.toLowerCase() + '-' + CoolUtil.difficultyArray[curDifficulty], songs[curSelected].songName.toLowerCase());
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 
@@ -158,12 +149,9 @@ class FreeplayState extends MusicBeatState {
 			curDifficulty = 1;
 		if (curDifficulty > 1)
 			curDifficulty = 0;
-
-		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
-
-		PlayState.storyDifficulty = curDifficulty;
-
-		diffText.text = "< " + CoolUtil.difficultyString() + " >";
+		
+		intendedScore = Highscore.getSongScore(songs[curSelected].songName + '-' + CoolUtil.difficultyArray[curDifficulty]).score;
+		diffText.text = "< " + CoolUtil.difficultyString().toUpperCase() + " >";
 		positionHighscore();
 	}
 
@@ -176,8 +164,8 @@ class FreeplayState extends MusicBeatState {
 			curSelected = songs.length - 1;
 		if (curSelected >= songs.length)
 			curSelected = 0;
-
-		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
+		
+		intendedScore = Highscore.getSongScore(songs[curSelected].songName + '-' + CoolUtil.difficultyArray[curDifficulty]).score;
 		
 		#if PRELOAD_ALL
 		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);

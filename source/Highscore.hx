@@ -1,92 +1,47 @@
 package;
 
-import flixel.FlxG;
+import haxe.ds.StringMap;
 
-class Highscore
-{
-	#if (haxe >= "4.0.0")
-	public static var songScores:Map<String, Int> = new Map();
-	#else
-	public static var songScores:Map<String, Int> = new Map<String, Int>();
-	#end
+@:structInit class HighscoreMap {
+	public var score:Int = 0;
+	public var misses:Int = 0;
+}
 
-	public static function saveScore(song:String, score:Int = 0, ?diff:Int = 0):Void
-	{
-		var formattedSong:String = formatSong(song, diff);
+class Highscore {
+	public static var songScores:StringMap<HighscoreMap> = new StringMap<HighscoreMap>();
+	public static var weekScores:StringMap<HighscoreMap> = new StringMap<HighscoreMap>();
 
-		if (songScores.exists(formattedSong))
-		{
-			if (songScores.get(formattedSong) < score)
-				setScore(formattedSong, score);
-		}
-		else
-			setScore(formattedSong, score);
+	public static function saveSongScore(song:String, save:HighscoreMap):Void {
+		_setScore(songScores, song, save);
 	}
 
-	public static function saveWeekScore(week:Int = 1, score:Int = 0, ?diff:Int = 0):Void
-	{
-		var formattedSong:String = formatSong('week' + week, diff);
-
-		if (songScores.exists(formattedSong))
-		{
-			if (songScores.get(formattedSong) < score)
-				setScore(formattedSong, score);
-		}
-		else
-			setScore(formattedSong, score);
+	public static function saveWeekScore(week:Int, diff:String, save:HighscoreMap):Void {
+		_setScore(weekScores, 'week' + week + diff, save);
 	}
 
-	/**
-	 * YOU SHOULD FORMAT SONG WITH formatSong() BEFORE TOSSING IN SONG VARIABLE
-	 */
-	static function setScore(formattedSong:String, score:Int):Void
-	{
-		/** GeoKureli
-		 * References to Highscore were wrapped in `#if !switch` blocks. I wasn't sure if this
-		 * is because switch doesn't use NGio, or because switch has a different saving method.
-		 * I moved the compiler flag here, rather than using it everywhere else.
-		 */
-		#if !switch
-		// Reminder that I don't need to format this song, it should come formatted!
-		songScores.set(formattedSong, score);
-		FlxG.save.data.songScores = songScores;
-		FlxG.save.flush();
-		#end
+	public static function getSongScore(song:String):HighscoreMap {
+		return _getScore(songScores, song);
 	}
 
-	public static function formatSong(song:String, diff:Int):String
-	{
-		var daSong:String = song;
-
-		if (diff == 0)
-			daSong += '-fine';
-		else if (diff == 1)
-			daSong += '-obed';
-
-		return daSong;
+	public static function getWeekScore(week:Int, diff:String):HighscoreMap {
+		return _getScore(weekScores, 'week' + week + diff);
 	}
 
-	public static function getScore(song:String, diff:Int):Int
-	{
-		if (!songScores.exists(formatSong(song, diff)))
-			setScore(formatSong(song, diff), 0);
+	@:dox(hide)
+	private static inline function _getScore(strmap:StringMap<HighscoreMap>, id:String):HighscoreMap {
+		final dummy:HighscoreMap = {
+			score: 0,
+			misses: 0
+		};
 
-		return songScores.get(formatSong(song, diff));
+		return strmap.get(id) != null ? strmap.get(id) : dummy;
 	}
 
-	public static function getWeekScore(week:Int, diff:Int):Int
-	{
-		if (!songScores.exists(formatSong('week' + week, diff)))
-			setScore(formatSong('week' + week, diff), 0);
-
-		return songScores.get(formatSong('week' + week, diff));
-	}
-
-	public static function load():Void
-	{
-		if (FlxG.save.data.songScores != null)
-		{
-			songScores = FlxG.save.data.songScores;
-		}
+	@:dox(hide)
+	private static function _setScore(strmap:StringMap<HighscoreMap>, id:String, save:HighscoreMap):Void {
+		if (strmap.exists(id) && strmap.get(id).score < save.score)
+			strmap.set(id, save);
+		else if (!strmap.exists(id))
+			strmap.set(id, save);
 	}
 }
